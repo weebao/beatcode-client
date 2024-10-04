@@ -1,38 +1,35 @@
-# create-svelte
+# BeatCode Client
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Ship fast
 
-## Creating a project
+## Installation
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Clone this repo
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+git clone https://github.com/beatcode-official/beatcode-client.git
 ```
 
-## Building
-
-To create a production version of your app:
+Install dependencies (Make sure you had node.js installed)
 
 ```bash
-npm run build
+npm install
 ```
 
-You can preview the production build with `npm run preview`.
+## Contribution guidelines
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Make sure you create a new branch following the below format every time you upload your code
+
+```bash
+git checkout -b "your name-feature"
+```
+
+When creating a PR, make sure to add [NO-??] to link a task from Notion with your PR. Example:
+
+```
+[NO-69] Centered a div after 5 days
+```
+
+Make sure you request review from at least one other person and have it approved before you merge your branch to main. You can always request me @weebao and I will make sure to review it by the end of the day.
+
+Also, please delete the branch after having it merged to keep things clean :D
