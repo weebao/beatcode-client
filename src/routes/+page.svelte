@@ -8,7 +8,7 @@
 <section class="flex overflow-hidden flex-col items-center">
 	<div class="flex flex-col items-center mt-24 mb-4 text-5xl leading-none max-md:mt-10 max-md:max-w-full max-md:text-4xl">
 		<h1 class="font-semibold text-center text-neutral-100 max-md:max-w-full max-md:text-4xl">
-			Head-to-head live codingff battle
+			Head-to-head live coding battle
 		</h1>
 		<div class="flex gap-4 justify-center items-center mt-3 whitespace-nowrap max-md:text-4xl">
 			<span class="gap-2.5 self-stretch pb-2 my-auto font-semibold text-neutral-100 max-md:text-4xl">

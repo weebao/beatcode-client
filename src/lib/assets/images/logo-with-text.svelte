@@ -1,4 +1,8 @@
-<svg width="161" height="30" viewBox="0 0 161 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<script lang="ts">
+  export let className = "";
+</script>
+
+<svg class={className} width="161" height="30" viewBox="0 0 161 30" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path
     d="M15.3787 17.2046C15.3787 16.586 15.8802 16.0845 16.4988 16.0845H27.5817C28.2004 16.0845 28.7019 16.586 28.7019 17.2046V23.0619H15.3787V17.2046Z"
     fill="#ADEBB3"

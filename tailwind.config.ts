@@ -14,6 +14,10 @@ const config: Config = {
 			}
 		},
 		extend: {
+			height: {
+				nav: "var(--navbar-height)",
+				navscreen: "calc(100dvh - var(--navbar-height))"
+			},
 			colors: {
 				border: "hsl(var(--border) / <alpha-value>)",
 				input: "hsl(var(--input) / <alpha-value>)",

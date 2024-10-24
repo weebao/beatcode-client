@@ -8,6 +8,6 @@
 </svelte:head>
 
 <Navbar />
-<main class="min-h-[calc(100dvh-80px)] bg-background">
+<main class="min-h-navscreen bg-background">
   <slot />
 </main>
