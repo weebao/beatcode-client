@@ -18,46 +18,44 @@ const baseURL = env.API_URL;
  * @throws Will throw an error if the request fails with a server error (status code 500-599).
  */
 async function send({ method, path, data, token }: HttpRequestFetch): Promise<any> {
-  const options: RequestInit = {};
+    const options: RequestInit = {};
 
-  // Specifying the HTTP request options and method
-  options.method = method;
-  options.headers = {};
+    // Specifying the HTTP request options and method
+    options.method = method;
+    options.headers = {};
 
-  // Check if there is data, transform it to JSON and add to the body
-  if (data) {
-    options.headers['Content-Type'] = 'application/json';
-    options.body = JSON.stringify(data);
-  }
-
-  // Check if there is a web token, add that to authorization header
-  if (token) {
-    options.headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  // Start fetching the endpoint and convert the response body to json
-  let responseStatus = 500;
-  try {
-
-    const response = await fetch(`${baseURL}${path}`, options);
-    const json = await response.json();
-
-    responseStatus = response.status;
-
-    // Successful response status
-    if (response.ok || response.status === 201) {
-      return json;
+    // Check if there is data, transform it to JSON and add to the body
+    if (data) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(data);
     }
 
-    // Client errors ranging from 400 to 499
-    if (response.status >= 400 || response.status <= 499) {
-      return { error: json, status: response.status };
+    // Check if there is a web token, add that to authorization header
+    if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`;
     }
 
-  } catch (e) {
-    // Unexpected server errors ranging from 500 to 599
-    error(responseStatus as NumericRange<500, 599>);
-  }
+    // Start fetching the endpoint and convert the response body to json
+    let responseStatus = 500;
+    try {
+        const response = await fetch(`${baseURL}${path}`, options);
+        const json = await response.json();
+
+        responseStatus = response.status;
+
+        // Successful response status
+        if (response.ok || response.status === 201) {
+            return json;
+        }
+
+        // Client errors ranging from 400 to 499
+        if (response.status >= 400 || response.status <= 499) {
+            return { error: json, status: response.status };
+        }
+    } catch (e) {
+        // Unexpected server errors ranging from 500 to 599
+        error(responseStatus as NumericRange<500, 599>);
+    }
 }
 
 /**
@@ -67,8 +65,8 @@ async function send({ method, path, data, token }: HttpRequestFetch): Promise<an
  * @param token - Optional. The authorization token to include in the request headers.
  * @returns A promise that resolves with the response of the GET request.
  */
-async function get(path: string, token?: string) {
-  return await send({ method: 'GET', path, token });
+export function get(path: string, token?: string) {
+    return send({ method: 'GET', path, token });
 }
 
 /**
@@ -79,8 +77,8 @@ async function get(path: string, token?: string) {
  * @param token - Optional authentication token to be included in the request headers.
  * @returns A promise that resolves with the response of the POST request.
  */
-async function post(path: string, data?: HttpPayload, token?: string) {
-  return await send({ method: 'POST', path, data, token });
+export function post(path: string, data?: HttpPayload, token?: string) {
+    return send({ method: 'POST', path, data, token });
 }
 
 /**
@@ -90,8 +88,8 @@ async function post(path: string, data?: HttpPayload, token?: string) {
  * @param token - Optional. The authentication token to include in the request headers.
  * @returns A promise that resolves with the response of the DELETE request.
  */
-async function del(path: string, token?: string) {
-  return await send({ method: 'DELETE', path, token });
+export function del(path: string, token?: string) {
+    return send({ method: 'DELETE', path, token });
 }
 
 /**
@@ -102,15 +100,6 @@ async function del(path: string, token?: string) {
  * @param token - Optional authentication token to include in the request headers.
  * @returns A promise that resolves with the response of the PUT request.
  */
-async function put(path: string, data?: HttpPayload, token?: string) {
-  return await send({ method: 'PUT', path, data, token });
+export function put(path: string, data?: HttpPayload, token?: string) {
+    return send({ method: 'PUT', path, data, token });
 }
-
-const api = {
-  get,
-  post,
-  del,
-  put
-};
-
-export default api;
