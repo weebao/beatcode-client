@@ -6,7 +6,7 @@ declare namespace App {
         user?: {
             name: string;
             // will add more when auth is done
-        }
+        };
     }
     // interface PageData {}
     // interface Error {}

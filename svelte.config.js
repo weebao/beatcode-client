@@ -1,12 +1,15 @@
-import adapter from '@sveltejs/adapter-auto';
-import path from 'path';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import adapter from "@sveltejs/adapter-auto";
+import path from "path";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    extensions: ['.svelte'],
+    extensions: [".svelte"],
     // Consult https://kit.svelte.dev/docs/integrations#preprocessors
     // for more information about preprocessors
+    // optimizeDeps: {
+    //     exclude: ['svelte-sonner']
+    // },
     preprocess: [vitePreprocess()],
 
     kit: {
@@ -15,14 +18,14 @@ const config = {
         // See https://kit.svelte.dev/docs/adapters for more information about adapters.
         adapter: adapter(),
         alias: {
-            $assets: path.resolve('./src/lib/assets'),
-            $components: path.resolve('./src/lib/components'),
-            $icons: path.resolve('./src/lib/assets/icons'),
-            $images: path.resolve('./src/lib/assets/images'),
-            $lib: path.resolve('./src/lib'),
-            $stores: path.resolve('./src/lib/stores'),
-            $types: path.resolve('./src/lib/types'),
-            $utils: path.resolve('./src/lib/utils')
+            $assets: path.resolve("./src/lib/assets"),
+            $components: path.resolve("./src/lib/components"),
+            $icons: path.resolve("./src/lib/assets/icons"),
+            $images: path.resolve("./src/lib/assets/images"),
+            $lib: path.resolve("./src/lib"),
+            $stores: path.resolve("./src/lib/stores"),
+            $types: path.resolve("./src/lib/types"),
+            $utils: path.resolve("./src/lib/utils")
         }
     }
 };

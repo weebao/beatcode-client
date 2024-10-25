@@ -1,8 +1,8 @@
 // Referenced from @algebra2boy - Yongye Tan
 
-import { error, type NumericRange } from '@sveltejs/kit';
-import { env } from '$lib/env';
-import type { HttpRequestFetch, HttpPayload } from '$lib/types/request';
+import { error, type NumericRange } from "@sveltejs/kit";
+import { env } from "$lib/env";
+import type { HttpRequestFetch, HttpPayload } from "$lib/types/request";
 /* The base URL of the backend API */
 const baseURL = env.API_URL;
 
@@ -26,13 +26,13 @@ async function send({ method, path, data, token }: HttpRequestFetch): Promise<an
 
     // Check if there is data, transform it to JSON and add to the body
     if (data) {
-        options.headers['Content-Type'] = 'application/json';
+        options.headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(data);
     }
 
     // Check if there is a web token, add that to authorization header
     if (token) {
-        options.headers['Authorization'] = `Bearer ${token}`;
+        options.headers["Authorization"] = `Bearer ${token}`;
     }
 
     // Start fetching the endpoint and convert the response body to json
@@ -66,7 +66,7 @@ async function send({ method, path, data, token }: HttpRequestFetch): Promise<an
  * @returns A promise that resolves with the response of the GET request.
  */
 export function get(path: string, token?: string) {
-    return send({ method: 'GET', path, token });
+    return send({ method: "GET", path, token });
 }
 
 /**
@@ -78,7 +78,7 @@ export function get(path: string, token?: string) {
  * @returns A promise that resolves with the response of the POST request.
  */
 export function post(path: string, data?: HttpPayload, token?: string) {
-    return send({ method: 'POST', path, data, token });
+    return send({ method: "POST", path, data, token });
 }
 
 /**
@@ -89,7 +89,7 @@ export function post(path: string, data?: HttpPayload, token?: string) {
  * @returns A promise that resolves with the response of the DELETE request.
  */
 export function del(path: string, token?: string) {
-    return send({ method: 'DELETE', path, token });
+    return send({ method: "DELETE", path, token });
 }
 
 /**
@@ -101,5 +101,5 @@ export function del(path: string, token?: string) {
  * @returns A promise that resolves with the response of the PUT request.
  */
 export function put(path: string, data?: HttpPayload, token?: string) {
-    return send({ method: 'PUT', path, data, token });
+    return send({ method: "PUT", path, data, token });
 }

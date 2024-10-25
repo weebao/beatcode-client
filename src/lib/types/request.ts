@@ -28,7 +28,7 @@ export type HttpPayload = {
  * The JSON Web Token to be sent to the server to verify the user's identity. This is optional.
  */
 export type HttpRequestFetch = {
-    method: 'GET' | 'POST' | 'DELETE' | 'PUT';
+    method: "GET" | "POST" | "DELETE" | "PUT";
     path: string;
     data?: HttpPayload;
     token?: string;

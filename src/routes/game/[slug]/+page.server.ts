@@ -1,1 +1,0 @@
-// Check if event locals has name yet, if not generate a dialog before entering the game :)

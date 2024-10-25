@@ -1,6 +1,6 @@
 <script lang="ts">
-    import HeroImg from '$lib/assets/images/hero.png';
-    import { Button } from '$lib/components/ui/button';
+    import HeroImg from "$lib/assets/images/hero.png";
+    import { Button } from "$lib/components/ui/button";
 
     let count = 0;
 </script>

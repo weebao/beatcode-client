@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LogoWithText from '$images/logo-with-text.svelte';
+    import LogoWithText from "$images/logo-with-text.svelte";
 </script>
 
 <nav
