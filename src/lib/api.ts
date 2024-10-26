@@ -1,10 +1,10 @@
 // Referenced from @algebra2boy - Yongye Tan
 
 import { error, type NumericRange } from "@sveltejs/kit";
-import { env } from "$lib/env";
 import type { HttpRequestFetch, HttpPayload } from "$lib/types/request";
+
 /* The base URL of the backend API */
-const baseURL = env.API_URL;
+const baseURL = "http://127.0.0.1:8000/api";
 
 /**
  * Sends an HTTP request to the specified path with the given method, data, and token.
@@ -31,9 +31,10 @@ async function send({ method, path, data, token }: HttpRequestFetch): Promise<an
     }
 
     // Check if there is a web token, add that to authorization header
-    if (token) {
-        options.headers["Authorization"] = `Bearer ${token}`;
-    }
+    // if (token) {
+    //     options.headers["Authorization"] = `Bearer ${token}`;
+    // }
+    console.log(`${method}: ${baseURL}${path}`);
 
     // Start fetching the endpoint and convert the response body to json
     let responseStatus = 500;

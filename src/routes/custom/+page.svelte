@@ -1,35 +1,32 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import SuperDebug, { type SuperValidated, type Infer, superForm } from "sveltekit-superforms";
-    import { zodClient } from "sveltekit-superforms/adapters";
+    import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
 
     import type { PageData } from "./$types";
-    import * as Form from "$lib/components/ui/form";
-    import { Input } from "$lib/components/ui/input";
-
     import type { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
+    
     import Logo from "$assets/icons/logo.svelte";
+    import * as Form from "$components/ui/form";
+    import { Input } from "$components/ui/input";
     import { Button } from "$components/ui/button";
 
     export let data: PageData;
-    let name = "";
+    let name = data.name;
 
-    const createRoomForm = superForm<Infer<CreateRoomSchema>>(data.createRoomForm, {
+    const createRoomForm = superForm<Infer<typeof CreateRoomSchema>>(data.createRoomForm, {
         onResult: ({ result: r }) => {
-            if (r?.type === "success") {
+            if (r?.type === "success" || r?.status === 303) {
                 toast.success(`Creating room...`);
-                resetName();
             } else {
                 toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
             }
         }
     });
-    const joinRoomForm = superForm<Infer<JoinRoomSchema>>(data.joinRoomForm, {
+    const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
         onResult: ({ result: r }) => {
-            if (r.type === "success") {
+            if (r?.type === "success" || r?.status === 303) {
                 toast.success(`Joining room...`);
-                resetName();
             } else {
                 toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
             }
@@ -50,17 +47,10 @@
         message: joinRoomMessage
     } = joinRoomForm;
 
-    const updateNames = (event) => {
-        const value = event.target.value;
-        name = value;
+    const updateNames = (event: InputEvent) => {
+        const value = (event.target as HTMLInputElement).value;
         $createRoomFormData.name = value;
         $joinRoomFormData.name = value;
-    };
-
-    const resetName = () => {
-        name = "";
-        $createRoomFormData.name = "";
-        $joinRoomFormData.name = "";
     };
 </script>
 

@@ -5,54 +5,57 @@ import { zod } from "sveltekit-superforms/adapters";
 import * as api from "$lib/api";
 import { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
     return {
+        name: locals.user?.name ?? "",
         createRoomForm: await superValidate(zod(CreateRoomSchema)),
         joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };
 };
 
 export const actions = {
-    createRoom: async ({ request }) => {
+    createRoom: async ({ request, locals, cookies }) => {
         const createRoomForm = await superValidate(request, zod(CreateRoomSchema));
+        const name = createRoomForm.data.name || locals.user?.name;
 
-        if (!createRoomForm.valid) {
+        if (!createRoomForm.valid && !name) {
             return fail(400, { createRoomForm });
         }
-        try {
-            const response: any = { ok: true, json: async () => ({ id: "123ABC" }) };
-            // const response = await api.post("/create-room", {
-            //     player_name: createRoomForm.data.name
-            // });
-            if (response.ok) {
-                const room = await response.json();
-                return redirect(204, `/game/${room.id}`);
-            } else {
-                return fail(response.status, { createRoomForm });
-            }
-        } catch (error) {
+        const data = await api.post("/create-room", {
+            player_name: name
+        });
+
+        if (!data.error) {
+            const { room_code, player_id } = data;
+            cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
+            redirect(303, `/room/${room_code}`);
+        } else {
             return fail(500, { createRoomForm });
         }
     },
 
-    joinRoom: async ({ request }) => {
+    joinRoom: async ({ request, locals, cookies }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
+        const name = joinRoomForm.data.name || locals.user?.name;
 
-        if (!joinRoomForm.valid) {
+        if (!joinRoomForm.valid && !name) {
             return fail(400, { joinRoomForm });
         }
 
-        try {
-            const response = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
-                player_name: joinRoomForm.data.name
-            });
-            if (response.ok) {
-                const room = await response.json();
-                // return redirect(204, `/game/${room.id}`);
-            } else {
-                return fail(response.status, { joinRoomForm });
+        const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
+            player_name: name
+        });
+        
+        if (!data.error) {
+            const { player_id } = data;
+            cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
+            redirect(303, `/room/${joinRoomForm.data.roomCode}`);
+        } else {
+            if (name && name.length > 0) {
+                joinRoomForm.errors.name = undefined;
+                joinRoomForm.data.name = name;
             }
-        } catch (error) {
+            joinRoomForm.errors.roomCode = [data.error.detail];
             return fail(500, { joinRoomForm });
         }
     }
