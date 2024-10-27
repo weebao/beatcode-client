@@ -4,7 +4,7 @@ import { error, type NumericRange } from "@sveltejs/kit";
 import type { HttpRequestFetch, HttpPayload } from "$lib/types/request";
 
 /* The base URL of the backend API */
-const baseURL = "http://127.0.0.1:8000/api";
+const baseURL = "http://0.0.0.0:8000/api";
 
 /**
  * Sends an HTTP request to the specified path with the given method, data, and token.

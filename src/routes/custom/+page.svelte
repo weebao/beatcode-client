@@ -5,7 +5,7 @@
 
     import type { PageData } from "./$types";
     import type { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
-    
+
     import Logo from "$assets/icons/logo.svelte";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
@@ -28,7 +28,8 @@
             if (r?.type === "success" || r?.status === 303) {
                 toast.success(`Joining room...`);
             } else {
-                toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
+                toast.error(`Server error: Maybe the server hasn't started yet
+                            ${JSON.stringify(r, null, 2)}`);
             }
         }
     });
@@ -65,7 +66,12 @@
     </div>
     <!-- Input name -->
     <div class="flex flex-col space-y-2">
-        <Input class="w-full" placeholder="Enter your name" bind:value={name} on:input={updateNames} />
+        <Input
+            class="w-full"
+            placeholder="Enter your name"
+            bind:value={name}
+            on:input={updateNames}
+        />
         {#if $createRoomErrors.name || $joinRoomErrors.name}
             <p class="text-base font-semibold text-destructive">
                 {$createRoomErrors.name || $joinRoomErrors.name}

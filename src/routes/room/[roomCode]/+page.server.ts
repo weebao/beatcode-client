@@ -10,6 +10,7 @@ import * as api from "$lib/api";
 export const load: PageServerLoad = async ({ locals, params }) => {
     return {
         name: locals.user?.name,
+        token: locals.user?.token,
         roomCode: params.roomCode,
         joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };
@@ -27,11 +28,11 @@ export const actions = {
         const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
             player_name: name
         });
-        
+
         if (!data.error) {
             const { player_id } = data;
             cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
-            redirect(303, `/game/${joinRoomForm.data.roomCode}`);
+            return { joinRoomForm };
         } else {
             return fail(500, { joinRoomForm });
         }

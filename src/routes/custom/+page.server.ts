@@ -27,6 +27,7 @@ export const actions = {
 
         if (!data.error) {
             const { room_code, player_id } = data;
+            console.log("redirect")
             cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
             redirect(303, `/room/${room_code}`);
         } else {
@@ -45,7 +46,7 @@ export const actions = {
         const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
             player_name: name
         });
-        
+
         if (!data.error) {
             const { player_id } = data;
             cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });

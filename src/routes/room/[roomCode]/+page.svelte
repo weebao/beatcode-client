@@ -1,25 +1,64 @@
 <script lang="ts">
+    import { onDestroy, onMount } from "svelte";
     import type { PageData } from "./$types";
     import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
-
+    
+    import { socket } from "$stores/socket";
     import type { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
-    import {
-        Button
-    } from "$components/ui/button";
+    import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
+    import type { PlayerInfo } from "$models/game";
 
     import { Copy, Link } from "lucide-svelte";
 
     export let data: PageData;
-    let { name, roomCode } = data;
+    let { name, token, roomCode } = data;
     let isDialogOpen = name === undefined;
+    let connectStatus = 0;
+    let opponentInfo: PlayerInfo;
 
+    // Establish socket and look for update
+    const API_URL = "ws://localhost:8000/ws";
+    const connect = () => {
+        if (name && token) {
+            $socket = new WebSocket(`${API_URL}/${roomCode}/${token}`);
+            
+            $socket.onopen = () => {
+                console.log('Connected to server');
+                connectStatus = 1;
+            };
+
+            $socket.onclose = () => {
+                console.log('Disconnected from server');
+                connectStatus = -1;
+            };
+
+            $socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('Received:', data);
+
+                if (data.event === "game_update") {
+                    opponentInfo = data.event_data.player2;
+                }
+            };
+
+            $socket.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+            };
+        }
+    }
+
+    // Prompt if user isn't authenticated
     const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
         onResult: ({ result: r }) => {
-            if (r?.type !== "success") {
+            if (r?.type === "success") {
+                toast.success("Successfully joined room");
+                isDialogOpen = false;
+                connect();
+            } else {
                 toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
             }
         }
@@ -32,24 +71,48 @@
         message: joinRoomMessage
     } = joinRoomForm;
 
+    // Utils
     const copy = (text: string) => {
         navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard");
-    }
+    };
+
+    onMount(() => {
+        connect();
+    });
+
+    onDestroy(() => {
+        $socket?.close();
+    });
 </script>
 
 <div class="mx-auto mt-16 flex flex-col items-center">
-    <h1 class="font-bold text-5xl mb-4">Game Room</h1>
-    <p class="text-xl mb-2">Code: {roomCode}</p>
-    <div class="flex items-center gap-2 mb-4">
-        <Button variant="outline" size="icon" class="w-8 h-8 p-1.5" on:click={() => copy(roomCode)}>
+    <h1 class="mb-4 text-5xl font-bold">Game Room</h1>
+    <p class="mb-2 text-xl">Code: {roomCode}</p>
+    <div class="mb-4 flex items-center gap-2">
+        <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" on:click={() => copy(roomCode)}>
             <Copy />
         </Button>
-        <Button variant="outline" size="icon" class="w-8 h-8 p-1.5" on:click={() => copy(`http://localhost:5173/room/${roomCode}`)}>
+        <Button
+            variant="outline"
+            size="icon"
+            class="h-8 w-8 p-1.5"
+            on:click={() => copy(`http://localhost:5173/room/${roomCode}`)}
+        >
             <Link />
         </Button>
     </div>
-    <Button size="lg" class="text-lg mt-4">Start Game</Button>
+    <div class="flex gap-12 my-4">
+        <div class="border border-secondary border-1 rounded-xl w-[400px] p-4">
+            <h2 class="text-2xl font-semibold">{name}</h2>
+            <p class="text-lg">The mightiest coder of all</p>
+        </div>
+        <div class={`border border-secondary ${opponentInfo ? '' : 'animate-pulse'} border-1 rounded-xl w-[400px] p-4`}>
+            <h2 class="text-2xl font-semibold">{opponentInfo?.name || "Waiting for opponent..."}</h2>
+            <p class="text-lg">The brave one who dares to challenge you</p>
+        </div>
+    </div>
+    <Button size="lg" class="mt-4 text-lg">Start Game</Button>
 </div>
 <!-- If not authenticated - prompt user to enter name -->
 <Dialog.Root bind:open={isDialogOpen} closeOnEscape={false} closeOnOutsideClick={false}>
@@ -67,17 +130,14 @@
                         {...attrs}
                         placeholder="Enter your name"
                         bind:value={$joinRoomFormData.name}
+                        class="mb-2"
                     />
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
             <Form.Field form={joinRoomForm} name="roomCode">
                 <Form.Control let:attrs>
-                    <Input
-                        {...attrs}
-                        type="hidden"
-                        value={roomCode}
-                    />
+                    <Input {...attrs} type="hidden" value={roomCode} />
                 </Form.Control>
             </Form.Field>
             <Dialog.Footer>

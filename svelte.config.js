@@ -23,6 +23,7 @@ const config = {
             $icons: path.resolve("./src/lib/assets/icons"),
             $images: path.resolve("./src/lib/assets/images"),
             $lib: path.resolve("./src/lib"),
+            $models: path.resolve("./src/lib/models"),
             $stores: path.resolve("./src/lib/stores"),
             $types: path.resolve("./src/lib/types"),
             $utils: path.resolve("./src/lib/utils")
