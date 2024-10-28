@@ -26,10 +26,10 @@
     let connectStatus = 0; // 0 - connecting, 1 - connected, -1 - disconnected
     let gameStarted = false;
     let winner = null;
-    
+
     // Setup websocket
     let socket: WebSocket;
-    
+
     const API_URL = "ws://0.0.0.0:8000/ws";
     const connect = () => {
         socket = new WebSocket(`${API_URL}/${roomCode}/${playerId}`);
@@ -67,12 +67,14 @@
     };
 
     const submitCode = () => {
-        socket.send(JSON.stringify({
-            type: "submit_code",
-            code: model.getValue()
-        }));
+        socket.send(
+            JSON.stringify({
+                type: "submit_code",
+                code: model.getValue()
+            })
+        );
     };
-    
+
     // Code editor config
     let editorElement: HTMLDivElement;
     let editor: monaco.editor.IStandaloneCodeEditor;

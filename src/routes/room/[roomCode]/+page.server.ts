@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         name: locals.user?.name,
         token: locals.user?.token,
         roomCode: params.roomCode,
-        joinRoomForm: await superValidate(zod(JoinRoomSchema))
+        joinRoomForm: await superValidate(zod(JoinRoomSchema)),
     };
 };
 
@@ -32,9 +32,35 @@ export const actions = {
         if (!data.error) {
             const { player_id } = data;
             cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
-            return { joinRoomForm };
+            return { joinRoomForm, token: player_id };
         } else {
             return fail(500, { joinRoomForm });
+        }
+    },
+
+    joinRoomThroughLink: async ({ request, locals, params, cookies }) => {
+        const name = locals.user?.name;
+        const roomCode = params.roomCode;
+
+        if (!name || !roomCode) {
+            return fail(400, { error: "Missing name or roomCode" });
+        }
+
+        const data = await api.post(`/join-room/${roomCode}`, {
+            player_name: name
+        });
+
+        if (!data.error) {
+            const { player_id } = data;
+            cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
+            return { success: true, token: player_id };
+        } else {
+            return fail(500, {
+                error: `
+                    Failed to join room ${roomCode} with name ${name}.
+                    Reason: ${data.error.detail}
+                `
+            });
         }
     },
 

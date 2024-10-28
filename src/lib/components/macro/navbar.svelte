@@ -3,7 +3,7 @@
 </script>
 
 <nav
-    class="flex h-nav w-full flex-col items-center justify-center self-stretch overflow-hidden max-md:max-w-full"
+    class="flex h-nav w-full flex-col items-center justify-center self-stretch overflow-hidden max-md:max-w-full px-8"
 >
     <div
         class="flex min-h-[80px] w-full max-w-[1280px] flex-wrap items-center justify-between gap-10"
