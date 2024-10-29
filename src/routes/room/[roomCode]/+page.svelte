@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import type { PageData } from "./$types";
-    import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
+    import { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
 
     import { socket } from "$stores/socket";
-    import type { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
+    import type { JoinRoomSchema } from "$lib/zod-schemas";
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
@@ -24,7 +24,7 @@
     const API_URL = "ws://localhost:8000/ws";
     const connect = () => {
         if (name && token) {
-            console.log(`connecting with ${token}`)
+            console.log(`connecting with ${token}`);
             $socket = new WebSocket(`${API_URL}/${roomCode}/${token}`);
 
             $socket.onopen = () => {
@@ -50,7 +50,6 @@
             $socket.onerror = async (error) => {
                 console.log("WebSocket Error:", error);
                 await joinRoomThroughLink();
-                // $socket?.close();
             };
         }
     };
@@ -58,10 +57,7 @@
     // Fallback to joinRoom action if WebSocket connection fails
     const joinRoomThroughLink = async () => {
         const response = await fetch(`?/joinRoomThroughLink`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
+            method: "POST"
         });
 
         const result = await response.json();
@@ -79,9 +75,8 @@
         onResult: ({ result: r }) => {
             if (r?.type === "success") {
                 isDialogOpen = false;
-                console.log(r);
-                name = r.data.joinRoomForm.data.name; // i know i know this is bad but its 4 am
-                token = r.data.token;
+                name = r.data?.joinRoomForm.data.name; // i know i know this is bad but its 4 am
+                token = r.data?.token;
                 connect();
             } else {
                 toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
@@ -105,10 +100,6 @@
     onMount(() => {
         connect();
     });
-
-    onDestroy(() => {
-        $socket?.close();
-    });
 </script>
 
 <div class="mx-auto mt-16 flex flex-col items-center">
@@ -130,9 +121,9 @@
     <div class="my-4 flex gap-12">
         <div class="border-1 w-[400px] rounded-xl border border-secondary p-4">
             <div class="flex items-center">
-                <h2 class="text-2xl mr-2 font-semibold">{name}</h2>
+                <h2 class="mr-2 text-2xl font-semibold">{name}</h2>
                 <div
-                    class="h-3 w-3 rounded-full transition-all duration-300 animate-pulse"
+                    class="h-3 w-3 animate-pulse rounded-full transition-all duration-300"
                     class:bg-yellow-500={connectStatus === 0}
                     class:bg-primary={connectStatus === 1}
                     class:bg-neutral={connectStatus === -1}
@@ -148,7 +139,7 @@
                     {opponentInfo?.name || "Waiting for opponent..."}
                 </h2>
                 <div
-                    class="h-3 w-3 rounded-full transition-all duration-300 animate-pulse ml-2"
+                    class="ml-2 h-3 w-3 animate-pulse rounded-full transition-all duration-300"
                     class:bg-transparent={!opponentInfo}
                     class:bg-primary={opponentInfo}
                     class:bg-neutral={connectStatus === -1}
@@ -161,7 +152,9 @@
             {/if}
         </div>
     </div>
-    <Button size="lg" class="mt-4 text-lg">Start Game</Button>
+    <a href="/game">
+        <Button size="lg" class="mt-4 text-lg">Start Game</Button>
+    </a>
 </div>
 <!-- If not authenticated - prompt user to enter name -->
 <Dialog.Root bind:open={isDialogOpen} closeOnEscape={false} closeOnOutsideClick={false}>

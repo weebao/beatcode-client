@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         name: locals.user?.name,
         token: locals.user?.token,
         roomCode: params.roomCode,
-        joinRoomForm: await superValidate(zod(JoinRoomSchema)),
+        joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };
 };
 

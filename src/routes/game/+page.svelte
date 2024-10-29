@@ -1,9 +1,11 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
+    import { toast } from "svelte-sonner";
     import * as monaco from "monaco-editor";
     import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 
     import DefaultTheme from "$assets/themes/code-editor/default.json";
+
     import * as Avatar from "$components/ui/avatar";
     import { Button } from "$components/ui/button";
     import * as Resizable from "$components/ui/resizable";
@@ -11,66 +13,101 @@
 
     import type { PlayerInfo } from "$models/game";
 
+    import { socket } from "$stores/socket";
+
     import { Play, Send, FileText, SquareCode, CheckSquare } from "lucide-svelte";
     import { samplePython } from "./assets/code";
+    import test from "node:test";
 
     // Game variables
     export let data;
-    const playerId = data.token;
-    const roomCode = data.roomCode;
+    let playerName = data.name;
+    let playerId = data.token;
+    let roomCode = data.roomCode;
+    console.log(data);
     let userInfo: PlayerInfo;
     let opponentInfo: PlayerInfo;
     let code = "";
     let problemTitle = "";
     let problemDescription = "";
+    let testCasePassed = 0;
+    let totalTestCases: null | number = null;
     let connectStatus = 0; // 0 - connecting, 1 - connected, -1 - disconnected
-    let gameStarted = false;
     let winner = null;
 
     // Setup websocket
-    let socket: WebSocket;
-
-    const API_URL = "ws://0.0.0.0:8000/ws";
     const connect = () => {
-        socket = new WebSocket(`${API_URL}/${roomCode}/${playerId}`);
+        if (!$socket) {
+            toast.error("Connection error: No socket available");
+            return;
+        }
 
-        socket.onopen = () => {
+        $socket.send(
+            JSON.stringify({
+                event: "start_game",
+                event_data: {}
+            })
+        );
+
+        $socket.onopen = () => {
             console.log("Connected to server");
             connectStatus = 1;
         };
 
-        socket.onclose = () => {
+        $socket.onclose = () => {
             console.log("Disconnected from server");
             connectStatus = -1;
         };
 
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
+        $socket.onmessage = (event) => {
+            const { event: e, event_data: data } = JSON.parse(event.data);
             console.log("Received:", data);
 
-            if (data.type === "game_update") {
-                userInfo = data.player1;
-                opponentInfo = data.player2;
-            } else if (data.type === "new_challenge") {
-                problemTitle = data.challenge_info.title;
-                problemDescription = data.challenge_info.description;
-                code = data.challenge_info.signature;
-                loadCode(code);
-            } else if (data.type === "game_ended") {
-                winner = data.winner;
+            switch (e) {
+                case "game_update":
+                    userInfo = data.player1;
+                    opponentInfo = data.player2;
+                    break;
+                case "new_challenge":
+                    problemTitle = data.challenge_info.title;
+                    problemDescription = data.challenge_info.description;
+                    code = data.challenge_info.signature;
+                    testCasePassed = 0;
+                    totalTestCases = null;
+                    loadCode(code);
+                    break;
+                case "execution_results":
+                    testCasePassed = data.passed;
+                    totalTestCases = data.totalTestCases;
+                case "game_ended":
+                    winner = data.winner;
+                    break;
+                case "error":
+                    toast.error(data.error_msg);
+                    break;
+                default:
+                    console.log("Unknown event type:", data.type);
+                    break;
             }
         };
 
-        socket.onerror = (error) => {
+        $socket.onerror = (error) => {
             console.error("WebSocket Error:", error);
         };
     };
 
     const submitCode = () => {
-        socket.send(
+        if (!$socket) {
+            toast.error("Connection error: No socket available");
+            return;
+        }
+
+        $socket.send(
             JSON.stringify({
-                type: "submit_code",
-                code: model.getValue()
+                event: "submit_code",
+                event_data: {
+                    code: model.getValue()
+                }
             })
         );
     };
@@ -88,7 +125,7 @@
 
     monaco.editor.defineTheme("default", {
         ...DefaultTheme,
-        base: "vs-dark" // or 'vs', 'hc-black' depending on your theme
+        base: "vs-dark"
     });
 
     // Run code on mount
@@ -115,7 +152,7 @@
     onDestroy(() => {
         monaco?.editor.getModels().forEach((model) => model.dispose());
         editor?.dispose();
-        socket?.close();
+        $socket?.close();
     });
 </script>
 
