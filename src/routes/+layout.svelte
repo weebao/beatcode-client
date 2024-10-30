@@ -1,5 +1,20 @@
 <script lang="ts">
-	import '../app.postcss';
+    import "../app.postcss";
+    import Navbar from "$lib/components/macro/navbar.svelte";
+    import { Toaster } from "$lib/components/ui/sonner";
+    interface Props {
+        children?: import("svelte").Snippet;
+    }
+
+    let { children }: Props = $props();
 </script>
 
-<slot />
+<svelte:head>
+    <title>BeatCode</title>
+</svelte:head>
+
+<Navbar />
+<Toaster />
+<main class="min-h-navscreen bg-background">
+    {@render children?.()}
+</main>
