@@ -2,6 +2,11 @@
     "base": "vs-dark",
     "inherit": true,
     "rules": [
+        {
+            "foreground": "4DA173",
+            "fontStyle": "italic",
+            "token": "comment"
+        }
     ],
     "colors": {
         "editor.foreground": "#CDD3DE",
