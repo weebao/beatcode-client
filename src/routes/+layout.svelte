@@ -2,6 +2,11 @@
     import "../app.postcss";
     import Navbar from "$lib/components/macro/navbar.svelte";
     import { Toaster } from "$lib/components/ui/sonner";
+    interface Props {
+        children?: import("svelte").Snippet;
+    }
+
+    let { children }: Props = $props();
 </script>
 
 <svelte:head>
@@ -11,5 +16,5 @@
 <Navbar />
 <Toaster />
 <main class="min-h-navscreen bg-background">
-    <slot />
+    {@render children?.()}
 </main>

@@ -1,4 +1,3 @@
-import Problem from "./problem.svelte";
-import Test from "./test.svelte";
+import Game from "./game.svelte";
 
-export { Problem, Test };
+export { Game };

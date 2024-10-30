@@ -4,60 +4,108 @@
     import { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
 
-    import { socket } from "$stores/socket";
-    import type { JoinRoomSchema } from "$lib/zod-schemas";
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
-    import type { PlayerInfo } from "$models/game";
+    import StatusIndicator from "$components/micro/status-indicator.svelte";
+    import { Game } from "$components/macro/game";
+
+    import type { JoinRoomSchema } from "$lib/zod-schemas";
+
+    import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
 
     import { Copy, Link } from "lucide-svelte";
 
-    export let data: PageData;
-    let { name, token, roomCode } = data;
-    let isDialogOpen = name === undefined;
-    let connectStatus = 0;
-    let opponentInfo: PlayerInfo;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
+    let { name, token, roomCode } = $state(data);
+    let isDialogOpen = $state(name === undefined);
+    let connectStatus = $state(0);
+
+    let userInfo: PlayerInfo | undefined = $state();
+    let opponentInfo: PlayerInfo | undefined = $state();
+    let challengeInfo: ChallengeInfo | undefined = $state();
+    let executionResults: ExecutionResults | undefined = $state();
+    let isExecuting = $state(false);
+    let gameStarted = $state(false);
+    let winner: string | null = $state(null);
 
     // Establish socket and look for update
     const API_URL = "ws://localhost:8000/ws";
+    let socket: WebSocket;
+
     const connect = () => {
-        if (name && token) {
-            console.log(`connecting with ${token}`);
-            $socket = new WebSocket(`${API_URL}/${roomCode}/${token}`);
+        socket = new WebSocket(`${API_URL}/${roomCode}/${token}`);
 
-            $socket.onopen = () => {
-                toast.success("Successfully joined room");
-                console.log("Connected to server");
-                connectStatus = 1;
-            };
+        socket.onopen = () => {
+            toast.success("Successfully joined room");
+            console.log("Connected to server");
+            connectStatus = 1;
+        };
 
-            $socket.onclose = () => {
-                console.log("Disconnected from server");
-                connectStatus = -1;
-            };
+        socket.onclose = () => {
+            console.log("Disconnected from server");
+            connectStatus = -1;
+        };
 
-            $socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log("Received:", data);
+        socket.onmessage = (event) => {
+            const { event: e, event_data: data } = JSON.parse(event.data);
+            console.log("Received:", data);
 
-                if (data.event === "game_update") {
-                    opponentInfo = data.event_data.player2;
-                }
-            };
+            switch (e) {
+                case "game_update":
+                    userInfo = data.player1;
+                    opponentInfo = data.player2;
+                    break;
+                case "new_challenge":
+                    challengeInfo = data.challenge_info;
+                    gameStarted = true;
+                    break;
+                case "execution_results":
+                    executionResults = data;
+                    isExecuting = false;
+                    break;
+                case "game_ended":
+                    winner = data.winner;
+                    break;
+                case "error":
+                    toast.error(data.error_msg);
+                    break;
+                default:
+                    break;
+            }
+        };
 
-            $socket.onerror = async (error) => {
-                console.log("WebSocket Error:", error);
-                await joinRoomThroughLink();
-            };
+        socket.onerror = async (error) => {
+            console.log("WebSocket Error:", error);
+            await joinRoomThroughLink();
+        };
+    };
+
+    const startGame = () => {
+        if (!opponentInfo) {
+            toast.error("Can't start game without an opponent");
+            return;
         }
+        socket.send(
+            JSON.stringify({
+                event: "start_game",
+                event_data: {}
+            })
+        );
     };
 
     // Fallback to joinRoom action if WebSocket connection fails
     const joinRoomThroughLink = async () => {
         const response = await fetch(`?/joinRoomThroughLink`, {
-            method: "POST"
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
         });
 
         const result = await response.json();
@@ -83,6 +131,23 @@
             }
         }
     });
+
+    const submitCode = (code: string) => {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            toast.error("Connection error: No socket available");
+            return;
+        }
+
+        isExecuting = true;
+        socket.send(
+            JSON.stringify({
+                event: "submit_code",
+                event_data: {
+                    code
+                }
+            })
+        );
+    };
 
     const {
         form: joinRoomFormData,
@@ -118,18 +183,18 @@
             <Link />
         </Button>
     </div>
-    <div class="my-4 flex gap-12">
+    <div class="my-4 flex items-center gap-12">
         <div class="border-1 w-[400px] rounded-xl border border-secondary p-4">
             <div class="flex items-center">
                 <h2 class="mr-2 text-2xl font-semibold">{name}</h2>
-                <div
-                    class="h-3 w-3 animate-pulse rounded-full transition-all duration-300"
-                    class:bg-yellow-500={connectStatus === 0}
-                    class:bg-primary={connectStatus === 1}
-                    class:bg-neutral={connectStatus === -1}
-                ></div>
+                <StatusIndicator status={connectStatus} />
             </div>
             <p class="text-lg">The mightiest coder of all</p>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <div class="h-6 w-[2px] rounded-sm bg-secondary"></div>
+            <div class="font-semibold text-secondary">VS</div>
+            <div class="h-6 w-[2px] rounded-sm bg-secondary"></div>
         </div>
         <div
             class={`border border-secondary ${opponentInfo ? "" : "animate-pulse"} border-1 w-[400px] rounded-xl p-4`}
@@ -152,10 +217,11 @@
             {/if}
         </div>
     </div>
-    <a href="/game">
-        <Button size="lg" class="mt-4 text-lg">Start Game</Button>
-    </a>
+    <Button size="lg" class="mt-4 text-lg" on:click={startGame}>Start Game</Button>
 </div>
+{#if gameStarted}
+    <Game {userInfo} {opponentInfo} {challengeInfo} {executionResults} {isExecuting} {winner} {submitCode} />
+{/if}
 <!-- If not authenticated - prompt user to enter name -->
 <Dialog.Root bind:open={isDialogOpen} closeOnEscape={false} closeOnOutsideClick={false}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton>
@@ -167,18 +233,22 @@
         </Dialog.Header>
         <form method="POST" use:enhanceJoinRoom action="?/joinRoom">
             <Form.Field form={joinRoomForm} name="name">
-                <Form.Control let:attrs>
-                    <Input
-                        {...attrs}
-                        placeholder="Enter your name"
-                        bind:value={$joinRoomFormData.name}
-                    />
+                <Form.Control>
+                    {#snippet children({ attrs }: { attrs: any })}
+                        <Input
+                            {...attrs}
+                            placeholder="Enter your name"
+                            bind:value={$joinRoomFormData.name}
+                        />
+                    {/snippet}
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
             <Form.Field form={joinRoomForm} name="roomCode">
-                <Form.Control let:attrs>
-                    <Input {...attrs} type="hidden" value={roomCode} />
+                <Form.Control>
+                    {#snippet children({ attrs }: { attrs: any })}
+                        <Input {...attrs} type="hidden" value={roomCode} />
+                    {/snippet}
                 </Form.Control>
             </Form.Field>
             <Dialog.Footer class="mt-4">
@@ -187,6 +257,23 @@
         </form>
     </Dialog.Content>
 </Dialog.Root>
+{#if winner}
+    <Dialog.Root open={true} closeOnEscape={false} closeOnOutsideClick={false}>
+        <Dialog.Content class="sm:max-w-[425px]" hideCloseButton>
+            <Dialog.Header>
+                <Dialog.Title>{winner} won!</Dialog.Title>
+            </Dialog.Header>
+            <div class="flex justify-center my-4">
+                <img src="/path/to/avatar.png" alt="Winner Avatar" class="w-24 h-24 rounded-full" />
+            </div>
+            <Dialog.Footer class="mt-4">
+                <Button on:click={() => { gameStarted = false; challengeInfo = undefined; winner = null; }}>
+                    Reset
+                </Button>
+            </Dialog.Footer>
+        </Dialog.Content>
+    </Dialog.Root>
+{/if}
 
 <style>
 </style>

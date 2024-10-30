@@ -8,4 +8,10 @@ export type PlayerInfo = {
 export type ChallengeInfo = {
     title: string;
     description: string;
+    signature: string;
+};
+
+export type ExecutionResults = {
+    passed: number;
+    totalTestCases: number;
 };

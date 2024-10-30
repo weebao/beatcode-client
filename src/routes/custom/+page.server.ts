@@ -37,8 +37,8 @@ export const actions = {
 
     joinRoom: async ({ request, locals, cookies }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
-        const name = joinRoomForm.data.name || locals.user?.name;
 
+        const name = joinRoomForm.data.name || locals.user?.name;
         if (!joinRoomForm.valid && !name) {
             return fail(400, { joinRoomForm });
         }
