@@ -15,6 +15,6 @@
 
 <Navbar />
 <Toaster />
-<main class="min-h-navscreen bg-background">
+<main class="min-h-navscreen bg-background px-4">
     {@render children?.()}
 </main>

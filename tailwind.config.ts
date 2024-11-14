@@ -1,5 +1,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
     darkMode: ["class"],
@@ -83,9 +84,27 @@ const config: Config = {
             },
             fontSize: {
                 base: "var(--font-base)"
-            }
+            },
+            textShadow: {
+                sm: "0 1px 2px var(--tw-shadow-color)",
+                DEFAULT: "0 2px 4px var(--tw-shadow-color)",
+                lg: "0 8px 16px var(--tw-shadow-color)",
+                center: "0 0 12px var(--tw-shadow-color)"
+            },
         }
-    }
+    },
+    plugins: [
+        plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+                {
+                    "text-shadow": (value) => ({
+                        textShadow: value
+                    })
+                },
+                { values: theme("textShadow") }
+            );
+        })
+    ]
 };
 
 export default config;

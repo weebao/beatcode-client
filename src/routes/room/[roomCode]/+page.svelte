@@ -23,7 +23,7 @@
 
     let { data }: Props = $props();
     let { name, token, roomCode } = $state(data);
-    let isDialogOpen = $state(name === undefined);
+    let isDialogOpen = $state(data.name === undefined);
     let connectStatus = $state(0);
 
     let userInfo: PlayerInfo | undefined = $state();
