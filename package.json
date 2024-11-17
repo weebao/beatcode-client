@@ -39,10 +39,12 @@
   },
   "type": "module",
   "dependencies": {
+    "@codemirror/lang-python": "^6.1.6",
+    "@lezer/highlight": "^1.2.1",
+    "codemirror": "^6.0.1",
     "dotenv": "^16.4.5",
     "gsap": "^3.12.5",
     "lucide-solid": "^0.456.0",
-    "monaco-editor": "^0.52.0",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
     "prettier-plugin-tailwindcss": "^0.6.8"

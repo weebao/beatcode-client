@@ -1,15 +1,11 @@
 <script lang="ts">
-    import { onDestroy, onMount, tick } from "svelte";
-    import { scale } from "svelte/transition";
-    import * as monaco from "monaco-editor";
-    import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
-
+    import { tick } from "svelte";
+    import { Editor, EditorData } from "$components/macro/editor";
     import Problem from "./problem.svelte";
     import Test from "./test.svelte";
 
     import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
 
-    import DefaultTheme from "$assets/themes/code-editor/default.json";
     import AvatarImg from "$assets/images/avatar.jpg";
 
     import * as Avatar from "$components/ui/avatar";
@@ -30,70 +26,36 @@
         submitCode: (code: string) => void;
     }
 
-    let { userInfo, opponentInfo, challengeInfo, executionResults, isExecuting, winner, submitCode }: Props =
-        $props();
+    let {
+        userInfo,
+        opponentInfo,
+        challengeInfo,
+        executionResults,
+        isExecuting,
+        winner,
+        submitCode
+    }: Props = $props();
 
-    // Code editor config
-    let editorElement: HTMLDivElement;
-    let editor: monaco.editor.IStandaloneCodeEditor;
-    let model: monaco.editor.ITextModel;
-
-    const loadCode = (code: string) => {
-        if (!editor) {
-            return;
-        }
-
-        model = monaco.editor.createModel(code, "python");
-        editor.setModel(model);
-    };
-
-    monaco.editor.defineTheme("default", {
-        ...DefaultTheme,
-        base: "vs-dark"
-    });
+    const editorData = new EditorData();
 
     const handleSubmit = () => {
-        if (!editor) {
-            toast.error("Code editor is not configured yet");
+        try {
+            submitCode(editorData.getCode());
+        } catch (e: any) {
+            toast.error(`Error: ${e.message}`);
         }
-        submitCode(editor.getValue());
     };
-
-    // Run code on mount
-    onMount(async () => {
-        self.MonacoEnvironment = {
-            getWorker: () => {
-                return new editorWorker();
-            }
-        };
-
-        editor = monaco.editor.create(editorElement, {
-            automaticLayout: true,
-            theme: "default",
-            language: "python",
-            minimap: {
-                enabled: false
-            }
-        });
-
-        loadCode(`${challengeInfo?.signature ?? "def Solution():"}\n    `);
-    });
 
     $effect.pre(() => {
         let currentChallenge = challengeInfo?.title;
-        console.log("beforetick", currentChallenge)
+        console.log("beforetick", currentChallenge);
         tick().then(() => {
-            console.log("tick", challengeInfo)
+            console.log("tick", challengeInfo);
             if (challengeInfo?.title !== currentChallenge) {
-                loadCode(`${challengeInfo?.signature ?? "def Solution():"}\n    `);
+                editorData.setCode(`${challengeInfo?.signature ?? "def Solution():"}\n    `);
                 executionResults = undefined;
             }
-        })
-    });
-
-    onDestroy(() => {
-        monaco?.editor.getModels().forEach((model) => model.dispose());
-        editor?.dispose();
+        });
     });
 </script>
 
@@ -114,11 +76,11 @@
         <div class="flex space-x-0.5">
             <Button variant="secondary" size="sm" on:click={handleSubmit}>
                 {#if isExecuting}
-                        <Loader class="animate-spin mr-2 h-4 w-4" />
-                        Submitting...
+                    <Loader class="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
                 {:else}
-                     <Play class="mr-2 h-4 w-4" />
-                     Submit Code
+                    <Play class="mr-2 h-4 w-4" />
+                    Submit Code
                 {/if}
             </Button>
             <!-- <Button variant="secondary" size="sm" class="rounded-r-none" on:click={handleSubmit}>
@@ -157,7 +119,9 @@
                         <span class="font-semibold">Problem</span>
                     </div>
                 </div>
-                <Problem title={challengeInfo?.title} description={challengeInfo?.description} />
+                <div class="panel-content">
+                    <Problem title={challengeInfo?.title} description={challengeInfo?.description} />
+                </div>
             </div>
         </Resizable.Pane>
         <Resizable.Handle class="mx-0.5 w-[2px] bg-transparent hover:bg-blue-500" />
@@ -171,10 +135,9 @@
                                 <span class="font-semibold">Code</span>
                             </div>
                         </div>
-                        <div
-                            class="h-full w-full bg-background py-2"
-                            bind:this={editorElement}
-                        ></div>
+                        <div class="panel-content px-4 bg-background">
+                            <Editor data={editorData}/>
+                        </div>
                     </div>
                 </Resizable.Pane>
                 <Resizable.Handle class="my-0.5 !h-[2px] bg-transparent hover:bg-blue-500" />
@@ -196,11 +159,14 @@
 
 <style>
     .panel {
-        @apply h-full overflow-auto rounded-lg border-[1px] border-secondary;
+        @apply flex flex-col h-full overflow-hidden rounded-lg border-[1px] border-secondary;
     }
 
     .panel-nav {
-        @apply sticky top-0 flex gap-1 bg-neutral text-neutral-foreground;
+        @apply flex gap-1 bg-neutral text-neutral-foreground;
+    }
+    .panel-content {
+        @apply w-full h-full overflow-auto;
     }
     .example-block {
         @apply mb-4 mt-2 rounded-sm bg-neutral px-4 py-2;

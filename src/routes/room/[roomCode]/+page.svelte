@@ -220,7 +220,15 @@
     <Button size="lg" class="mt-4 text-lg" on:click={startGame}>Start Game</Button>
 </div>
 {#if gameStarted}
-    <Game {userInfo} {opponentInfo} {challengeInfo} {executionResults} {isExecuting} {winner} {submitCode} />
+    <Game
+        {userInfo}
+        {opponentInfo}
+        {challengeInfo}
+        {executionResults}
+        {isExecuting}
+        {winner}
+        {submitCode}
+    />
 {/if}
 <!-- If not authenticated - prompt user to enter name -->
 <Dialog.Root bind:open={isDialogOpen} closeOnEscape={false} closeOnOutsideClick={false}>
@@ -263,11 +271,17 @@
             <Dialog.Header>
                 <Dialog.Title>{winner} won!</Dialog.Title>
             </Dialog.Header>
-            <div class="flex justify-center my-4">
-                <img src="/path/to/avatar.png" alt="Winner Avatar" class="w-24 h-24 rounded-full" />
+            <div class="my-4 flex justify-center">
+                <img src="/path/to/avatar.png" alt="Winner Avatar" class="h-24 w-24 rounded-full" />
             </div>
             <Dialog.Footer class="mt-4">
-                <Button on:click={() => { gameStarted = false; challengeInfo = undefined; winner = null; }}>
+                <Button
+                    on:click={() => {
+                        gameStarted = false;
+                        challengeInfo = undefined;
+                        winner = null;
+                    }}
+                >
                     Reset
                 </Button>
             </Dialog.Footer>

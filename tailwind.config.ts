@@ -19,6 +19,10 @@ const config: Config = {
                 nav: "var(--navbar-height)",
                 navscreen: "calc(100dvh - var(--navbar-height))"
             },
+            minHeight: {
+                nav: "var(--navbar-height)",
+                navscreen: "calc(100vh - var(--navbar-height))"
+            },
             colors: {
                 border: "hsl(var(--border) / <alpha-value>)",
                 input: "hsl(var(--input) / <alpha-value>)",
@@ -90,7 +94,7 @@ const config: Config = {
                 DEFAULT: "0 2px 4px var(--tw-shadow-color)",
                 lg: "0 8px 16px var(--tw-shadow-color)",
                 center: "0 0 12px var(--tw-shadow-color)"
-            },
+            }
         }
     },
     plugins: [
