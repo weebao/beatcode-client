@@ -1,4 +1,5 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
+import tailwindcssAnimate from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
@@ -94,10 +95,30 @@ const config: Config = {
                 DEFAULT: "0 2px 4px var(--tw-shadow-color)",
                 lg: "0 8px 16px var(--tw-shadow-color)",
                 center: "0 0 12px var(--tw-shadow-color)"
+            },
+            keyframes: {
+                "accordion-down": {
+                    from: { height: "0" },
+                    to: { height: "var(--bits-accordion-content-height)" }
+                },
+                "accordion-up": {
+                    from: { height: "var(--bits-accordion-content-height)" },
+                    to: { height: "0" }
+                },
+                "caret-blink": {
+                    "0%,70%,100%": { opacity: "1" },
+                    "20%,50%": { opacity: "0" }
+                }
+            },
+            animation: {
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+                "caret-blink": "caret-blink 1.25s ease-out infinite"
             }
         }
     },
     plugins: [
+        tailwindcssAnimate,
         plugin(function ({ matchUtilities, theme }) {
             matchUtilities(
                 {

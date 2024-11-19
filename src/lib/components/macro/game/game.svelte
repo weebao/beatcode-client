@@ -120,7 +120,10 @@
                     </div>
                 </div>
                 <div class="panel-content">
-                    <Problem title={challengeInfo?.title} description={challengeInfo?.description} />
+                    <Problem
+                        title={challengeInfo?.title}
+                        description={challengeInfo?.description}
+                    />
                 </div>
             </div>
         </Resizable.Pane>
@@ -135,8 +138,8 @@
                                 <span class="font-semibold">Code</span>
                             </div>
                         </div>
-                        <div class="panel-content px-4 bg-background">
-                            <Editor data={editorData}/>
+                        <div class="panel-content bg-background px-4">
+                            <Editor data={editorData} />
                         </div>
                     </div>
                 </Resizable.Pane>
@@ -159,14 +162,14 @@
 
 <style>
     .panel {
-        @apply flex flex-col h-full overflow-hidden rounded-lg border-[1px] border-secondary;
+        @apply flex h-full flex-col overflow-hidden rounded-lg border-[1px] border-secondary;
     }
 
     .panel-nav {
         @apply flex gap-1 bg-neutral text-neutral-foreground;
     }
     .panel-content {
-        @apply w-full h-full overflow-auto;
+        @apply h-full w-full overflow-auto;
     }
     .example-block {
         @apply mb-4 mt-2 rounded-sm bg-neutral px-4 py-2;

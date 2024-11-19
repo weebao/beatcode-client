@@ -43,7 +43,9 @@ const Theme = EditorView.theme(
         "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": {
             backgroundColor: selection
         },
-        "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground": { backgroundColor: selection },
+        "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground": {
+            backgroundColor: selection
+        },
 
         ".cm-panels": { backgroundColor: darkBackground, color: foreground },
         ".cm-panels.cm-panels-top": { borderBottom: "2px solid black" },
@@ -69,13 +71,13 @@ const Theme = EditorView.theme(
         // },
 
         "&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket": {
-            backgroundColor: "#bad0f847",
+            backgroundColor: "#bad0f847"
         },
 
         ".cm-gutters": {
             backgroundColor: background,
             color: gutter,
-            border: "none",
+            border: "none"
         },
 
         ".cm-activeLineGutter": {
@@ -190,7 +192,4 @@ const Highlight = HighlightStyle.define([
     { tag: t.invalid, color: invalid }
 ]);
 
-export const DefaultTheme = [
-    Theme, 
-    syntaxHighlighting(Highlight),
-];
+export const DefaultTheme = [Theme, syntaxHighlighting(Highlight)];

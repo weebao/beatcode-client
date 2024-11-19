@@ -40,7 +40,7 @@
             ease: "back.out(2)"
         });
         tl.to(".sparkle", {
-            duration: 2,
+            duration: 3,
             rotation: 360,
             ease: "elastic.out(1,0.5)",
             repeat: -1,

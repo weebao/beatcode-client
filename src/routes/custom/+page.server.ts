@@ -14,33 +14,38 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions = {
-    createRoom: async ({ request, locals, cookies }) => {
+    createRoom: async ({ request, locals }) => {
         const createRoomForm = await superValidate(request, zod(CreateRoomSchema));
         const name = createRoomForm.data.name || locals.user?.name;
 
-        if (!createRoomForm.valid && !name) {
+        if (!createRoomForm.valid) {
             return fail(400, { createRoomForm });
         }
-        const data = await api.post("/create-room", {
+        if (!locals.user) {
+            redirect(303, "/login");
+        }
+
+        const data = await api.post("/rooms/create", {
             player_name: name
         });
 
         if (!data.error) {
-            const { room_code, player_id } = data;
-            console.log("redirect");
-            cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
+            const { room_code } = data;
             redirect(303, `/room/${room_code}`);
         } else {
             return fail(500, { createRoomForm });
         }
     },
 
-    joinRoom: async ({ request, locals, cookies }) => {
+    joinRoom: async ({ request, locals }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
 
         const name = joinRoomForm.data.name || locals.user?.name;
-        if (!joinRoomForm.valid && !name) {
+        if (!joinRoomForm.valid) {
             return fail(400, { joinRoomForm });
+        }
+        if (!locals.user) {
+            redirect(303, "/login");
         }
 
         const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
@@ -48,8 +53,6 @@ export const actions = {
         });
 
         if (!data.error) {
-            const { player_id } = data;
-            cookies.set("jwt", JSON.stringify({ name, token: player_id }), { path: "/" });
             redirect(303, `/room/${joinRoomForm.data.roomCode}`);
         } else {
             if (name && name.length > 0) {

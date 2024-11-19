@@ -66,7 +66,7 @@
 <div class="mx-auto mt-16 max-w-96 space-y-4 rounded-md border border-secondary p-6">
     <div class="mb-8 flex flex-col items-center">
         <Logo class="h-16 w-16" />
-        <h1 class="text-xl font-semibold">Let's get started</h1>
+        <h1 class="text-xl font-semibold">Custom Room</h1>
     </div>
     <!-- Input name -->
     <div class="flex flex-col space-y-2">
@@ -84,19 +84,6 @@
     </div>
     <!-- Create room -->
     <form method="POST" use:enhanceCreateRoom action="?/createRoom">
-        <!-- Bad code alert: This is for logging the name input above into this form :) -->
-        <Form.Field form={createRoomForm} name="name" class="hidden">
-            <Form.Control>
-                {#snippet children({ attrs }: { attrs: any })}
-                    <Input
-                        {...attrs}
-                        placeholder="Enter your name"
-                        bind:value={$createRoomFormData.name}
-                    />
-                {/snippet}
-            </Form.Control>
-            <Form.FieldErrors />
-        </Form.Field>
         <Button class="w-full" type="submit">Create Room</Button>
     </form>
     <!-- {#if browser}
@@ -109,28 +96,15 @@
     </div>
     <!-- Join room -->
     <form class="flex w-full space-x-2" method="POST" use:enhanceJoinRoom action="?/joinRoom">
-        <!-- Bad code alert: This is for logging the name input above into this form :) -->
-        <Form.Field form={joinRoomForm} name="name" class="hidden flex-1">
-            <Form.Control let:attrs>
-                <Input
-                    {...attrs}
-                    placeholder="Enter your name"
-                    bind:value={$joinRoomFormData.name}
-                />
-                <!-- {#snippet children({ attrs }: { attrs: any })}
-                {/snippet} -->
-            </Form.Control>
-            <Form.FieldErrors />
-        </Form.Field>
         <Form.Field form={joinRoomForm} name="roomCode" class="flex-1">
-            <Form.Control let:attrs>
-                <Input
-                    {...attrs}
-                    placeholder="Enter room code"
-                    bind:value={$joinRoomFormData.roomCode}
-                />
-                <!-- {#snippet children({ attrs }: { attrs: any })}
-                {/snippet} -->
+            <Form.Control>
+                {#snippet children({ props })}
+                    <Input
+                        {...props}
+                        placeholder="Enter room code"
+                        bind:value={$joinRoomFormData.roomCode}
+                    />
+                {/snippet}
             </Form.Control>
             <Form.FieldErrors />
         </Form.Field>
