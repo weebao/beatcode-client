@@ -1,4 +1,6 @@
-export const defaultRoomSettings = {
+import type { RoomSettings } from "$lib/models/room";
+
+export const defaultRoomSettings: RoomSettings = {
     problem_count: 3,
     starting_hp: 100,
     base_hp_deduction: 4,

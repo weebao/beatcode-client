@@ -5,6 +5,8 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = jwt ? JSON.parse(jwt) : null;
     event.locals.roomCode = "";
 
-    const response = await resolve(event);
+    const response = await resolve(event, {
+        preload: ({ type }) => type === "font"
+    });
     return response;
 };

@@ -85,7 +85,8 @@ const config: Config = {
                     "Arial",
                     "sans-serif"
                 ],
-                mono: ["Consolas", "Monaco", "Courier New", "monospace"]
+                mono: ["Consolas", "Monaco", "Courier New", "monospace"],
+                icon: ["Typori"]
             },
             fontSize: {
                 base: "var(--font-base)"

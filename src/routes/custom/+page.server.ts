@@ -40,7 +40,6 @@ export const actions = {
     joinRoom: async ({ request, locals }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
 
-        const name = joinRoomForm.data.name || locals.user?.name;
         if (!joinRoomForm.valid) {
             return fail(400, { joinRoomForm });
         }
@@ -48,18 +47,15 @@ export const actions = {
             redirect(303, "/login");
         }
 
-        const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
+        const name = locals.user.name;
+        const { roomCode } = joinRoomForm.data;
+        const data = await api.post(`/rooms/join/${roomCode}`, {
             player_name: name
         });
 
         if (!data.error) {
             redirect(303, `/room/${joinRoomForm.data.roomCode}`);
         } else {
-            if (name && name.length > 0) {
-                joinRoomForm.errors.name = undefined;
-                joinRoomForm.data.name = name;
-            }
-            joinRoomForm.errors.roomCode = [data.error.detail];
             return fail(500, { joinRoomForm });
         }
     }

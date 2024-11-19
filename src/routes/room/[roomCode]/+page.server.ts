@@ -19,13 +19,17 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 export const actions = {
     joinRoom: async ({ request, locals, cookies }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
-        const name = joinRoomForm.data.name || locals.user?.name;
-
-        if (!joinRoomForm.valid && !name) {
+        
+        if (!locals.user) {
+            redirect(303, "/login");
+        }
+        if (!joinRoomForm.valid) {
             return fail(400, { joinRoomForm });
         }
-
-        const data = await api.post(`/join-room/${joinRoomForm.data.roomCode}`, {
+        
+        const name = locals.user.name;
+        const { roomCode } = joinRoomForm.data;
+        const data = await api.post(`/rooms/join/${roomCode}`, {
             player_name: name
         });
 
@@ -42,11 +46,11 @@ export const actions = {
         const name = locals.user?.name;
         const roomCode = params.roomCode;
 
-        if (!name || !roomCode) {
-            return fail(400, { error: "Missing name or roomCode" });
+        if (!roomCode) {
+            return fail(400, { error: "Invalid roomCode" });
         }
 
-        const data = await api.post(`/join-room/${roomCode}`, {
+        const data = await api.post(`/rooms/join/${roomCode}`, {
             player_name: name
         });
 
@@ -63,9 +67,4 @@ export const actions = {
             });
         }
     },
-
-    startGame: async ({ locals, params }) => {
-        locals.roomCode = params.roomCode;
-        throw redirect(303, `/game`);
-    }
 } satisfies Actions;

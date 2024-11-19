@@ -55,7 +55,6 @@
     const updateNames = (event: InputEvent) => {
         const value = (event.target as HTMLInputElement).value;
         $createRoomFormData.name = value;
-        $joinRoomFormData.name = value;
     };
 </script>
 
@@ -64,24 +63,11 @@
 </svelte:head>
 
 <div class="mx-auto mt-16 max-w-96 space-y-4 rounded-md border border-secondary p-6">
-    <div class="mb-8 flex flex-col items-center">
+    <div class="mb-6 flex flex-col items-center">
         <Logo class="h-16 w-16" />
-        <h1 class="text-xl font-semibold">Custom Room</h1>
+        <h1 class="text-3xl font-icon font-medium">Custom Mode</h1>
     </div>
-    <!-- Input name -->
-    <div class="flex flex-col space-y-2">
-        <Input
-            class="w-full"
-            placeholder="Enter your name"
-            bind:value={name}
-            on:input={updateNames}
-        />
-        {#if $createRoomErrors.name || $joinRoomErrors.name}
-            <p class="text-base font-semibold text-destructive">
-                {$createRoomErrors.name || $joinRoomErrors.name}
-            </p>
-        {/if}
-    </div>
+
     <!-- Create room -->
     <form method="POST" use:enhanceCreateRoom action="?/createRoom">
         <Button class="w-full" type="submit">Create Room</Button>
@@ -89,6 +75,8 @@
     <!-- {#if browser}
         <SuperDebug data={$createRoomFormData} />
     {/if} -->
+    <Button class="w-full" variant="accent" href="/custom/lobby">Browse Lobby</Button>
+ 
     <div class="flex items-center justify-center space-x-2">
         <div class="h-px w-full rounded bg-secondary"></div>
         <span class="text-sm uppercase text-secondary">or</span>

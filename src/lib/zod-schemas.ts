@@ -9,5 +9,4 @@ export const JoinRoomSchema = z.object({
         .string()
         .length(6, "Invalid room code (Length has to be 6)")
         .transform((val) => val.trim().toUpperCase()),
-    name: z.string().min(1, "Name is required")
 });
