@@ -17,7 +17,7 @@
         const tl = gsap.timeline();
         tl.to(".header-1", {
             duration: 1.5,
-            text: "Live LeetCode battle",
+            text: "Head-to-head code battle",
             ease: "none"
         });
         tl.to(".header-2", {
@@ -52,7 +52,7 @@
 <section class="flex flex-col items-center overflow-hidden">
     <div class="mb-8 mt-24 flex flex-col items-center">
         <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
-            Live LeetCode battle with magic
+            Head-to-head code battle with magic
         </h1>
         <div
             class="relative flex flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"

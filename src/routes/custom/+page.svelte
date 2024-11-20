@@ -68,39 +68,41 @@
         <h1 class="text-3xl font-icon font-medium">Custom Mode</h1>
     </div>
 
-    <!-- Create room -->
-    <form method="POST" use:enhanceCreateRoom action="?/createRoom">
-        <Button class="w-full" type="submit">Create Room</Button>
-    </form>
-    <!-- {#if browser}
-        <SuperDebug data={$createRoomFormData} />
-    {/if} -->
-    <Button class="w-full" variant="accent" href="/custom/lobby">Browse Lobby</Button>
- 
+    <div class="space-y-2">
+        <!-- Join room -->
+        <form class="flex w-full space-x-2" method="POST" use:enhanceJoinRoom action="?/joinRoom">
+            <Form.Field form={joinRoomForm} name="roomCode" class="flex-1">
+                <Form.Control>
+                    {#snippet children({ props })}
+                        <Input
+                            {...props}
+                            placeholder="Enter room code"
+                            bind:value={$joinRoomFormData.roomCode}
+                        />
+                    {/snippet}
+                </Form.Control>
+                <Form.FieldErrors />
+            </Form.Field>
+            <Button variant="secondary" type="submit">Join</Button>
+        </form>
+        <!-- {#if browser}
+            <SuperDebug data={$joinRoomFormData} />
+        {/if} -->
+        <!-- Create room -->
+        <form method="POST" use:enhanceCreateRoom action="?/createRoom">
+            <Button class="w-full" type="submit">Create New Room</Button>
+        </form>
+        <!-- {#if browser}
+            <SuperDebug data={$createRoomFormData} />
+        {/if} -->
+    </div>
     <div class="flex items-center justify-center space-x-2">
         <div class="h-px w-full rounded bg-secondary"></div>
         <span class="text-sm uppercase text-secondary">or</span>
         <div class="h-px w-full rounded bg-secondary"></div>
     </div>
-    <!-- Join room -->
-    <form class="flex w-full space-x-2" method="POST" use:enhanceJoinRoom action="?/joinRoom">
-        <Form.Field form={joinRoomForm} name="roomCode" class="flex-1">
-            <Form.Control>
-                {#snippet children({ props })}
-                    <Input
-                        {...props}
-                        placeholder="Enter room code"
-                        bind:value={$joinRoomFormData.roomCode}
-                    />
-                {/snippet}
-            </Form.Control>
-            <Form.FieldErrors />
-        </Form.Field>
-        <Button variant="secondary" type="submit">Join</Button>
-    </form>
-    <!-- {#if browser}
-        <SuperDebug data={$joinRoomFormData} />
-    {/if} -->
+    <Button class="w-full" variant="accent" href="/custom/lobby">Browse Lobby</Button>
+ 
 </div>
 
 <style>

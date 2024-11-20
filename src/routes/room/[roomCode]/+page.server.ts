@@ -5,7 +5,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { z } from "zod";
 import { fail, redirect } from "@sveltejs/kit";
 import { JoinRoomSchema } from "$lib/zod-schemas";
-import * as api from "$lib/api";
+import * as api from "$lib/server/api";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     return {
@@ -17,15 +17,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions = {
-    joinRoom: async ({ request, locals, cookies }) => {
+    joinRoomAsGuest: async ({ request, locals, cookies }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
         
-        if (!locals.user) {
-            redirect(303, "/login");
-        }
-        if (!joinRoomForm.valid) {
-            return fail(400, { joinRoomForm });
-        }
+        // Screw cleanly storing fetch functions in organized folders
+        const guestToken = 
         
         const name = locals.user.name;
         const { roomCode } = joinRoomForm.data;

@@ -2,12 +2,12 @@ import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import * as api from "$lib/api";
+import * as api from "$lib/server/api";
 import { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
 
 export const load: PageServerLoad = async ({ locals }) => {
     return {
-        name: locals.user?.name ?? "",
+        name: locals.user?.data?.displayName ?? "",
         createRoomForm: await superValidate(zod(CreateRoomSchema)),
         joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };

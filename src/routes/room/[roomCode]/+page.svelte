@@ -118,20 +118,6 @@
         }
     };
 
-    // Prompt if user isn't authenticated
-    const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
-        onResult: ({ result: r }) => {
-            if (r?.type === "success") {
-                isDialogOpen = false;
-                name = r.data?.joinRoomForm.data.name; // i know i know this is bad but its 4 am
-                token = r.data?.token;
-                connect();
-            } else {
-                toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
-            }
-        }
-    });
-
     const submitCode = (code: string) => {
         if (!socket || socket.readyState !== WebSocket.OPEN) {
             toast.error("Connection error: No socket available");
@@ -149,13 +135,6 @@
         );
     };
 
-    const {
-        form: joinRoomFormData,
-        errors: joinRoomErrors,
-        enhance: enhanceJoinRoom,
-        message: joinRoomMessage
-    } = joinRoomForm;
-
     // Utils
     const copy = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -171,14 +150,14 @@
     <h1 class="mb-2 text-5xl font-bold">Game Room</h1>
     <p class="mb-2 text-xl">Code: {roomCode}</p>
     <div class="mb-4 flex items-center gap-2">
-        <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" on:click={() => copy(roomCode)}>
+        <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" onclick={() => copy(roomCode)}>
             <Copy />
         </Button>
         <Button
             variant="outline"
             size="icon"
             class="h-8 w-8 p-1.5"
-            on:click={() => copy(`http://localhost:5173/room/${roomCode}`)}
+            onclick={() => copy(`http://localhost:5173/room/${roomCode}`)}
         >
             <Link />
         </Button>
@@ -217,7 +196,7 @@
             {/if}
         </div>
     </div>
-    <Button size="lg" class="mt-4 text-lg" on:click={startGame}>Start Game</Button>
+    <Button size="lg" class="mt-4 text-lg" onclick={startGame}>Start Game</Button>
 </div>
 {#if gameStarted}
     <Game
@@ -230,44 +209,24 @@
         {submitCode}
     />
 {/if}
-<!-- If not authenticated - prompt user to enter name -->
-<Dialog.Root bind:open={isDialogOpen} closeOnEscape={false} closeOnOutsideClick={false}>
-    <Dialog.Content class="sm:max-w-[425px]" hideCloseButton>
+<!-- If not authenticated - prompt user to sign in -->
+<Dialog.Root bind:open={isDialogOpen}>
+    <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <Dialog.Header>
-            <Dialog.Title>What's your name?</Dialog.Title>
+            <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
             <Dialog.Description>
-                First time here? Please enter your name to join.
+                Please sign in to join
             </Dialog.Description>
         </Dialog.Header>
-        <form method="POST" use:enhanceJoinRoom action="?/joinRoom">
-            <Form.Field form={joinRoomForm} name="name">
-                <Form.Control>
-                    {#snippet children({ attrs }: { attrs: any })}
-                        <Input
-                            {...attrs}
-                            placeholder="Enter your name"
-                            bind:value={$joinRoomFormData.name}
-                        />
-                    {/snippet}
-                </Form.Control>
-                <Form.FieldErrors />
-            </Form.Field>
-            <Form.Field form={joinRoomForm} name="roomCode">
-                <Form.Control>
-                    {#snippet children({ attrs }: { attrs: any })}
-                        <Input {...attrs} type="hidden" value={roomCode} />
-                    {/snippet}
-                </Form.Control>
-            </Form.Field>
-            <Dialog.Footer class="mt-4">
-                <Button type="submit">Save changes</Button>
-            </Dialog.Footer>
+        <form method="POST" action="?/joinRoomAsGuest">
+            <Button href={`/login?joining=${roomCode}`}>Sign in</Button>
+            <Button type="submit" variant="ghost">Play as guest</Button>
         </form>
     </Dialog.Content>
 </Dialog.Root>
 {#if winner}
-    <Dialog.Root open={true} closeOnEscape={false} closeOnOutsideClick={false}>
-        <Dialog.Content class="sm:max-w-[425px]" hideCloseButton>
+    <Dialog.Root open={true}>
+        <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
             <Dialog.Header>
                 <Dialog.Title>{winner} won!</Dialog.Title>
             </Dialog.Header>
@@ -276,7 +235,7 @@
             </div>
             <Dialog.Footer class="mt-4">
                 <Button
-                    on:click={() => {
+                    onclick={() => {
                         gameStarted = false;
                         challengeInfo = undefined;
                         winner = null;

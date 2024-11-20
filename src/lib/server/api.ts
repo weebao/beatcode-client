@@ -1,4 +1,4 @@
-// Referenced from @algebra2boy - Yongye Tan
+// Referenced from @algebra2boy - Yongye Tan and sveltekit/realworld
 
 import { error, type NumericRange } from "@sveltejs/kit";
 import { API_URL } from "$env/static/private";
