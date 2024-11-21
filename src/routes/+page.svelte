@@ -1,7 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import gsap from "gsap";
-    import TextPlugin from "gsap/TextPlugin";
+    import { gsap } from "gsap";
+    import { TextPlugin } from "gsap/TextPlugin";
+
+    gsap.registerPlugin(TextPlugin);
 
     import { SparkleIcon } from "lucide-svelte";
 

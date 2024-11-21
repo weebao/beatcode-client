@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import LogoWithText from "$images/logo-with-text.svelte";
+    import { goto } from "$app/navigation";
 </script>
 
 {#if $page.url.pathname !== "/game"}
@@ -15,7 +16,7 @@
                     <LogoWithText />
                 </a>
             </div>
-            <button class="my-auto self-stretch text-sm leading-7 text-secondary">Sign in</button>
+            <button class="my-auto self-stretch text-sm leading-7 text-secondary"on:click={() => goto("/login")}>Sign in</button>
         </div>
     </nav>
 {/if}
