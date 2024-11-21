@@ -1,13 +1,20 @@
 <script lang="ts">
-    import { Button } from "$components/ui/button";
-    import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$components/ui/card";
-    import { Input } from "$components/ui/input";
-    import { Label } from "$components/ui/label";
+    export let form;
+    console.log("Current form state:", form);
+    import { enhance } from '$app/forms';
+    import { goto } from '$app/navigation';
+    import { Button } from "$lib/components/ui/button";
+    import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
+    import { Input } from "$lib/components/ui/input";
+    import { Label } from "$lib/components/ui/label";
     import { Loader2 } from "lucide-svelte";
 
     let loading = false;
+    let error: string | null = null;
+
     let email = "";
     let username = "";
+    let displayName = "";
     let password = "";
     let confirmPassword = "";
 
@@ -15,17 +22,13 @@
     $: passwordsMatch = password === confirmPassword;
     $: isValidPassword = password.length >= 8;
 
-    async function handleSubmit() {
-        loading = true;
-        try {
-            if (!passwordsMatch || !isValidPassword) {
-                return;
-            }
-            // Add your signup logic here
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated delay
-        } finally {
-            loading = false;
+    function handleSubmit() {
+        if (!passwordsMatch || !isValidPassword) {
+            error = "Please fix the validation errors";
+            return;
         }
+        loading = true;
+        // The actual submission is handled by the enhance action
     }
 </script>
 
@@ -35,13 +38,33 @@
             <CardTitle>Create Account</CardTitle>
             <CardDescription>Sign up for a new account</CardDescription>
         </CardHeader>
-        <form on:submit|preventDefault={handleSubmit}>
+        <form
+            method="POST"
+            use:enhance={() => {
+                return async ({ result }) => {
+                    loading = false;
+                    if (result.type === 'success') {
+                        goto('/login');
+                    } else if (result.type === 'failure') {
+                        error = result.data?.error;
+                    }
+                };
+            }}
+            on:submit|preventDefault={handleSubmit}
+        >
             <CardContent>
+                {#if error}
+                    <div class="bg-destructive/15 text-destructive text-sm p-3 rounded-md mb-4">
+                        {error}
+                    </div>
+                {/if}
+
                 <div class="grid w-full items-center gap-4">
                     <div class="flex flex-col space-y-1.5">
                         <Label for="username">Username</Label>
                         <Input
                             id="username"
+                            name="username"
                             type="text"
                             bind:value={username}
                             placeholder="your_username"
@@ -52,6 +75,7 @@
                         <Label for="email">Email</Label>
                         <Input
                             id="email"
+                            name="email"
                             type="email"
                             bind:value={email}
                             placeholder="name@example.com"
@@ -59,9 +83,20 @@
                         />
                     </div>
                     <div class="flex flex-col space-y-1.5">
+                        <Label for="displayName">Display Name</Label>
+                        <Input
+                            id="displayName"
+                            name="displayName"
+                            type="text"
+                            bind:value={displayName}
+                            placeholder="How others will see you"
+                        />
+                    </div>
+                    <div class="flex flex-col space-y-1.5">
                         <Label for="password">Password</Label>
                         <Input
                             id="password"
+                            name="password"
                             type="password"
                             bind:value={password}
                             required
