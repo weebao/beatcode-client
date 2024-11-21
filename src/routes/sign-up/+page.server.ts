@@ -24,8 +24,19 @@ export const actions = {
                 body: JSON.stringify(userData)
             });
 
-            const data = await response.json();
-            console.log("Response:", data);
+            const responseText = await response.text();
+            console.log("Raw response:", responseText);
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error("Failed to parse response:", responseText);
+                return fail(500, {
+                    error: `Server error: ${responseText}`,
+                    values: { username: userData.username, email: userData.email }
+                });
+            }
 
             if (!response.ok) {
                 return fail(response.status, {

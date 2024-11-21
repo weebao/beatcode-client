@@ -11,6 +11,7 @@
     import { Button } from "$components/ui/button";
     import { cn } from "$lib/utils.js";
 
+    let username = ''
     let isNotMounted = true;
 
     onMount(() => {

@@ -6,6 +6,7 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { Loader2 } from "lucide-svelte";
+    import {handleLoginResponse, user} from '$models/user';
 
     export let form;
     let loading = false;
@@ -24,20 +25,15 @@
     <form
         method="POST"
         use:enhance={() => {
-                loading = true;
-                return async ({ result }) => {
-                    loading = false;
-                    if (result.type === 'success') {
-                        // Store tokens in localStorage or other state management
-                        if (result.data?.tokens) {
-                            localStorage.setItem('access_token', result.data.tokens.access_token);
-                            localStorage.setItem('refresh_token', result.data.tokens.refresh_token);
-                        }
-                        // Redirect to home or dashboard
-                        goto('/');
-                    }
-                };
-            }}
+            loading = true;
+            return async ({ result }) => {
+                loading = false;
+                if (result.type === 'success' && result.data?.tokens) {
+                    await handleLoginResponse(result.data.tokens);
+                    goto('/');
+                }
+            };
+        }}
     >
       <CardContent>
         {#if form?.error}
