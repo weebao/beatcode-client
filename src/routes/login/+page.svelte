@@ -6,14 +6,11 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { Loader2 } from "lucide-svelte";
-    import {handleLoginResponse, user} from '$models/user';
+    import {handleLoginResponse} from '$models/user';
 
     export let form;
     let loading = false;
-
-    function handleSubmit() {
-        loading = true;
-    }
+    let authError: string | null = null;
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-background">
@@ -26,22 +23,39 @@
         method="POST"
         use:enhance={() => {
             loading = true;
+            authError = null;
+
             return async ({ result }) => {
+                console.log('Form submission result:', result); // Debug log
                 loading = false;
+
                 if (result.type === 'success' && result.data?.tokens) {
+                    console.log(result.data.tokens);
                     await handleLoginResponse(result.data.tokens);
                     goto('/');
+                } else {
+                    // Changed error handling logic
+                    console.log('Error response:', result); // Debug log
+                    if (result.data?.error === "Incorrect credentials" ||
+                        result.error?.message === "Incorrect credentials" ||
+                        result.data?.detail === "Incorrect credentials") {
+                        authError = "Invalid username or password";
+                    } else {
+                        authError = "An error occurred during login. Please try again.";
+                    }
                 }
             };
         }}
     >
       <CardContent>
-        {#if form?.error}
+        {#if authError || form?.error}
           <div class="bg-destructive/15 text-destructive text-sm p-3 rounded-md mb-4">
-            {#if form.error === 'Email not verified'}
+            {#if form?.error === 'Email not verified'}
               Please verify your email before logging in. Check your inbox for the verification link.
+            {:else if authError}
+              {authError}
             {:else}
-              {form.error}
+              {form?.error}
             {/if}
           </div>
         {/if}
