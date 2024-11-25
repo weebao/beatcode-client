@@ -5,6 +5,12 @@ import path from "path";
 
 export default defineConfig({
     plugins: [sveltekit(), purgeCss()],
+    optimizeDeps: {
+        include: ['gsap']
+    },
+    ssr: {
+        noExternal: ['gsap']
+    },
     resolve: {
         alias: {
             $lib: path.resolve("./src/lib")
