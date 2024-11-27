@@ -35,3 +35,7 @@ export const RoomSettingsSchema = z.object({
 export const CreateRoomSchema = z.object({
     settings: RoomSettingsSchema
 });
+
+export const JoinRoomSchema = z.object({
+    room_code: z.string().length(6)
+});

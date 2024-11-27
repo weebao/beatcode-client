@@ -4,7 +4,7 @@
     import { toast } from "svelte-sonner";
 
     import type { PageData } from "./$types";
-    import type { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
+    import type { CreateRoomSchema, JoinRoomSchema } from "$lib/models/room";
 
     import Logo from "$assets/icons/logo.svelte";
     import * as Form from "$components/ui/form";
@@ -66,13 +66,13 @@
     <div class="space-y-2">
         <!-- Join room -->
         <form class="flex w-full space-x-2" method="POST" use:enhanceJoinRoom action="?/joinRoom">
-            <Form.Field form={joinRoomForm} name="roomCode" class="flex-1">
+            <Form.Field form={joinRoomForm} name="room_code" class="flex-1">
                 <Form.Control>
                     {#snippet children({ props })}
                         <Input
                             {...props}
                             placeholder="Enter room code"
-                            bind:value={$joinRoomFormData.roomCode}
+                            bind:value={$joinRoomFormData.room_code}
                         />
                     {/snippet}
                 </Form.Control>
