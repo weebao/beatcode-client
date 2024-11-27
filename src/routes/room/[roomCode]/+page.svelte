@@ -39,7 +39,7 @@
     let retries = $state(RETRY_LIMIT);
 
     const connect = () => {
-        socket = new WebSocket(`${WEBSOCKET_URL}/${roomCode}/${token}`);
+        socket = new WebSocket(`${WEBSOCKET_URL}/${roomCode}`);
 
         socket.onopen = () => {
             toast.success("Successfully joined room");

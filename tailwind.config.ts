@@ -1,7 +1,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
-import tailwindcssAnimate from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
     darkMode: ["class"],
@@ -18,28 +17,21 @@ const config: Config = {
         extend: {
             height: {
                 nav: "var(--navbar-height)",
-                navscreen: "calc(100dvh - var(--navbar-height))"
+                navscreen: "calc(100dvh - var(--navbar-height) - 1px)"
             },
             minHeight: {
                 nav: "var(--navbar-height)",
-                navscreen: "calc(100vh - var(--navbar-height))"
+                navscreen: "calc(100vh - var(--navbar-height) - 1px)"
             },
             colors: {
                 border: "hsl(var(--border) / <alpha-value>)",
                 input: "hsl(var(--input) / <alpha-value>)",
                 ring: "hsl(var(--ring) / <alpha-value>)",
-                background: {
-                    DEFAULT: "hsl(var(--background) / <alpha-value>)",
-                    dark: "hsl(var(--background-dark) / <alpha-value>)"
-                },
+                background: "hsl(var(--background) / <alpha-value>)",
                 foreground: "hsl(var(--foreground) / <alpha-value>)",
                 primary: {
                     DEFAULT: "hsl(var(--primary) / <alpha-value>)",
                     foreground: "hsl(var(--primary-foreground) / <alpha-value>)"
-                },
-                neutral: {
-                    DEFAULT: "hsl(var(--neutral) / <alpha-value>)",
-                    foreground: "hsl(var(--neutral-foreground) / <alpha-value>)"
                 },
                 secondary: {
                     DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
@@ -65,12 +57,27 @@ const config: Config = {
                     DEFAULT: "hsl(var(--card) / <alpha-value>)",
                     foreground: "hsl(var(--card-foreground) / <alpha-value>)"
                 },
+                neutral: {
+                    DEFAULT: "hsl(var(--neutral) / <alpha-value>)",
+                    foreground: "hsl(var(--neutral-foreground) / <alpha-value>)"
+                },
                 rose: {
                     DEFAULT: "hsl(var(--rose) / <alpha-value>)",
                     foreground: "hsl(var(--rose-foreground) / <alpha-value>)"
+                },
+                sidebar: {
+                    DEFAULT: "hsl(var(--sidebar-background))",
+                    foreground: "hsl(var(--sidebar-foreground))",
+                    primary: "hsl(var(--sidebar-primary))",
+                    "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+                    accent: "hsl(var(--sidebar-accent))",
+                    "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+                    border: "hsl(var(--sidebar-border))",
+                    ring: "hsl(var(--sidebar-ring))"
                 }
             },
             borderRadius: {
+                xl: "calc(var(--radius) + 4px)",
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)"
@@ -87,9 +94,6 @@ const config: Config = {
                 ],
                 mono: ["Consolas", "Monaco", "Courier New", "monospace"],
                 icon: ["Typori"]
-            },
-            fontSize: {
-                base: "var(--font-base)"
             },
             textShadow: {
                 sm: "0 1px 2px var(--tw-shadow-color)",
@@ -118,19 +122,7 @@ const config: Config = {
             }
         }
     },
-    plugins: [
-        tailwindcssAnimate,
-        plugin(function ({ matchUtilities, theme }) {
-            matchUtilities(
-                {
-                    "text-shadow": (value) => ({
-                        textShadow: value
-                    })
-                },
-                { values: theme("textShadow") }
-            );
-        })
-    ]
+    plugins: [tailwindcssAnimate]
 };
 
 export default config;

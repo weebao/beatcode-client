@@ -31,3 +31,7 @@ export const RoomSettingsSchema = z.object({
     starting_mp: z.number().int().min(1).max(1000),
     mana_recharge: z.number().int().min(1).max(1000)
 });
+
+export const CreateRoomSchema = z.object({
+    settings: RoomSettingsSchema
+});

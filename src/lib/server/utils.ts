@@ -7,9 +7,9 @@ export const setTokenCookie = (cookies: Cookies, token: string, key: string) => 
         httpOnly: true,
         path: "/",
         secure: true,
-        sameSite: "strict",
+        sameSite: "strict"
     });
-}
+};
 
 export const clearUser = (locals: App.Locals, cookies: Cookies) => {
     cookies.delete("accessToken", { path: "/" });

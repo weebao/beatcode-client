@@ -60,7 +60,7 @@
 </script>
 
 <div
-    class="absolute left-0 top-0 flex min-h-screen w-screen flex-col overflow-hidden bg-background-dark"
+    class="bg-background-dark absolute left-0 top-0 flex min-h-screen w-screen flex-col overflow-hidden"
 >
     <div class="flex items-center justify-between gap-4 px-4 py-2 text-white">
         <div class="flex w-full">

@@ -1,6 +1,6 @@
 // Check if event locals has name yet, if not generate a dialog before entering the game :)
 import type { Actions, PageServerLoad } from "./$types";
-import { }
+import { WEBSOCKET_URL } from "$env/static/private";
 import { fail, redirect } from "@sveltejs/kit";
 import { loginAsGuest, getMe } from "$lib/server/auth";
 
@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     return {
         name: locals.user?.displayName,
         roomCode: params.roomCode,
-        websocketUrl
+        websocketUrl: WEBSOCKET_URL
     };
 };
 

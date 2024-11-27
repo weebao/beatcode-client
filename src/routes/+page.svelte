@@ -1,7 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import gsap from "gsap";
-    import TextPlugin from "gsap/TextPlugin";
+    import { gsap } from "gsap";
+    import { TextPlugin } from "gsap/TextPlugin";
+
+    gsap.registerPlugin(TextPlugin);
 
     import { SparkleIcon } from "lucide-svelte";
 
@@ -9,6 +11,7 @@
     import { Button } from "$components/ui/button";
     import { cn } from "$lib/utils.js";
 
+    let username = "";
     let isNotMounted = true;
 
     onMount(() => {
@@ -62,12 +65,12 @@
                 <span class="header-2"></span>
                 &nbsp;
                 <span
-                    class="header-3 mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose text-shadow-center md:mt-1.5"
+                    class="header-3 text-shadow-center mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose md:mt-1.5"
                     class:hidden={isNotMounted}
                 ></span>
                 <SparkleIcon
                     class={cn(
-                        "sparkle ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose text-shadow-[0_0_12px_#EBADC1]",
+                        "sparkle text-shadow-[0_0_12px_#EBADC1] ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose",
                         isNotMounted ? "hidden" : ""
                     )}
                     fill="#EBADC1"

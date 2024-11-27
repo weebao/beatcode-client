@@ -11,7 +11,7 @@ export const loginAsGuest = async (cookies: Cookies) => {
 
 export const getMe = async () => {
     return api.get("/users/me");
-}
+};
 
 export const refreshAccessToken = async (cookies: Cookies) => {
     const refreshToken = cookies.get("refresh_token");
@@ -27,4 +27,4 @@ export const refreshAccessToken = async (cookies: Cookies) => {
     const { access_token, refresh_token } = data;
     setTokenCookie(cookies, access_token, "access_token");
     setTokenCookie(cookies, refresh_token, "refresh_token");
-}
+};
