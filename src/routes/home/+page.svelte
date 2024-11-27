@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    
+
     interface Props {
         data: PageData;
     }
@@ -9,8 +9,7 @@
     let { name } = $state(data);
 </script>
 
-<div class="h-navscreen w-full">
-</div>
+<div class="h-navscreen w-full"></div>
 
 <style>
 </style>

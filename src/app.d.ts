@@ -12,6 +12,7 @@ declare namespace App {
             isGuest?: boolean;
             createdAt: number;
             updatedAt: number;
+            room?: string;
         };
     }
     // interface PageData {}

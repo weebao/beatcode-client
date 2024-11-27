@@ -1,5 +1,7 @@
 // Referenced from @algebra2boy - Yongye Tan
 
+import type { Cookies } from "@sveltejs/kit";
+
 /**
  * Represents the payload for an HTTP request.
  *
@@ -24,12 +26,12 @@ export type HttpPayload = {
  * @property {HttpPayload} [data]
  * The data to be sent to the server in JSON format. This is optional and can be used for POST and PUT requests since not every endpoint requires a request body.
  *
- * @property {string} [token]
- * The JSON Web Token to be sent to the server to verify the user's identity. This is optional.
+ * @property {Cookies} [cookies]
+ * The cookies to be sent to the server. This is optional and can be used to authenticate the user.
  */
 export type HttpRequestFetch = {
     method: "GET" | "POST" | "DELETE" | "PUT";
     path: string;
     data?: HttpPayload;
-    token?: string;
+    cookies?: Cookies;
 };

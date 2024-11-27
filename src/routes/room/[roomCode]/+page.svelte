@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import type { PageData } from "./$types";
     import { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
+    import { WEBSOCKET_URL } from "$env/static/private";
+    import type { PageData } from "./$types";
 
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
@@ -10,8 +11,6 @@
     import { Input } from "$components/ui/input";
     import StatusIndicator from "$components/micro/status-indicator.svelte";
     import { Game } from "$components/macro/game";
-
-    import type { JoinRoomSchema } from "$lib/zod-schemas";
 
     import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
 
@@ -22,7 +21,7 @@
     }
 
     let { data }: Props = $props();
-    let { name, token, roomCode } = $state(data);
+    let { name, roomCode } = $state(data);
     let isDialogOpen = $state(data.name === undefined);
     let connectStatus = $state(0);
 
@@ -35,11 +34,12 @@
     let winner: string | null = $state(null);
 
     // Establish socket and look for update
-    const API_URL = "ws://localhost:8000/ws";
+    const RETRY_LIMIT = 3;
     let socket: WebSocket;
+    let retries = $state(RETRY_LIMIT);
 
     const connect = () => {
-        socket = new WebSocket(`${API_URL}/${roomCode}/${token}`);
+        socket = new WebSocket(`${WEBSOCKET_URL}/${roomCode}/${token}`);
 
         socket.onopen = () => {
             toast.success("Successfully joined room");
@@ -82,7 +82,8 @@
 
         socket.onerror = async (error) => {
             console.log("WebSocket Error:", error);
-            await joinRoomThroughLink();
+            if (retries > 0) {
+            }
         };
     };
 
@@ -97,25 +98,6 @@
                 event_data: {}
             })
         );
-    };
-
-    // Fallback to joinRoom action if WebSocket connection fails
-    const joinRoomThroughLink = async () => {
-        const response = await fetch(`?/joinRoomThroughLink`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
-
-        const result = await response.json();
-        if (result.type === "success") {
-            const data = JSON.parse(result.data);
-            token = data[data[0].token];
-            connect();
-        } else {
-            toast.error(`Error: ${JSON.stringify(result, null, 2)}`);
-        }
     };
 
     const submitCode = (code: string) => {
@@ -214,9 +196,7 @@
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <Dialog.Header>
             <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
-            <Dialog.Description>
-                Please sign in to join
-            </Dialog.Description>
+            <Dialog.Description>Please sign in to join</Dialog.Description>
         </Dialog.Header>
         <form method="POST" action="?/joinRoomAsGuest">
             <Button href={`/login?joining=${roomCode}`}>Sign in</Button>

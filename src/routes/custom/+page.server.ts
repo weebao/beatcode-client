@@ -7,16 +7,15 @@ import { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
 
 export const load: PageServerLoad = async ({ locals }) => {
     return {
-        name: locals.user?.data?.displayName ?? "",
+        name: locals.user?.displayName ?? "",
         createRoomForm: await superValidate(zod(CreateRoomSchema)),
         joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };
 };
 
 export const actions = {
-    createRoom: async ({ request, locals }) => {
+    createRoom: async ({ request, locals, cookies }) => {
         const createRoomForm = await superValidate(request, zod(CreateRoomSchema));
-        const name = createRoomForm.data.name || locals.user?.name;
 
         if (!createRoomForm.valid) {
             return fail(400, { createRoomForm });
@@ -25,9 +24,8 @@ export const actions = {
             redirect(303, "/login");
         }
 
-        const data = await api.post("/rooms/create", {
-            player_name: name
-        });
+        const { settings } = createRoomForm.data;
+        const data = await api.post("/rooms/create", settings, cookies);
 
         if (!data.error) {
             const { room_code } = data;
@@ -37,26 +35,13 @@ export const actions = {
         }
     },
 
-    joinRoom: async ({ request, locals }) => {
+    joinRoom: async ({ request, locals, cookies }) => {
         const joinRoomForm = await superValidate(request, zod(JoinRoomSchema));
 
         if (!joinRoomForm.valid) {
             return fail(400, { joinRoomForm });
         }
-        if (!locals.user) {
-            redirect(303, "/login");
-        }
 
-        const name = locals.user.name;
-        const { roomCode } = joinRoomForm.data;
-        const data = await api.post(`/rooms/join/${roomCode}`, {
-            player_name: name
-        });
-
-        if (!data.error) {
-            redirect(303, `/room/${joinRoomForm.data.roomCode}`);
-        } else {
-            return fail(500, { joinRoomForm });
-        }
+        redirect(303, `/room/${joinRoomForm.data.roomCode}`);
     }
 } satisfies Actions;

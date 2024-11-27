@@ -51,11 +51,6 @@
         enhance: enhanceJoinRoom,
         message: joinRoomMessage
     } = joinRoomForm;
-
-    const updateNames = (event: InputEvent) => {
-        const value = (event.target as HTMLInputElement).value;
-        $createRoomFormData.name = value;
-    };
 </script>
 
 <svelte:head>
@@ -65,7 +60,7 @@
 <div class="mx-auto mt-16 max-w-96 space-y-4 rounded-md border border-secondary p-6">
     <div class="mb-6 flex flex-col items-center">
         <Logo class="h-16 w-16" />
-        <h1 class="text-3xl font-icon font-medium">Custom Mode</h1>
+        <h1 class="font-icon text-3xl font-medium">Custom Mode</h1>
     </div>
 
     <div class="space-y-2">
@@ -102,7 +97,6 @@
         <div class="h-px w-full rounded bg-secondary"></div>
     </div>
     <Button class="w-full" variant="accent" href="/custom/lobby">Browse Lobby</Button>
- 
 </div>
 
 <style>
