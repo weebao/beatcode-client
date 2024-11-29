@@ -1,6 +1,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
     darkMode: ["class"],
@@ -122,7 +123,19 @@ const config: Config = {
             }
         }
     },
-    plugins: [tailwindcssAnimate]
+    plugins: [
+        tailwindcssAnimate,
+        plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+                {
+                    "text-shadow": (value) => ({
+                        textShadow: value
+                    })
+                },
+                { values: theme("textShadow") }
+            );
+        })
+    ]
 };
 
 export default config;

@@ -1,26 +1,15 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import LogoWithText from "$images/logo-with-text.svelte";
-    import { goto } from "$app/navigation";
-    import { onMount } from "svelte";
-    import { fetchUserData, user } from "$models/user";
+    import LogoHorizontal from "$assets/images/logo-horizontal.svelte";
+    import type { User } from "$lib/models/user";
+    import { Button } from "$components/ui/button";
 
-    let loading = true;
-
-    onMount(async () => {
-        const token = localStorage.getItem("access_token");
-        if (token) {
-            await fetchUserData(token);
-        }
-        loading = false;
-    });
-
-    async function handleSignOut() {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        user.set(null);
-        await goto("/login");
+    interface Props {
+        user?: User;
+        handleSignOut: () => void;
     }
+    
+    const { user, handleSignOut }: Props = $props();
 </script>
 
 {#if $page.url.pathname !== "/game"}
@@ -32,25 +21,24 @@
         >
             <div class="my-auto flex items-center gap-1.5 self-stretch whitespace-nowrap text-2xl">
                 <a href="/">
-                    <LogoWithText />
+                    <LogoHorizontal />
                 </a>
             </div>
-            {#if !loading}
-                {#if !$user}
-                    <button
-                        class="my-auto self-stretch text-sm leading-7 text-secondary"
-                        on:click={() => goto("/login")}
-                    >
-                        Sign in
-                    </button>
-                {:else}
-                    <div class="flex items-center gap-4">
-                        <span class="text-primary">Hello {$user.username}!</span>
-                        <button class="text-sm leading-7 text-secondary" on:click={handleSignOut}>
-                            Sign out
-                        </button>
-                    </div>
-                {/if}
+            {#if !user}
+                <Button
+                    class="my-auto self-stretch text-sm leading-7 text-secondary"
+                    variant="link"
+                    href="/login"
+                >
+                    Sign in
+                </Button>
+            {:else}
+                <div class="flex items-center gap-4">
+                    <span class="text-primary">Hello {user.username}!</span>
+                    <Button class="text-sm leading-7 text-secondary" variant="link" onclick={handleSignOut}>
+                        Sign out
+                    </Button>
+                </div>
             {/if}
         </div>
     </nav>

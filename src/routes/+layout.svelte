@@ -1,9 +1,11 @@
 <script lang="ts">
     import "../app.postcss";
+    import type { PageData } from "./$types";
     import Navbar from "$lib/components/macro/navbar.svelte";
     import { Toaster } from "$lib/components/ui/sonner";
     interface Props {
         children?: import("svelte").Snippet;
+        data: PageData
     }
 
     let { children }: Props = $props();

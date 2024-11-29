@@ -1,55 +1,37 @@
-import { fail } from "@sveltejs/kit";
-import type { Actions } from "./$types";
-import { fetchUserData } from "$models/user";
-export const actions = {
-    default: async ({ request }) => {
-        const formData = await request.formData();
+import { LoginSchema } from "$lib/models/auth";
+import type { Actions, PageServerLoad } from "./$types";
+import { fail, redirect } from "@sveltejs/kit";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { login } from "$lib/server/auth";
+import { API_PREFIX } from "$lib/config";
 
-        const params = new URLSearchParams();
-        params.append("username", formData.get("email")?.toString() || "");
-        params.append("password", formData.get("password")?.toString() || "");
+export const load: PageServerLoad = async ({ locals }) => {
+    if (locals.user) {
+        redirect(302, "/home");
+    }
+
+    return {
+        form: await superValidate(zod(LoginSchema))
+    }
+}
+
+export const actions = {
+    default: async ({ request, cookies }) => {
+        const loginForm = await superValidate(request, zod(LoginSchema));
+
+        if (!loginForm.valid) {
+            return fail(400, { loginForm });
+        }
 
         try {
-            const response = await fetch("http://localhost:8000/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: params
-            });
-
-            // Log the raw response for debugging
-            const responseText = await response.text();
-            console.log("Raw response:", responseText);
-
-            let data;
-            try {
-                data = JSON.parse(responseText);
-            } catch (e) {
-                console.error("Failed to parse response:", responseText);
-                return fail(500, {
-                    error: "Invalid server response",
-                    details: responseText
-                });
-            }
-
-            if (!response.ok) {
-                return fail(response.status, {
-                    error: data?.detail || "Login failed",
-                    email: formData.get("email")
-                });
-            }
-
-            return {
-                success: true,
-                tokens: data
-            };
-        } catch (error) {
-            console.error("Login error:", error);
+            await login({ username: "", password: "" }, cookies);
+            redirect(302, "/home");
+        } catch (error: any) {
             return fail(500, {
-                error: "Server error during login",
-                email: formData.get("email")
+                loginForm,
+                error
             });
         }
     }
-};
+} satisfies Actions;

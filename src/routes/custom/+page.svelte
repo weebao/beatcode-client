@@ -19,21 +19,21 @@
     let name = $state(data.name);
 
     const createRoomForm = superForm<Infer<typeof CreateRoomSchema>>(data.createRoomForm, {
-        onResult: ({ result: r }) => {
-            if (r?.type === "success" || r?.status === 303) {
+        onResult: ({ result }) => {
+            if (result?.type === "success" || result?.status === 303) {
                 toast.success(`Creating room...`);
             } else {
-                toast.error(`Error: ${JSON.stringify(r, null, 2)}`);
+                toast.error(`Error: ${JSON.stringify(result, null, 2)}`);
             }
         }
     });
     const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
-        onResult: ({ result: r }) => {
-            if (r?.type === "success" || r?.status === 303) {
+        onResult: ({ result }) => {
+            if (result?.type === "success" || result?.status === 303) {
                 toast.success(`Joining room...`);
             } else {
                 toast.error(`Server error: Maybe the server hasn't started yet
-                            ${JSON.stringify(r, null, 2)}`);
+                            ${JSON.stringify(result, null, 2)}`);
             }
         }
     });

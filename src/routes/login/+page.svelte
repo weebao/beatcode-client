@@ -1,63 +1,50 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
-    import { Button } from "$lib/components/ui/button";
-    import {
-        Card,
-        CardContent,
-        CardDescription,
-        CardFooter,
-        CardHeader,
-        CardTitle
-    } from "$lib/components/ui/card";
-    import { Input } from "$lib/components/ui/input";
-    import { Label } from "$lib/components/ui/label";
-    import { Loader2 } from "lucide-svelte";
-    import { handleLoginResponse } from "$models/user";
+    import { toast } from "svelte-sonner";
+    import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
 
-    export let form;
-    let loading = false;
-    let authError: string | null = null;
+    import * as Card from "$lib/components/ui/card";
+    import * as Form from "$components/ui/form";
+    import { Input } from "$components/ui/input";
+    import { Label } from "$lib/components/ui/label";
+    import { Button } from "$components/ui/button";
+    import { Loader2 } from "lucide-svelte";
+
+    import type { PageData } from "./$types";
+    import type { LoginSchema } from "$models/auth";
+    import { announce } from "$lib/utils";
+
+    interface Props {
+        data: PageData;
+    }
+
+    let { data } = $props();
+    let loading = $state(false);
+
+    const loginForm = superForm<Infer<typeof LoginSchema>>(data.form, {
+        onResult: async ({ result }) => {
+            loading = false;
+            announce(result, "Logged in successfully");
+        }
+    });
+
+    const {
+        form: loginFormData,
+        errors: loginErrors,
+        enhance: enhanceLogin
+    } = loginForm;
 </script>
 
 <div class="flex min-h-navscreen items-center justify-center bg-background">
-    <Card class="w-[350px]">
-        <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>Enter your credentials to access your account</CardDescription>
-        </CardHeader>
-        <form
-            method="POST"
-            use:enhance={() => {
-                loading = true;
-                authError = null;
-
-                return async ({ result }) => {
-                    console.log("Form submission result:", result); // Debug log
-                    loading = false;
-
-                    if (result.type === "success" && result.data?.tokens) {
-                        console.log(result.data.tokens);
-                        await handleLoginResponse(result.data.tokens);
-                        goto("/");
-                    } else {
-                        // Changed error handling logic
-                        console.log("Error response:", result); // Debug log
-                        if (
-                            result.data?.error === "Incorrect credentials" ||
-                            result.error?.message === "Incorrect credentials" ||
-                            result.data?.detail === "Incorrect credentials"
-                        ) {
-                            authError = "Invalid username or password";
-                        } else {
-                            authError = "An error occurred during login. Please try again.";
-                        }
-                    }
-                };
-            }}
-        >
-            <CardContent>
-                {#if authError || form?.error}
+    <Card.Root class="w-[350px]">
+        <Card.Header>
+            <Card.Title>Login</Card.Title>
+            <Card.Description>Enter your credentials to access your account</Card.Description>
+        </Card.Header>
+        <form method="POST" use:enhanceLogin>
+            <Card.Content>
+                <!-- {#if authError || form?.error}
                     <div class="mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
                         {#if form?.error === "Email not verified"}
                             Please verify your email before logging in. Check your inbox for the
@@ -68,25 +55,45 @@
                             {form?.error}
                         {/if}
                     </div>
-                {/if}
+                {/if} -->
                 <div class="grid w-full items-center gap-4">
                     <div class="flex flex-col space-y-1.5">
-                        <Label for="email">Email or Username</Label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="text"
-                            placeholder="name@example.com or username"
-                            required
-                        />
+                        <Label for="username">Email or Username</Label>
+                        <Form.Field form={loginForm} name="username">
+                            <Form.Control>
+                                {#snippet children({ props })}
+                                    <Input
+                                        {...props}
+                                        id="username"
+                                        name="username"
+                                        type="text"
+                                        required
+                                    />
+                                {/snippet}
+                            </Form.Control>
+                            <Form.FieldErrors />
+                        </Form.Field>
                     </div>
                     <div class="flex flex-col space-y-1.5">
                         <Label for="password">Password</Label>
-                        <Input id="password" name="password" type="password" required />
+                        <Form.Field form={loginForm} name="password">
+                            <Form.Control>
+                                {#snippet children({ props })}
+                                    <Input
+                                        {...props}
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        required
+                                    />
+                                {/snippet}
+                            </Form.Control>
+                            <Form.FieldErrors />
+                        </Form.Field>
                     </div>
                 </div>
-            </CardContent>
-            <CardFooter class="flex flex-col gap-2">
+            </Card.Content>
+            <Card.Footer class="flex flex-col gap-2">
                 <Button class="w-full" type="submit" disabled={loading}>
                     {#if loading}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
@@ -98,7 +105,7 @@
                         >Sign up</a
                     >
                 </p>
-            </CardFooter>
+            </Card.Footer>
         </form>
-    </Card>
+    </Card.Root>
 </div>

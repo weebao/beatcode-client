@@ -1,6 +1,15 @@
-import type { Cookies } from "@sveltejs/kit";
+import { error, type Cookies } from "@sveltejs/kit";
 import * as api from "./api";
 import { setTokenCookie } from "./utils";
+import type { LoginData, RegisterData } from "$lib/models/auth";
+import type { User } from "$lib/models/user";
+
+export const login = async (data: LoginData, cookies: Cookies) => {
+    const response = await api.post("/users/login", data);
+    const { access_token, refresh_token } = response;
+    setTokenCookie(cookies, access_token, "accessToken");
+    setTokenCookie(cookies, refresh_token, "refreshToken");
+}
 
 export const loginAsGuest = async (cookies: Cookies) => {
     const data = await api.post("/users/guest");
@@ -8,6 +17,11 @@ export const loginAsGuest = async (cookies: Cookies) => {
     setTokenCookie(cookies, access_token, "accessToken");
     setTokenCookie(cookies, refresh_token, "refreshToken");
 };
+
+export const register = async (data: RegisterData, cookies: Cookies): Promise<User> => {
+    const response = await api.post("/users/register", data);
+    return response;
+}
 
 export const getMe = async () => {
     return api.get("/users/me");

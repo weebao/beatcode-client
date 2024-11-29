@@ -3,7 +3,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import * as api from "$lib/server/api";
-import { CreateRoomSchema, JoinRoomSchema } from "$lib/zod-schemas";
+import { CreateRoomSchema, JoinRoomSchema } from "$models/room";
 
 export const load: PageServerLoad = async ({ locals }) => {
     return {
@@ -42,6 +42,6 @@ export const actions = {
             return fail(400, { joinRoomForm });
         }
 
-        redirect(303, `/room/${joinRoomForm.data.roomCode}`);
+        redirect(303, `/room/${joinRoomForm.data.room_code}`);
     }
 } satisfies Actions;

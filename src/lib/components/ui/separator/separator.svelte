@@ -1,22 +1,38 @@
 <script lang="ts">
-	import { Separator as SeparatorPrimitive } from "bits-ui";
 	import { cn } from "$lib/utils.js";
 
 	let {
 		ref = $bindable(null),
 		class: className,
+		variant = "secondary",
 		orientation = "horizontal",
+		text = "",
 		...restProps
-	}: SeparatorPrimitive.RootProps = $props();
+	} = $props();
 </script>
 
-<SeparatorPrimitive.Root
-	bind:ref
-	class={cn(
-		"bg-border shrink-0",
-		orientation === "horizontal" ? "h-[1px] w-full" : "min-h-full w-[1px]",
-		className
-	)}
-	{orientation}
-	{...restProps}
-/>
+{#if orientation === "horizontal"}
+	<div
+		bind:this={ref}
+		class={cn("flex items-center justify-center space-x-2", className)}
+		{...restProps}
+	>
+		<div class={cn("h-px w-full rounded", `bg-${variant}`)}></div>
+		{#if text}
+			<span class={cn("text-sm uppercase", `text-${variant}`)}>{text}</span>
+			<div class={cn("h-px w-full rounded", `bg-${variant}`)}></div>
+		{/if}
+	</div>
+{:else}
+	<div
+		bind:this={ref}
+		class={cn("flex flex-col items-center gap-1", className)}
+		{...restProps}
+	>
+		<div class={cn("h-6 w-[2px] rounded-sm", `bg-${variant}`)}></div>
+		{#if text}
+			<div class={cn("font-semibold", `text-${variant}`)}>{text}</div>
+			<div class={cn("h-6 w-[2px] rounded-sm", `bg-${variant}`)}></div>
+		{/if}
+	</div>
+{/if}

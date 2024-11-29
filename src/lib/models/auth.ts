@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { HttpPayload } from "./request";
 
 export type JwtPayload = {
     exp: number;
@@ -18,13 +19,21 @@ export interface LoginFormResult {
     data?: LoginResponse;
     error?: string;
 }
-export interface LoginData {
-    email: string;
+export interface LoginData extends HttpPayload {
+    username: string;
     password: string;
 }
 
+export interface RegisterData extends HttpPayload {
+    username: string;
+    display_name: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+}
+
 export const LoginSchema = z.object({
-    email: z.string().min(1, "Email or Username is required"),
+    username: z.string().min(1, "Email or Username is required"),
     password: z.string().min(1, "Password is required")
 });
 
@@ -38,6 +47,7 @@ export const SignUpSchema = z
                 /^[a-zA-Z0-9_-]+$/,
                 "Username can only contain letters, numbers, underscores, and hyphens"
             ),
+        display_name: z.string().max(50, "Display name must be at most 50 characters"),
         email: z.string().email("Please enter a valid email address"),
         password: z.string().min(8, "Password must be at least 8 characters"),
         confirm_password: z.string()
