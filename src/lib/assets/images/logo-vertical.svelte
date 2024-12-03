@@ -6,7 +6,7 @@
     let { class: className = "" }: Props = $props();
 </script>
 
-<svg width="108" height="67" viewBox="0 0 108 67" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg class={className} width="108" height="67" viewBox="0 0 108 67" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
         d="M45.2715 18.5217C45.2715 17.9137 45.7643 17.4209 46.3723 17.4209H61.6285C62.2365 17.4209 62.7293 17.9137 62.7293 18.5217V26.5637H45.2715V18.5217Z"
         fill="#ADEBB3"

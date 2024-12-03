@@ -1,11 +1,11 @@
 import { z } from "zod";
-import type { HttpPayload } from "./request";
+import type { HttpJSONPayload } from "./request";
 
-export type JwtPayload = {
+export interface JwtPayload {
     exp: number;
     secret: string | null;
     [key: string]: any; // To allow additional properties
-};
+}
 export interface Tokens {
     access_token: string;
     refresh_token: string;
@@ -19,12 +19,12 @@ export interface LoginFormResult {
     data?: LoginResponse;
     error?: string;
 }
-export interface LoginData extends HttpPayload {
+export interface LoginData extends HttpJSONPayload {
     username: string;
     password: string;
 }
 
-export interface RegisterData extends HttpPayload {
+export interface RegisterData extends HttpJSONPayload {
     username: string;
     display_name: string;
     email: string;
@@ -37,11 +37,11 @@ export const LoginSchema = z.object({
     password: z.string().min(1, "Password is required")
 });
 
-export const SignUpSchema = z
+export const RegisterSchema = z
     .object({
         username: z
             .string()
-            .min(3, "Username must be at least 3 characters")
+            .min(1, "Username cannot be empty")
             .max(20, "Username must be at most 20 characters")
             .regex(
                 /^[a-zA-Z0-9_-]+$/,

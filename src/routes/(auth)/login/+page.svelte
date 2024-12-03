@@ -1,19 +1,18 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import { goto } from "$app/navigation";
-    import { toast } from "svelte-sonner";
+    import type { PageData } from "./$types";
     import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
+    import { goto } from "$app/navigation";
 
-    import * as Card from "$lib/components/ui/card";
+    import * as Card from "$components/ui/card";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
-    import { Label } from "$lib/components/ui/label";
     import { Button } from "$components/ui/button";
-    import { Loader2 } from "lucide-svelte";
 
-    import type { PageData } from "./$types";
-    import type { LoginSchema } from "$models/auth";
     import { announce } from "$lib/utils";
+    import type { LoginSchema } from "$models/auth";
+
+    import { Loader2 } from "lucide-svelte";
+    import LogoVertical from "$assets/images/logo-vertical.svelte";
 
     interface Props {
         data: PageData;
@@ -22,27 +21,28 @@
     let { data } = $props();
     let loading = $state(false);
 
-    const loginForm = superForm<Infer<typeof LoginSchema>>(data.form, {
+    const form = superForm<Infer<typeof LoginSchema>>(data.form, {
         onResult: async ({ result }) => {
             loading = false;
+            console.log(result);
+            if (result.type === "redirect") {
+                goto("/home");
+            }
             announce(result, "Logged in successfully");
         }
     });
 
-    const {
-        form: loginFormData,
-        errors: loginErrors,
-        enhance: enhanceLogin
-    } = loginForm;
+    const { form: formData, errors, enhance } = form;
 </script>
 
-<div class="flex min-h-navscreen items-center justify-center bg-background">
-    <Card.Root class="w-[350px]">
+<div class="flex h-navscreen justify-center bg-background">
+    <Card.Root class="h-fit w-[350px] my-center">
         <Card.Header>
-            <Card.Title>Login</Card.Title>
-            <Card.Description>Enter your credentials to access your account</Card.Description>
+            <div class="my-3 flex w-full justify-center">
+                <LogoVertical />
+            </div>
         </Card.Header>
-        <form method="POST" use:enhanceLogin>
+        <form method="POST" use:enhance>
             <Card.Content>
                 <!-- {#if authError || form?.error}
                     <div class="mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
@@ -56,17 +56,16 @@
                         {/if}
                     </div>
                 {/if} -->
-                <div class="grid w-full items-center gap-4">
-                    <div class="flex flex-col space-y-1.5">
-                        <Label for="username">Email or Username</Label>
-                        <Form.Field form={loginForm} name="username">
+                <div class="grid w-full items-center space-y-2">
+                    <div class="flex flex-col">
+                        <Form.Field {form} name="username">
                             <Form.Control>
                                 {#snippet children({ props })}
                                     <Input
                                         {...props}
-                                        id="username"
-                                        name="username"
+                                        bind:value={$formData.username}
                                         type="text"
+                                        placeholder="Username or Email"
                                         required
                                     />
                                 {/snippet}
@@ -74,18 +73,23 @@
                             <Form.FieldErrors />
                         </Form.Field>
                     </div>
-                    <div class="flex flex-col space-y-1.5">
-                        <Label for="password">Password</Label>
-                        <Form.Field form={loginForm} name="password">
+                    <div class="flex flex-col">
+                        <Form.Field {form} name="password">
                             <Form.Control>
                                 {#snippet children({ props })}
                                     <Input
                                         {...props}
-                                        id="password"
-                                        name="password"
+                                        bind:value={$formData.password}
                                         type="password"
+                                        placeholder="Password"
                                         required
                                     />
+                                    <a
+                                        href="/forgot-password"
+                                        class="text-right text-sm text-secondary hover:underline"
+                                    >
+                                        Forgot password?
+                                    </a>
                                 {/snippet}
                             </Form.Control>
                             <Form.FieldErrors />
@@ -100,9 +104,10 @@
                     {/if}
                     Sign In
                 </Button>
-                <p class="text-center text-sm text-muted-foreground">
-                    Don't have an account? <a href="/sign-up" class="text-primary hover:underline"
-                        >Sign up</a
+                <p class="mt-2 text-center text-sm text-muted-foreground">
+                    Don't have an account yet? <a
+                        href="/register"
+                        class="text-primary hover:underline">Sign up</a
                     >
                 </p>
             </Card.Footer>

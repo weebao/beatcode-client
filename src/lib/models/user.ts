@@ -1,16 +1,11 @@
 export interface User {
     username: string;
     email: string;
-    displayName: string;
+    display_name: string;
     rating: number;
-    isVerified?: boolean;
-    isGuest?: boolean;
-    createdAt: number;
-    updatedAt: number;
+    is_verified?: boolean;
+    is_guest?: boolean;
+    created_at: number;
+    updated_at: number;
     room?: string;
-}
-
-export interface LoginResponse {
-    access_token: string;
-    refresh_token: string;
 }

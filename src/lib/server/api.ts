@@ -16,17 +16,24 @@ import { refreshAccessToken } from "./auth";
  * @returns {Promise<any>} A promise that resolves to the response data or an error object with the status code.
  * @throws Will throw an error if the request fails with a server error (status code 500-599).
  */
-async function send({ method, path, data, cookies }: HttpRequestFetch): Promise<any> {
+async function send({ method, path, data, cookies, refresh }: HttpRequestFetch): Promise<any> {
     const options: RequestInit = {};
 
     // Specifying the HTTP request options and method
     options.method = method;
     options.headers = {};
 
-    // Check if there is data, transform it to JSON and add to the body
+    // Check if there is data and set appropriate headers and body
     if (data) {
-        options.headers["Content-Type"] = "application/json";
-        options.body = JSON.stringify(data);
+        if (data instanceof FormData) {
+            options.body = data;
+        } else if (data instanceof URLSearchParams) {
+            options.headers["Content-Type"] = "application/x-www-form-urlencoded";
+            options.body = data.toString();
+        } else {
+            options.headers["Content-Type"] = "application/json";
+            options.body = JSON.stringify(data);
+        }
     }
 
     const accessToken = cookies?.get("access_token");
@@ -48,9 +55,9 @@ async function send({ method, path, data, cookies }: HttpRequestFetch): Promise<
         }
 
         // Refresh token and refetch if unauthorized
-        if (response.status === 401) {
+        if (refresh && response.status === 401) {
             await refreshAccessToken(cookies!);
-            return send({ method, path, data, cookies });
+            return send({ method, path, data, cookies, refresh: false });
         }
 
         // Client errors ranging from 400 to 499
@@ -67,11 +74,12 @@ async function send({ method, path, data, cookies }: HttpRequestFetch): Promise<
  * Sends a GET request to the specified path.
  *
  * @param path - The endpoint path to send the GET request to.
+ * @param refresh - Optional. Whether to refresh the access token if unauthorized.
  * @param cookies - Optional. The cookies to include in the request headers.
  * @returns A promise that resolves with the response of the GET request.
  */
-export function get(path: string, cookies?: Cookies) {
-    return send({ method: "GET", path, cookies });
+export function get(path: string, refresh?: boolean, cookies?: Cookies) {
+    return send({ method: "GET", path, refresh, cookies });
 }
 
 /**
@@ -79,22 +87,24 @@ export function get(path: string, cookies?: Cookies) {
  *
  * @param path - The endpoint path to which the POST request is sent.
  * @param data - Optional payload to be sent with the POST request.
+ * @param refresh - Optional. Whether to refresh the access token if unauthorized.
  * @param cookies - Optional cookies to be included in the request headers.
  * @returns A promise that resolves with the response of the POST request.
  */
-export function post(path: string, data?: HttpPayload, cookies?: Cookies) {
-    return send({ method: "POST", path, data, cookies });
+export function post(path: string, data?: HttpPayload, refresh?: boolean, cookies?: Cookies) {
+    return send({ method: "POST", path, data, refresh, cookies });
 }
 
 /**
  * Sends a DELETE request to the specified path.
  *
  * @param path - The endpoint path to send the DELETE request to.
+ * @param refresh - Optional. Whether to refresh the access token if unauthorized.
  * @param cookies - Optional. The cookies to include in the request headers.
  * @returns A promise that resolves with the response of the DELETE request.
  */
-export function del(path: string, cookies?: Cookies) {
-    return send({ method: "DELETE", path, cookies });
+export function del(path: string, refresh?: boolean, cookies?: Cookies) {
+    return send({ method: "DELETE", path, refresh, cookies });
 }
 
 /**
@@ -102,9 +112,10 @@ export function del(path: string, cookies?: Cookies) {
  *
  * @param path - The endpoint path to send the PUT request to.
  * @param data - Optional payload to include in the PUT request.
+ * @param refresh - Optional. Whether to refresh the access token if unauthorized.
  * @param cookies - Optional cookies to include in the request headers.
  * @returns A promise that resolves with the response of the PUT request.
  */
-export function put(path: string, data?: HttpPayload, cookies?: Cookies) {
-    return send({ method: "PUT", path, data, cookies });
+export function put(path: string, data?: HttpPayload, refresh?: boolean, cookies?: Cookies) {
+    return send({ method: "PUT", path, data, refresh, cookies });
 }

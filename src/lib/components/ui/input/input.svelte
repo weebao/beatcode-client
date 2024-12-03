@@ -1,22 +1,41 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from "svelte/elements";
-	import type { WithElementRef } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+    import type { HTMLInputAttributes } from "svelte/elements";
+    import { Toggle, type WithElementRef } from "bits-ui";
+    import { Eye, EyeClosed } from "lucide-svelte";
+    import { cn } from "$lib/utils.js";
 
-	let {
-		ref = $bindable(null),
-		value = $bindable(),
-		class: className,
-		...restProps
-	}: WithElementRef<HTMLInputAttributes> = $props();
+    let {
+        ref = $bindable(null),
+        value = $bindable(),
+        class: className,
+        type = $bindable(),
+        ...restProps
+    }: WithElementRef<HTMLInputAttributes> = $props();
+
+    let show = $state(type === "password" ? false : undefined);
 </script>
 
-<input
-	bind:this={ref}
-	class={cn(
-		"border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-		className
-	)}
-	bind:value
-	{...restProps}
-/>
+<div class="relative">
+    <input
+        bind:this={ref}
+        class={cn(
+            "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+            className,
+            { "pr-10": type === "password" }
+        )}
+        bind:value
+        type={show ? "text" : type}
+        {...restProps}
+    />
+    {#if type === "password"}
+        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+            <Toggle.Root bind:pressed={show} class="text-muted-foreground hover:text-foreground">
+                {#if show}
+                    <Eye class="h-5 w-5 stroke-2" />
+                {:else}
+                    <EyeClosed class="h-5 w-5 stroke-2" />
+                {/if}
+            </Toggle.Root>
+        </div>
+    {/if}
+</div>

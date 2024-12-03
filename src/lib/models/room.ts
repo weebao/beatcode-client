@@ -1,6 +1,7 @@
 import { z } from "zod";
+import type { HttpJSONPayload } from "./request";
 
-export type RoomSettings = {
+export interface RoomSettings extends HttpJSONPayload {
     problem_count: number;
     starting_hp: number;
     base_hp_deduction: number;
@@ -14,7 +15,7 @@ export type RoomSettings = {
     starting_sp: number;
     starting_mp: number;
     mana_recharge: number;
-};
+}
 
 export const RoomSettingsSchema = z.object({
     problem_count: z.number().int().min(1).max(100),

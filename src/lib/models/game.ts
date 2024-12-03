@@ -1,17 +1,17 @@
-export type PlayerInfo = {
+export interface PlayerInfo {
     hp: number;
     name: string;
     current_challenge: number;
     solved_test_cases: number;
-};
+}
 
-export type ChallengeInfo = {
+export interface ChallengeInfo {
     title: string;
     description: string;
     signature: string;
-};
+}
 
-export type ExecutionResults = {
+export interface ExecutionResults {
     passed: number;
     totalTestCases: number;
-};
+}

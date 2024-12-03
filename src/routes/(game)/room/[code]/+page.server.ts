@@ -7,7 +7,7 @@ import { loginAsGuest, getMe } from "$lib/server/auth";
 export const load: PageServerLoad = async ({ locals, params }) => {
     return {
         name: locals.user?.displayName,
-        roomCode: params.roomCode,
+        roomCode: params.code,
         websocketUrl: WEBSOCKET_URL
     };
 };
@@ -19,8 +19,8 @@ export const actions = {
             const user = await getMe();
             locals.user = user;
             return { user };
-        } catch (err: any) {
-            return fail(500, { message: err.message });
+        } catch (e: any) {
+            return fail(500, { message: e.message });
         }
     }
 } satisfies Actions;

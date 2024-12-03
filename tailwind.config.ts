@@ -125,7 +125,14 @@ const config: Config = {
     },
     plugins: [
         tailwindcssAnimate,
-        plugin(function ({ matchUtilities, theme }) {
+        plugin(function ({ addUtilities, matchUtilities, theme }) {
+            addUtilities({
+                ".my-center": {
+                    marginTop: "auto",
+                    marginBottom: "auto",
+                    transform: "translateY(calc(-1 * var(--navbar-height)))"
+                }
+            });
             matchUtilities(
                 {
                     "text-shadow": (value) => ({

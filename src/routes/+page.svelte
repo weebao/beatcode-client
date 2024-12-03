@@ -65,12 +65,12 @@
                 <span class="header-2"></span>
                 &nbsp;
                 <span
-                    class="header-3 text-shadow-center mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose md:mt-1.5"
+                    class="header-3 mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose text-shadow-center md:mt-1.5"
                     class:hidden={isNotMounted}
                 ></span>
                 <SparkleIcon
                     class={cn(
-                        "sparkle text-shadow-[0_0_12px_#EBADC1] ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose",
+                        "sparkle ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose text-shadow-[0_0_12px_#EBADC1]",
                         isNotMounted ? "hidden" : ""
                     )}
                     fill="#EBADC1"
@@ -78,8 +78,11 @@
             </span>
         </div>
     </div>
-    <a href="/custom">
-        <Button class="text-md font-medium lg:text-lg">Start now</Button>
-    </a>
-    <img loading="lazy" src={HeroImg} alt="Hero" class="max-w-[1280px] flex-1 object-contain" />
+    <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
+    <img
+        loading="lazy"
+        src={HeroImg}
+        alt="Hero"
+        class="w-2/3 max-w-[1280px] flex-1 object-contain"
+    />
 </section>

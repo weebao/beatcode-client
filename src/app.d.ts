@@ -6,12 +6,12 @@ declare namespace App {
         user?: {
             username: string;
             email: string;
-            displayName: string;
+            display_name: string;
             rating: number;
-            isVerified?: boolean;
-            isGuest?: boolean;
-            createdAt: number;
-            updatedAt: number;
+            is_verified?: boolean;
+            is_guest?: boolean;
+            created_at: number;
+            updated_at: number;
             room?: string;
         };
     }
