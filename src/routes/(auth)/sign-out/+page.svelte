@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { PageData } from "$./types";
+    import type { PageData } from "./$types";
     import { goto, invalidateAll } from "$app/navigation";
     import * as Card from "$components/ui/card";
     import LogoVertical from "$assets/images/logo-vertical.svelte";
@@ -28,7 +28,7 @@
         </Card.Header>
         <Card.Content class="text-center">
             {#if data.status === "success"}
-                <p class="text-xl">You are logged out. Redirecting you...</p>
+                <p class="text-xl mb-2">You are logged out. Redirecting you...</p>
                 <p>
                     Honestly, you shouldn't even be seeing this since it normally goes very fast.
                     The fact you're seeing this is either your computer is slow or you're just

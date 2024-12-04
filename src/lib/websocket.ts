@@ -1,6 +1,3 @@
-// websocket.ts
-import { writable, type Writable } from "svelte/store";
-
 const RETRIES = 3;
 
 export interface WebSocketMessage {
@@ -9,8 +6,8 @@ export interface WebSocketMessage {
 }
 
 export function createWebSocket(url: string) {
-    const messages: Writable<WebSocketMessage | null> = writable(null);
-    const status: Writable<"CONNECTING" | "OPEN" | "CLOSING" | "CLOSED"> = writable("CONNECTING");
+    let message = $state<WebSocketMessage | null>(null);
+    let status = $state<"CONNECTING" | "OPEN" | "CLOSING" | "CLOSED">("CONNECTING");
     let socket: WebSocket;
     let retries = RETRIES;
 
@@ -19,18 +16,18 @@ export function createWebSocket(url: string) {
 
         socket.onopen = () => {
             console.log("[WS] Connected");
-            status.set("OPEN");
+            status = "OPEN";
             retries = RETRIES; // Reset retries on successful connection
         };
 
         socket.onclose = () => {
             console.log("[WS] Disconnected");
-            status.set("CLOSED");
+            status = "CLOSED";
         };
-        
+
         socket.onerror = (error: any) => {
             console.error("[WS] Error:", error);
-            status.set("CLOSED");
+            status = "CLOSED";
             if (retries > 0) {
                 retries--;
                 console.log(`[WS] Retrying... (${RETRIES - retries}/${RETRIES})`);
@@ -41,8 +38,7 @@ export function createWebSocket(url: string) {
         };
 
         socket.onmessage = (event) => {
-            const message: WebSocketMessage = JSON.parse(event.data);
-            messages.set(message);
+            message = JSON.parse(event.data);
         };
     }
 
@@ -63,8 +59,8 @@ export function createWebSocket(url: string) {
     connect();
 
     return {
-        messages,
-        status,
+        get message() { return message },
+        get status() { return status },
         send,
         close
     };

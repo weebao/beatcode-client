@@ -99,7 +99,7 @@
                     max={100}
                     value={opponentInfo?.hp ?? 100}
                     isOpposite={true}
-                    barColor="bg-rose"
+                    barClass="bg-rose"
                     class="h-2"
                 />
             </div>

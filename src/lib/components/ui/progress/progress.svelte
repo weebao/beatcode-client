@@ -3,14 +3,14 @@
     import { cn } from "$lib/utils.js";
 
     interface ExtraProps {
-        barColor?: string;
+        barClass?: string;
         isOpposite?: boolean;
     }
 
     let {
         ref = $bindable(null),
         class: className,
-        barColor = "bg-primary",
+        barClass = "bg-primary",
         isOpposite,
         max = 100,
         value,
@@ -26,7 +26,7 @@
     {...restProps}
 >
     <div
-        class="h-full w-full flex-1 bg-primary transition-all {barColor}"
+        class="h-full w-full flex-1 bg-primary transition-all {barClass}"
         style={`transform: translateX(${isOpposite ? "" : "-"}${100 - (100 * (value ?? 0)) / (max ?? 1)}%)`}
     ></div>
 </ProgressPrimitive.Root>

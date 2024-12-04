@@ -37,14 +37,12 @@
             announce(result, "Joining room...");
             if (result.type === "success") {
                 const { data: resultData } = result.data?.joinRoomForm;
-                const { status } = createWebSocket(`${data.webSocketUrl}/${resultData.room_code}`);
-                status.subscribe(value => {
-                    if (value === "OPEN") {
-                        goto(`/room/${resultData.room_code}`)
-                    } else {
-                        toast.error(`[${value}] Room is closed or does not exist.`);
-                    }
-                });
+                let { status } = createWebSocket(`${data.webSocketUrl}/${resultData.room_code}`);
+                if (status === "OPEN") {
+                    goto(`/room/${resultData.room_code}`);
+                } else {
+                    toast.error(`[${status}] Room is closed or does not exist.`);
+                }
             }
         }
     });
@@ -99,7 +97,7 @@
         <Dialog.Trigger class="w-full">
             <Button class="w-full">Create New Room</Button>
         </Dialog.Trigger>
-        <Dialog.Content class="sm:max-w-[425px]">
+        <Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
             <Dialog.Header>
                 <Dialog.Title>Create a new room</Dialog.Title>
                 <Dialog.Description>Please fill out the room settings below.</Dialog.Description>

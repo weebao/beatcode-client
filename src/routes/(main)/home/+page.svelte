@@ -18,6 +18,7 @@
 
     let { data }: Props = $props();
     let user = data.user;
+    let mounted = $state(false);
 
     const mockExp = [
         { name: "Array", percentage: 70 },
@@ -32,6 +33,8 @@
         { name: "Custom", icon: Settings, link: "/custom" }
     ];
     const rating = Ratings[user?.rating ?? 0];
+
+    onMount(() => (mounted = true));
 </script>
 
 <div class="mx-auto mt-16 flex max-w-[1280px] flex-col">
@@ -52,7 +55,12 @@
                                 <span class="text-lg">{skill.name}</span>
                                 <span>{skill.percentage}%</span>
                             </div>
-                            <Progress class="h-2" value={skill.percentage} max={100} />
+                            <Progress
+                                class="h-2"
+                                barClass="duration-1000"
+                                value={mounted ? skill.percentage : 0}
+                                max={100}
+                            />
                         </div>
                     {/each}
                 </Card.Content>
@@ -82,8 +90,8 @@
             complexity={20}
         />
         <GradientBlob
-            class="fixed left-2/3 top-32 -z-[5] h-[400px] w-[400px] -translate-x-2/3"
-            blobClass="bg-yellow-200/80"
+            class="fixed left-2/3 top-24 -z-[5] h-[400px] w-[400px] -translate-x-1/3"
+            blobClass="bg-yellow-200"
             complexity={20}
         />
 

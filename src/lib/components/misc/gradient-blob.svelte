@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
     import { gbc } from "@yuvalkarif/gradient-blob";
+    import { cn } from "$lib/utils";
 
     interface Props {
         class?: string;
@@ -19,7 +20,8 @@
         complexity = 20
     }: Props = $props();
 
-    let path = $state("0% 0%");
+    let path = $state("100% 100% 100%");
+    let mounted = $state(false);
 
     const gbInstance = gbc({ cacheChance: 50 });
 
@@ -35,6 +37,7 @@
 
     onMount(() => {
         change();
+        mounted = true;
         intervalId = setInterval(change, speed);
     });
 
@@ -44,12 +47,14 @@
 </script>
 
 <div class={className} style="filter: blur({blur}px); opacity: 80%;">
-    <div class="blob {blobClass}" style={path}></div>
+    <div class={cn("blob", blobClass, mounted ? "" : "opacity-0")} style={path}></div>
 </div>
 
 <style>
     .blob {
         height: 100%;
-        transition: clip-path 4s linear;
+        transition:
+            clip-path 4s linear,
+            opacity 1s;
     }
 </style>

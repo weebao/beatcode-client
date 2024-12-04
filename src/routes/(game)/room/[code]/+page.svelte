@@ -35,27 +35,13 @@
 
     $effect(() => console.log(data.user));
 
-    // Establish socket and look for update
-    const RETRY_LIMIT = 3;
-    let socket: WebSocket;
-    let retries = $state(RETRY_LIMIT);
+    import { createWebSocket } from "$lib/websocket";
 
-    const connect = () => {
-        socket = new WebSocket(`${data.websocketUrl}/${roomCode}`);
+    const ws = createWebSocket(`${data.websocketUrl}/${roomCode}`);
 
-        socket.onopen = () => {
-            toast.success("Successfully joined room");
-            console.log("Connected to server");
-            connectStatus = 1;
-        };
-
-        socket.onclose = () => {
-            console.log("Disconnected from server");
-            connectStatus = -1;
-        };
-
-        socket.onmessage = (event) => {
-            const { event: e, event_data: data } = JSON.parse(event.data);
+    messages.subscribe((message) => {
+        if (message) {
+            const { event: e, data } = message;
             console.log("Received:", data);
 
             switch (e) {
@@ -80,14 +66,27 @@
                 default:
                     break;
             }
-        };
+        }
+    });
 
-        socket.onerror = async (error) => {
-            console.log("WebSocket Error:", error);
-            if (retries > 0) {
-            }
-        };
-    };
+    status.subscribe((currentStatus) => {
+        switch (currentStatus) {
+            case "OPEN":
+                toast.success("Successfully joined room");
+                console.log("Connected to server");
+                connectStatus = 1;
+                break;
+            case "CLOSED":
+                console.log("Disconnected from server");
+                connectStatus = -1;
+                break;
+            case "CONNECTING":
+                connectStatus = 0;
+                break;
+            default:
+                break;
+        }
+    });
 
     const startGame = () => {
         if (!opponentInfo) {
@@ -103,20 +102,15 @@
     };
 
     const submitCode = (code: string) => {
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
+        if (status === "CLOSED") {
             toast.error("Connection error: No socket available");
             return;
         }
 
         isExecuting = true;
-        socket.send(
-            JSON.stringify({
-                event: "submit_code",
-                event_data: {
-                    code
-                }
-            })
-        );
+        send("submit_code", {
+            code
+        });
     };
 
     // Utils
@@ -124,10 +118,6 @@
         navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard");
     };
-
-    onMount(() => {
-        connect();
-    });
 </script>
 
 <div class="mx-auto mt-16 flex flex-col items-center">
@@ -194,7 +184,8 @@
         </form>
     </Dialog.Content>
 </Dialog.Root>
-{#if winner}
+
+<!-- {#if winner}
     <Dialog.Root open={true}>
         <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
             <Dialog.Header>
@@ -216,7 +207,7 @@
             </Dialog.Footer>
         </Dialog.Content>
     </Dialog.Root>
-{/if}
+{/if} -->
 
 <style>
 </style>
