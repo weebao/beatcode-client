@@ -2,7 +2,7 @@
     import type { User } from "$models/user";
     import { ChevronDown } from "lucide-svelte";
     import AvatarImg from "$assets/images/avatar.jpg";
-    import { Ratings } from "$assets/config/rating";
+    import { Ratings } from "$assets/config/game";
     import * as Avatar from "$components/ui/avatar";
     import * as DropdownMenu from "$components/ui/dropdown-menu";
     import { cn } from "$lib/utils";
@@ -28,7 +28,7 @@
                     <Avatar.Fallback>CN</Avatar.Fallback>
                 </Avatar.Root>
                 <div class="flex flex-col">
-                    <p class="font-medium">{user.display_name}</p>
+                    <p class="mb-1 font-medium">{user.display_name}</p>
                     <div
                         class={cn(
                             "w-fit rounded-sm px-4 pb-px pt-[2px] font-icon text-xs font-bold italic tracking-wider",
@@ -43,10 +43,7 @@
         </div>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content align="end">
-        <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/profile")}
-            >Profile</DropdownMenu.Item
-        >
-        <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/profile")}
+        <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/settings")}
             >Settings</DropdownMenu.Item
         >
         <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/sign-out")}

@@ -1,39 +1,36 @@
 <script lang="ts">
-    import { browser } from "$app/environment";
-    import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
-    import { toast } from "svelte-sonner";
+    import { type Infer, superForm } from "sveltekit-superforms";
 
     import type { PageData } from "./$types";
-    import type { CreateRoomSchema, JoinRoomSchema } from "$lib/models/room";
+    import type { RoomSettingsSchema, JoinRoomSchema } from "$models/room";
+    import { DefaultRoomSettings } from "$assets/config/room";
 
     import Logo from "$assets/icons/logo.svelte";
     import * as Form from "$components/ui/form";
+    import * as Dialog from "$components/ui/dialog";
     import { Input } from "$components/ui/input";
     import { Button } from "$components/ui/button";
+    import { RoomSettingsForm } from "$components/game/room";
+    import { announce } from "$lib/utils";
+    import { Separator } from "$components/ui/separator";
 
     interface Props {
         data: PageData;
     }
 
     let { data }: Props = $props();
-    let name = $state(data.name);
+    let closeDialogBtn = $state<HTMLButtonElement>();
 
-    const createRoomForm = superForm<Infer<typeof CreateRoomSchema>>(data.createRoomForm, {
+    const createRoomForm = superForm<Infer<typeof RoomSettingsSchema>>(data.createRoomForm, {
         onResult: ({ result }) => {
-            if (result?.type === "success" || result?.status === 303) {
-                toast.success(`Creating room...`);
-            } else {
-                toast.error(`Error: ${JSON.stringify(result, null, 2)}`);
-            }
+            announce(result, "Creating room...");
         }
     });
     const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
         onResult: ({ result }) => {
-            if (result?.type === "success" || result?.status === 303) {
-                toast.success(`Joining room...`);
-            } else {
-                toast.error(`Server error: Maybe the server hasn't started yet
-                            ${JSON.stringify(result, null, 2)}`);
+            announce(result, "Joining room...");
+            if (result.type === "success") {
+                
             }
         }
     });
@@ -78,25 +75,28 @@
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
-            <Button variant="secondary" type="submit">Join</Button>
+            <Button variant="secondary" size="sm" type="submit">Join</Button>
         </form>
-        <!-- {#if browser}
-            <SuperDebug data={$joinRoomFormData} />
-        {/if} -->
-        <!-- Create room -->
-        <form method="POST" use:enhanceCreateRoom action="?/createRoom">
-            <Button class="w-full" type="submit">Create New Room</Button>
-        </form>
-        <!-- {#if browser}
-            <SuperDebug data={$createRoomFormData} />
-        {/if} -->
-    </div>
-    <div class="flex items-center justify-center space-x-2">
-        <div class="h-px w-full rounded bg-secondary"></div>
-        <span class="text-sm uppercase text-secondary">or</span>
-        <div class="h-px w-full rounded bg-secondary"></div>
     </div>
     <Button class="w-full" variant="accent" href="/custom/lobby">Browse Lobby</Button>
+    <Separator text="OR" />
+    <!-- Create room -->
+    <Dialog.Root>
+        <Dialog.Trigger class="w-full">
+            <Button class="w-full">Create New Room</Button>
+        </Dialog.Trigger>
+        <Dialog.Content class="sm:max-w-[425px]">
+            <Dialog.Header>
+                <Dialog.Title>Create a new room</Dialog.Title>
+                <Dialog.Description>Please fill out the room settings below.</Dialog.Description>
+            </Dialog.Header>
+            <RoomSettingsForm form={createRoomForm} action="?/createRoom">
+                <Dialog.Footer>
+                    <Button type="submit">Create Room</Button>
+                </Dialog.Footer>
+            </RoomSettingsForm>
+        </Dialog.Content>
+    </Dialog.Root>
 </div>
 
 <style>

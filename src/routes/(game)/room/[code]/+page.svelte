@@ -2,15 +2,14 @@
     import { onDestroy, onMount } from "svelte";
     import { type Infer, superForm } from "sveltekit-superforms";
     import { toast } from "svelte-sonner";
-    import { WEBSOCKET_URL } from "$env/static/private";
     import type { PageData } from "./$types";
 
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
-    import StatusIndicator from "$components/micro/status-indicator.svelte";
-    import { Game } from "$components/macro/game";
+    import StatusIndicator from "$components/misc/status-indicator.svelte";
+    import { Game } from "$components/game";
 
     import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
 
@@ -21,8 +20,8 @@
     }
 
     let { data }: Props = $props();
-    let { name, roomCode } = $state(data);
-    let isDialogOpen = $state(data.name === undefined);
+    let { roomCode } = $state(data);
+    let isDialogOpen = $state(data.user === undefined);
     let connectStatus = $state(0);
 
     let userInfo: PlayerInfo | undefined = $state();
@@ -39,7 +38,7 @@
     let retries = $state(RETRY_LIMIT);
 
     const connect = () => {
-        socket = new WebSocket(`${WEBSOCKET_URL}/${roomCode}`);
+        socket = new WebSocket(`${data.websocketUrl}/${roomCode}`);
 
         socket.onopen = () => {
             toast.success("Successfully joined room");
@@ -158,7 +157,9 @@
             <div class="h-6 w-[2px] rounded-sm bg-secondary"></div>
         </div>
         <div
-            class={`border border-secondary ${opponentInfo ? "" : "animate-pulse"} border-1 w-[400px] rounded-xl p-4`}
+            class="border border-secondary ${opponentInfo
+                ? ''
+                : 'animate-pulse'} border-1 w-[400px] rounded-xl p-4"
         >
             <div class="flex items-center">
                 <h2 class="text-2xl font-semibold">

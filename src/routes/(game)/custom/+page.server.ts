@@ -3,19 +3,18 @@ import { fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import * as api from "$lib/server/api";
-import { CreateRoomSchema, JoinRoomSchema } from "$models/room";
+import { RoomSettingsSchema, JoinRoomSchema } from "$models/room";
 
 export const load: PageServerLoad = async ({ locals }) => {
     return {
-        name: locals.user?.displayName ?? "",
-        createRoomForm: await superValidate(zod(CreateRoomSchema)),
+        createRoomForm: await superValidate(zod(RoomSettingsSchema)),
         joinRoomForm: await superValidate(zod(JoinRoomSchema))
     };
 };
 
 export const actions = {
     createRoom: async ({ request, locals, cookies }) => {
-        const createRoomForm = await superValidate(request, zod(CreateRoomSchema));
+        const createRoomForm = await superValidate(request, zod(RoomSettingsSchema));
 
         if (!createRoomForm.valid) {
             return fail(400, { createRoomForm });
@@ -24,8 +23,7 @@ export const actions = {
             redirect(303, "/login");
         }
 
-        const { settings } = createRoomForm.data;
-        const data = await api.post("/rooms/create", settings, cookies);
+        const data = await api.post("/rooms/create", createRoomForm.data, true, cookies);
 
         if (!data.error) {
             const { room_code } = data;
@@ -42,6 +40,6 @@ export const actions = {
             return fail(400, { joinRoomForm });
         }
 
-        redirect(303, `/room/${joinRoomForm.data.room_code}`);
+        return { joinRoomForm };
     }
 } satisfies Actions;

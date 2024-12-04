@@ -8,7 +8,7 @@ const preloadFont: Handle = async ({ event, resolve }) => {
     });
 };
 
-const protectedRoutes: string[] = ["/home", "/profile", "/settings"];
+const protectedRoutes: string[] = ["/home", "/settings"];
 
 // custom redirect from joy of code `https://github.com/JoysOfCode/sveltekit-auth-cookies/blob/migration/src/hooks.ts`
 function redirect(location: string, body?: string) {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { tick } from "svelte";
-    import { Editor, EditorData } from "$components/macro/editor";
+    import { Editor, EditorData } from "./editor";
     import Problem from "./problem.svelte";
     import Test from "./test.svelte";
 
@@ -60,7 +60,7 @@
 </script>
 
 <div
-    class="bg-background-dark absolute left-0 top-0 flex min-h-screen w-screen flex-col overflow-hidden"
+    class="absolute left-0 top-0 flex min-h-screen w-screen flex-col overflow-hidden bg-background-dark"
 >
     <div class="flex items-center justify-between gap-4 px-4 py-2 text-white">
         <div class="flex w-full">
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="flex space-x-0.5">
-            <Button variant="secondary" size="sm" on:click={handleSubmit}>
+            <Button variant="secondary" size="sm" onclick={handleSubmit}>
                 {#if isExecuting}
                     <Loader class="mr-2 h-4 w-4 animate-spin" />
                     Submitting...

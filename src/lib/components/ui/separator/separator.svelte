@@ -1,6 +1,14 @@
 <script lang="ts">
     import { cn } from "$lib/utils.js";
 
+    interface Props {
+        ref?: HTMLDivElement | null;
+        class?: string;
+        variant?: "primary" | "secondary";
+        orientation?: "horizontal" | "vertical";
+        text?: string;
+    }
+
     let {
         ref = $bindable(null),
         class: className,
@@ -8,7 +16,7 @@
         orientation = "horizontal",
         text = "",
         ...restProps
-    } = $props();
+    }: Props = $props();
 </script>
 
 {#if orientation === "horizontal"}
@@ -19,7 +27,7 @@
     >
         <div class={cn("h-px w-full rounded", `bg-${variant}`)}></div>
         {#if text}
-            <span class={cn("text-sm uppercase", `text-${variant}`)}>{text}</span>
+            <span class={cn("text-sm", `text-${variant}`)}>{text}</span>
             <div class={cn("h-px w-full rounded", `bg-${variant}`)}></div>
         {/if}
     </div>

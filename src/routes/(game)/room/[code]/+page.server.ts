@@ -6,7 +6,6 @@ import { loginAsGuest, getMe } from "$lib/server/auth";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     return {
-        name: locals.user?.displayName,
         roomCode: params.code,
         websocketUrl: WEBSOCKET_URL
     };
@@ -16,7 +15,7 @@ export const actions = {
     joinRoomAsGuest: async ({ request, locals, cookies }) => {
         try {
             await loginAsGuest(cookies);
-            const user = await getMe();
+            const user = await getMe(cookies);
             locals.user = user;
             return { user };
         } catch (e: any) {

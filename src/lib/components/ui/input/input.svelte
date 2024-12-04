@@ -4,18 +4,23 @@
     import { Eye, EyeClosed } from "lucide-svelte";
     import { cn } from "$lib/utils.js";
 
+    interface ExtraProps {
+        containerClass?: string;
+    }
+
     let {
         ref = $bindable(null),
         value = $bindable(),
         class: className,
+        containerClass,
         type = $bindable(),
         ...restProps
-    }: WithElementRef<HTMLInputAttributes> = $props();
+    }: WithElementRef<HTMLInputAttributes & ExtraProps> = $props();
 
     let show = $state(type === "password" ? false : undefined);
 </script>
 
-<div class="relative">
+<div class={cn("relative", containerClass)}>
     <input
         bind:this={ref}
         class={cn(
