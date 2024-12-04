@@ -1,14 +1,17 @@
 import type { Actions, PageServerLoad } from "./$types";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, isHttpError, isRedirect, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import * as api from "$lib/server/api";
 import { RoomSettingsSchema, JoinRoomSchema } from "$models/room";
+import { WEBSOCKET_URL } from "$env/static/private";
+import { createRoom } from "$lib/server/room";
 
 export const load: PageServerLoad = async ({ locals }) => {
     return {
         createRoomForm: await superValidate(zod(RoomSettingsSchema)),
-        joinRoomForm: await superValidate(zod(JoinRoomSchema))
+        joinRoomForm: await superValidate(zod(JoinRoomSchema)),
+        webSocketUrl: WEBSOCKET_URL
     };
 };
 
@@ -23,13 +26,20 @@ export const actions = {
             redirect(303, "/login");
         }
 
-        const data = await api.post("/rooms/create", createRoomForm.data, true, cookies);
-
-        if (!data.error) {
-            const { room_code } = data;
-            redirect(303, `/room/${room_code}`);
-        } else {
-            return fail(500, { createRoomForm });
+        try {
+            const data = await createRoom(createRoomForm.data, cookies);
+            console.log(data)
+            if (data.status >= 400) {
+                return fail(data.status, { createRoomForm, error: data.error });
+            }
+            redirect(303, `/room/${data.room_code}`);
+        } catch (e: unknown) {
+            if (isRedirect(e)) throw e;
+            if (isHttpError(e)) {
+                console.error(e.body);
+                return fail(e.status, { createRoomForm, message: "Something went wrong in the server" });
+            }
+            return fail(500, { createRoomForm, message: "An unexpected error occurred" });
         }
     },
 

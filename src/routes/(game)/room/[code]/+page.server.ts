@@ -15,9 +15,6 @@ export const actions = {
     joinRoomAsGuest: async ({ request, locals, cookies }) => {
         try {
             await loginAsGuest(cookies);
-            const user = await getMe(cookies);
-            locals.user = user;
-            return { user };
         } catch (e: any) {
             return fail(500, { message: e.message });
         }

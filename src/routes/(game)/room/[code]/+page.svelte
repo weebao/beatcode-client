@@ -8,12 +8,13 @@
     import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
+    import { Separator } from "$components/ui/separator";
     import StatusIndicator from "$components/misc/status-indicator.svelte";
-    import { Game } from "$components/game";
 
     import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
 
     import { Copy, Link } from "lucide-svelte";
+    import { enhance } from "$app/forms";
 
     interface Props {
         data: PageData;
@@ -31,6 +32,8 @@
     let isExecuting = $state(false);
     let gameStarted = $state(false);
     let winner: string | null = $state(null);
+
+    $effect(() => console.log(data.user));
 
     // Establish socket and look for update
     const RETRY_LIMIT = 3;
@@ -144,22 +147,18 @@
         </Button>
     </div>
     <div class="my-4 flex items-center gap-12">
-        <div class="border-1 w-[400px] rounded-xl border border-secondary p-4">
+        <div class="border-1 w-[400px] rounded-xl border border-secondary px-6 py-4">
             <div class="flex items-center">
-                <h2 class="mr-2 text-2xl font-semibold">{name}</h2>
+                <h2 class="mr-2 text-2xl font-semibold">{data.user?.display_name ?? "Player"}</h2>
                 <StatusIndicator status={connectStatus} />
             </div>
             <p class="text-lg">The mightiest coder of all</p>
         </div>
-        <div class="flex flex-col items-center gap-1">
-            <div class="h-6 w-[2px] rounded-sm bg-secondary"></div>
-            <div class="font-semibold text-secondary">VS</div>
-            <div class="h-6 w-[2px] rounded-sm bg-secondary"></div>
-        </div>
+        <Separator orientation="vertical" text="VS" />
         <div
             class="border border-secondary ${opponentInfo
                 ? ''
-                : 'animate-pulse'} border-1 w-[400px] rounded-xl p-4"
+                : 'animate-pulse'} border-1 w-[400px] rounded-xl px-6 py-4"
         >
             <div class="flex items-center">
                 <h2 class="text-2xl font-semibold">
@@ -181,17 +180,7 @@
     </div>
     <Button size="lg" class="mt-4 text-lg" onclick={startGame}>Start Game</Button>
 </div>
-{#if gameStarted}
-    <Game
-        {userInfo}
-        {opponentInfo}
-        {challengeInfo}
-        {executionResults}
-        {isExecuting}
-        {winner}
-        {submitCode}
-    />
-{/if}
+
 <!-- If not authenticated - prompt user to sign in -->
 <Dialog.Root bind:open={isDialogOpen}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
@@ -199,7 +188,7 @@
             <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
             <Dialog.Description>Please sign in to join</Dialog.Description>
         </Dialog.Header>
-        <form method="POST" action="?/joinRoomAsGuest">
+        <form method="POST" use:enhance action="?/joinRoomAsGuest">
             <Button href={`/login?joining=${roomCode}`}>Sign in</Button>
             <Button type="submit" variant="ghost">Play as guest</Button>
         </form>

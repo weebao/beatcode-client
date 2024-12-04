@@ -40,12 +40,16 @@ async function send({ method, path, data, cookies, refresh }: HttpRequestFetch):
     if (accessToken) {
         options.headers["Authorization"] = `Bearer ${accessToken}`;
     }
+    // console.log("[Request Header]", options);
 
     // Start fetching the endpoint and convert the response body to json
     let responseStatus = 500;
     try {
         const response = await fetch(`${API_URL}${path}`, options);
         const json = await response.json();
+
+        // console.log("[Server Response]", response);
+        // console.log("[Server JSON]", json);
 
         responseStatus = response.status;
 

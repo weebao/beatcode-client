@@ -1,5 +1,6 @@
 <script lang="ts">
     import { type Infer, superForm } from "sveltekit-superforms";
+    import { get } from "svelte/store";
 
     import type { PageData } from "./$types";
     import type { RoomSettingsSchema, JoinRoomSchema } from "$models/room";
@@ -13,6 +14,9 @@
     import { RoomSettingsForm } from "$components/game/room";
     import { announce } from "$lib/utils";
     import { Separator } from "$components/ui/separator";
+    import { createWebSocket } from "$lib/websocket";
+    import { toast } from "svelte-sonner";
+    import { goto } from "$app/navigation";
 
     interface Props {
         data: PageData;
@@ -22,15 +26,25 @@
     let closeDialogBtn = $state<HTMLButtonElement>();
 
     const createRoomForm = superForm<Infer<typeof RoomSettingsSchema>>(data.createRoomForm, {
+        id: "create-room",
         onResult: ({ result }) => {
             announce(result, "Creating room...");
         }
     });
     const joinRoomForm = superForm<Infer<typeof JoinRoomSchema>>(data.joinRoomForm, {
+        id: "join-room",
         onResult: ({ result }) => {
             announce(result, "Joining room...");
             if (result.type === "success") {
-                
+                const { data: resultData } = result.data?.joinRoomForm;
+                const { status } = createWebSocket(`${data.webSocketUrl}/${resultData.room_code}`);
+                status.subscribe(value => {
+                    if (value === "OPEN") {
+                        goto(`/room/${resultData.room_code}`)
+                    } else {
+                        toast.error(`[${value}] Room is closed or does not exist.`);
+                    }
+                });
             }
         }
     });

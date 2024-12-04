@@ -11,7 +11,7 @@
 
 <div
     class={cn(
-        "h-3 w-3 animate-pulse rounded-full transition-all duration-300",
+        "h-3 w-3 animate-pulse rounded-full transition-all duration-1000",
         status === 0 && "bg-yellow-500",
         status === 1 && "bg-primary",
         status === -1 && "bg-neutral",

@@ -14,7 +14,7 @@ export function announce(result: ActionResult, successMsg: string, customErrorMs
             return "An unknown error occurred";
         }
         if (data.error) {
-            return data.error.message;
+            return data.error.message || data.error.detail;
         }
 
         for (const key in data) {
