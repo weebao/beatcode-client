@@ -132,7 +132,7 @@
             variant="outline"
             size="icon"
             class="h-8 w-8 p-1.5"
-            onclick={() => copy(`http://localhost:5173/room/${data.roomCode}`)}
+            onclick={() => copy(`${data.websiteUrl}/room/${data.roomCode}`)}
         >
             <Link />
         </Button>
