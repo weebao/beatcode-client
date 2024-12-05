@@ -2,7 +2,7 @@
     import { cn } from "$lib/utils.js";
 
     interface Props {
-        ref?: HTMLDivElement | null;
+        ref?: HTMLElement | null;
         class?: string;
         variant?: "primary" | "secondary";
         orientation?: "horizontal" | "vertical";

@@ -18,6 +18,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions = {
     default: async ({ request, cookies }) => {
         const form = await superValidate(request, zod(LoginSchema));
+        const url = new URL(request.url);
+        const roomId = url.searchParams.get("joining");
 
         if (!form.valid) {
             return fail(400, { form });
@@ -30,7 +32,10 @@ export const actions = {
                 form.errors.password = [response.error.detail];
                 return fail(response.status, { form, message: response.error.detail });
             }
-            throw redirect(302, "/home");
+            if (roomId) {
+                redirect(302, `/room/${roomId}`);
+            }
+            redirect(302, "/home");
         } catch (e: unknown) {
             if (isRedirect(e)) throw e;
             if (isHttpError(e)) {

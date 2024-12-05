@@ -1,6 +1,7 @@
 import type { Cookies, Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { getMe } from "$lib/server/auth";
+import { getCurrentGame } from "$lib/server/game";
 
 const preloadFont: Handle = async ({ event, resolve }) => {
     return await resolve(event, {
@@ -8,7 +9,7 @@ const preloadFont: Handle = async ({ event, resolve }) => {
     });
 };
 
-const protectedRoutes: string[] = ["/home", "/settings"];
+const protectedRoutes: string[] = ["/home", "/settings", "/solo", "/team", "/custom"];
 
 // custom redirect from joy of code `https://github.com/JoysOfCode/sveltekit-auth-cookies/blob/migration/src/hooks.ts`
 function redirect(location: string, body?: string) {
@@ -19,18 +20,16 @@ function redirect(location: string, body?: string) {
 }
 
 const checkAuth: Handle = async ({ event, resolve }) => {
-    event.locals.user = undefined;
     const accessToken = event.cookies.get("access_token");
     const isProtected = protectedRoutes.includes(event.url.pathname);
     if (!accessToken && isProtected) {
         return redirect("/login", "User is unauthorized");
     }
     try {
-        const user = await getMe(event.cookies);
-        if (user && user.username) {
+        if (!event.locals.user) {
+            console.log("[Fetch user's latest info]:", event.cookies);
+            const user = await getMe(event.cookies);
             event.locals.user = user;
-        } else if (isProtected) {
-            return redirect("/login", "User is unauthorized");
         }
     } catch (e: unknown) {
         if (isProtected) {
@@ -40,4 +39,25 @@ const checkAuth: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-export const handle = sequence(preloadFont, checkAuth);
+const gameExceptRoutes = ["/sign-out"];
+
+const checkIfInGame: Handle = async ({ event, resolve }) => {
+    if (
+        event.locals.user &&
+        !event.url.pathname.startsWith("/game") &&
+        !gameExceptRoutes.includes(event.url.pathname)
+    ) {
+        try {
+            const data = await getCurrentGame(event.cookies);
+            console.log("[Check if user is in game]:", data);
+            if (data) {
+                return redirect(`/game/${data.match_id}`, "User is currently in game");
+            }
+        } catch (e) {
+            console.error("Game check error:", e);
+        }
+    }
+    return resolve(event);
+};
+
+export const handle = sequence(preloadFont, checkAuth, checkIfInGame);

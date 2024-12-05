@@ -10,13 +10,11 @@
     import * as Form from "$components/ui/form";
     import * as Dialog from "$components/ui/dialog";
     import { Input } from "$components/ui/input";
-    import { Button } from "$components/ui/button";
+    import { Button, buttonVariants } from "$components/ui/button";
     import { RoomSettingsForm } from "$components/game/room";
     import { announce } from "$lib/utils";
     import { Separator } from "$components/ui/separator";
-    import { createWebSocket } from "$lib/websocket";
-    import { toast } from "svelte-sonner";
-    import { goto } from "$app/navigation";
+    import { createWebSocket } from "$lib/websocket.svelte";
 
     interface Props {
         data: PageData;
@@ -24,6 +22,8 @@
 
     let { data }: Props = $props();
     let closeDialogBtn = $state<HTMLButtonElement>();
+    let roomCode = $state<string>();
+    const ws = createWebSocket(data.token ?? "");
 
     const createRoomForm = superForm<Infer<typeof RoomSettingsSchema>>(data.createRoomForm, {
         id: "create-room",
@@ -35,15 +35,6 @@
         id: "join-room",
         onResult: ({ result }) => {
             announce(result, "Joining room...");
-            if (result.type === "success") {
-                const { data: resultData } = result.data?.joinRoomForm;
-                let { status } = createWebSocket(`${data.webSocketUrl}/${resultData.room_code}`);
-                if (status === "OPEN") {
-                    goto(`/room/${resultData.room_code}`);
-                } else {
-                    toast.error(`[${status}] Room is closed or does not exist.`);
-                }
-            }
         }
     });
 
@@ -94,10 +85,8 @@
     <Separator text="OR" />
     <!-- Create room -->
     <Dialog.Root>
-        <Dialog.Trigger class="w-full">
-            <Button class="w-full">Create New Room</Button>
-        </Dialog.Trigger>
-        <Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
+        <Dialog.Trigger class="w-full {buttonVariants()}">Create New Room</Dialog.Trigger>
+        <Dialog.Content class="sm:max-w-[425px]">
             <Dialog.Header>
                 <Dialog.Title>Create a new room</Dialog.Title>
                 <Dialog.Description>Please fill out the room settings below.</Dialog.Description>

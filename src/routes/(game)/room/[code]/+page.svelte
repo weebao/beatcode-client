@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { type Infer, superForm } from "sveltekit-superforms";
+    import { onDestroy } from "svelte";
     import { toast } from "svelte-sonner";
     import type { PageData } from "./$types";
+    import { enhance } from "$app/forms";
+    import { goto } from "$app/navigation";
+    import { createWebSocket } from "$lib/websocket.svelte";
 
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
@@ -11,56 +13,67 @@
     import { Separator } from "$components/ui/separator";
     import StatusIndicator from "$components/misc/status-indicator.svelte";
 
-    import type { ChallengeInfo, ExecutionResults, PlayerInfo } from "$models/game";
-
-    import { Copy, Link } from "lucide-svelte";
-    import { enhance } from "$app/forms";
+    import type { RoomState } from "$models/room";
+    import { Copy, LogOut, Link, Settings } from "lucide-svelte";
 
     interface Props {
         data: PageData;
     }
 
     let { data }: Props = $props();
-    let { roomCode } = $state(data);
-    let isDialogOpen = $state(data.user === undefined);
-    let connectStatus = $state(0);
+    let roomState = $state<RoomState>();
+    let gameLink = $state<string>("");
+    let gameLinkBtn: HTMLElement;
 
-    let userInfo: PlayerInfo | undefined = $state();
-    let opponentInfo: PlayerInfo | undefined = $state();
-    let challengeInfo: ChallengeInfo | undefined = $state();
-    let executionResults: ExecutionResults | undefined = $state();
-    let isExecuting = $state(false);
-    let gameStarted = $state(false);
-    let winner: string | null = $state(null);
+    let isHost = $derived(roomState?.host_name === data.user?.username);
 
-    $effect(() => console.log(data.user));
+    let userReady = $derived(isHost ? roomState?.host_ready : roomState?.guest_ready);
+    let userStatus = $derived(userReady ? 1 : 0);
 
-    import { createWebSocket } from "$lib/websocket";
+    let opponentName = $derived(
+        isHost ? roomState?.guest_display_name : roomState?.host_display_name
+    );
+    let opponentReady = $derived(isHost ? roomState?.guest_ready : roomState?.host_ready);
+    let opponentStatus = $derived(opponentName ? (opponentReady ? 1 : 0) : -1);
 
-    const ws = createWebSocket(`${data.websocketUrl}/${roomCode}`);
+    // Room WebSocket
+    const ws = createWebSocket(data?.token ?? "");
+    if (data.user) {
+        ws.setUrl(`${data.websocketUrl}/rooms/${data.roomCode}`);
+        ws.connect();
+    }
 
-    messages.subscribe((message) => {
-        if (message) {
-            const { event: e, data } = message;
-            console.log("Received:", data);
+    $effect(() => {
+        if (ws.status === "CLOSED") {
+            toast.error(ws.reason ?? "Failed to connect to room");
+        }
+    });
 
-            switch (e) {
-                case "game_update":
-                    userInfo = data.player1;
-                    opponentInfo = data.player2;
+    $effect(() => {
+        if (ws.message) {
+            let { type, data } = ws.message;
+            switch (type) {
+                case "game_started":
+                    // goto(`/game/${data.game_id}`);
+                    // gameLink = `/game/${data.game_id}`;
+                    gameLinkBtn.setAttribute("href", `/game/${data.game_id}`);
+                    gameLinkBtn.click();
                     break;
-                case "new_challenge":
-                    challengeInfo = data.challenge_info;
-                    gameStarted = true;
+                case "room_state":
+                    roomState = data;
+                    if (isHost && !userReady) {
+                        ws.send("toggle_ready");
+                    }
                     break;
-                case "execution_results":
-                    executionResults = data;
-                    isExecuting = false;
+                case "settings_updated":
+                    if (roomState) {
+                        roomState.settings = data;
+                    }
                     break;
-                case "game_ended":
-                    winner = data.winner;
+                case "chat":
                     break;
                 case "error":
+                    console.log(data);
                     toast.error(data.error_msg);
                     break;
                 default:
@@ -69,48 +82,25 @@
         }
     });
 
-    status.subscribe((currentStatus) => {
-        switch (currentStatus) {
-            case "OPEN":
-                toast.success("Successfully joined room");
-                console.log("Connected to server");
-                connectStatus = 1;
-                break;
-            case "CLOSED":
-                console.log("Disconnected from server");
-                connectStatus = -1;
-                break;
-            case "CONNECTING":
-                connectStatus = 0;
-                break;
-            default:
-                break;
-        }
-    });
-
-    const startGame = () => {
-        if (!opponentInfo) {
+    const startGame = (e: Event) => {
+        e.preventDefault();
+        if (!roomState?.guest_name) {
             toast.error("Can't start game without an opponent");
-            return;
+        } else if (!opponentReady) {
+            toast.error("Opponent is not ready");
+        } else {
+            console.log("game started");
+            ws.send("start_game");
         }
-        socket.send(
-            JSON.stringify({
-                event: "start_game",
-                event_data: {}
-            })
-        );
     };
 
-    const submitCode = (code: string) => {
-        if (status === "CLOSED") {
-            toast.error("Connection error: No socket available");
-            return;
-        }
+    const toggleReady = () => {
+        ws.send("toggle_ready");
+    };
 
-        isExecuting = true;
-        send("submit_code", {
-            code
-        });
+    const leaveRoom = () => {
+        ws.close();
+        goto("/custom");
     };
 
     // Utils
@@ -118,96 +108,103 @@
         navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard");
     };
+
+    onDestroy(() => {
+        ws.close();
+    });
 </script>
 
 <div class="mx-auto mt-16 flex flex-col items-center">
-    <h1 class="mb-2 text-5xl font-bold">Game Room</h1>
-    <p class="mb-2 text-xl">Code: {roomCode}</p>
+    <h1 class="mb-2 text-5xl font-bold">
+        {roomState?.host_name ? `${roomState?.host_display_name}'s` : "Game"} Room
+    </h1>
+    <p class="mb-2 text-xl">Code: {data.roomCode}</p>
     <div class="mb-4 flex items-center gap-2">
-        <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" onclick={() => copy(roomCode)}>
+        <Button
+            variant="outline"
+            size="icon"
+            class="h-8 w-8 p-1.5"
+            onclick={() => copy(data.roomCode)}
+        >
             <Copy />
         </Button>
         <Button
             variant="outline"
             size="icon"
             class="h-8 w-8 p-1.5"
-            onclick={() => copy(`http://localhost:5173/room/${roomCode}`)}
+            onclick={() => copy(`http://localhost:5173/room/${data.roomCode}`)}
         >
             <Link />
         </Button>
+        <form use:enhance action="?/changeSettings" method="post">
+            <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" type="submit">
+                <Settings />
+            </Button>
+        </form>
+        <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" onclick={leaveRoom}>
+            <LogOut />
+        </Button>
     </div>
-    <div class="my-4 flex items-center gap-12">
-        <div class="border-1 w-[400px] rounded-xl border border-secondary px-6 py-4">
+    <div class="my-4 flex w-full items-center justify-center gap-12">
+        <div
+            class="border-1 h-full w-full max-w-[400px] rounded-xl border border-secondary px-6 py-4"
+        >
             <div class="flex items-center">
                 <h2 class="mr-2 text-2xl font-semibold">{data.user?.display_name ?? "Player"}</h2>
-                <StatusIndicator status={connectStatus} />
+                <StatusIndicator status={userStatus} />
             </div>
             <p class="text-lg">The mightiest coder of all</p>
         </div>
         <Separator orientation="vertical" text="VS" />
         <div
-            class="border border-secondary ${opponentInfo
+            class="border-1 h-full w-full max-w-[400px] rounded-xl border border-secondary px-6 py-4{opponentName
                 ? ''
-                : 'animate-pulse'} border-1 w-[400px] rounded-xl px-6 py-4"
+                : ' animate-pulse'}"
         >
             <div class="flex items-center">
-                <h2 class="text-2xl font-semibold">
-                    {opponentInfo?.name || "Waiting for opponent..."}
+                <h2 class="mr-2 text-2xl font-semibold">
+                    {opponentName || "Waiting for opponent..."}
                 </h2>
-                <div
-                    class="ml-2 h-3 w-3 animate-pulse rounded-full transition-all duration-300"
-                    class:bg-transparent={!opponentInfo}
-                    class:bg-primary={opponentInfo}
-                    class:bg-neutral={connectStatus === -1}
-                ></div>
+                <StatusIndicator status={opponentStatus} />
             </div>
-            {#if opponentInfo}
+            {#if opponentName}
                 <p class="text-lg">The brave one who dares to challenge you</p>
             {:else}
                 <p class="text-lg">Who will it be?</p>
             {/if}
         </div>
     </div>
-    <Button size="lg" class="mt-4 text-lg" onclick={startGame}>Start Game</Button>
+    {#if isHost}
+        <Button size="lg" class="mt-4 text-lg" onclick={startGame}>Start Game</Button>
+    {:else if userReady}
+        <Button size="lg" class="mt-4 text-lg" variant="ghost" onclick={toggleReady}
+            >Cancel Ready</Button
+        >
+    {:else}
+        <Button size="lg" class="mt-4 text-lg" onclick={toggleReady}>Ready</Button>
+    {/if}
+    <a
+        bind:this={gameLinkBtn}
+        href={gameLink}
+        target="_blank"
+        data-sveltekit-reload
+        aria-label="Game Link"
+    ></a>
 </div>
 
 <!-- If not authenticated - prompt user to sign in -->
-<Dialog.Root bind:open={isDialogOpen}>
+<Dialog.Root open={!data.user}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <Dialog.Header>
             <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
             <Dialog.Description>Please sign in to join</Dialog.Description>
         </Dialog.Header>
         <form method="POST" use:enhance action="?/joinRoomAsGuest">
-            <Button href={`/login?joining=${roomCode}`}>Sign in</Button>
+            <Button href={`/login?joining=${data.roomCode}`}>Sign in</Button>
             <Button type="submit" variant="ghost">Play as guest</Button>
         </form>
     </Dialog.Content>
 </Dialog.Root>
-
-<!-- {#if winner}
-    <Dialog.Root open={true}>
-        <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
-            <Dialog.Header>
-                <Dialog.Title>{winner} won!</Dialog.Title>
-            </Dialog.Header>
-            <div class="my-4 flex justify-center">
-                <img src="/path/to/avatar.png" alt="Winner Avatar" class="h-24 w-24 rounded-full" />
-            </div>
-            <Dialog.Footer class="mt-4">
-                <Button
-                    onclick={() => {
-                        gameStarted = false;
-                        challengeInfo = undefined;
-                        winner = null;
-                    }}
-                >
-                    Reset
-                </Button>
-            </Dialog.Footer>
-        </Dialog.Content>
-    </Dialog.Root>
-{/if} -->
 
 <style>
 </style>

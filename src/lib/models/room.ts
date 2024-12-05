@@ -18,6 +18,19 @@ export interface RoomSettings extends HttpJSONPayload {
     mana_recharge: number;
 }
 
+export interface RoomState {
+    room_code: string;
+    host_name: string;
+    host_display_name: string;
+    guest_name: string | null;
+    guest_display_name: string | null;
+    is_public: boolean;
+    status: "waiting" | "in_game";
+    settings: RoomSettings;
+    host_ready: boolean;
+    guest_ready: boolean | null;
+}
+
 export const RoomSettingsSchema = z
     .object({
         problem_count: z.number().int().min(1).max(100).default(DefaultRoomSettings.problem_count),

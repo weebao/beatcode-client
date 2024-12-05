@@ -7,7 +7,7 @@
     import { Button } from "$components/ui/button";
     import * as Tooltip from "$components/ui/tooltip";
 
-    import { Settings, UserRound, UsersRound } from "lucide-svelte";
+    import { Settings, Shell, Swords } from "lucide-svelte";
     import { cn } from "$lib/utils";
     import { onMount } from "svelte";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
@@ -28,8 +28,8 @@
         { name: "Dynamic Programming", percentage: 30 }
     ];
     const gameModes = [
-        { name: "Solo", icon: UserRound, link: "/solo" },
-        { name: "Team", icon: UsersRound, link: "/team" },
+        { name: "Unranked", icon: Shell, link: "/solo/unranked" },
+        { name: "Ranked", icon: Swords, link: "/solo/ranked" },
         { name: "Custom", icon: Settings, link: "/custom" }
     ];
     const rating = Ratings[user?.rating ?? 0];
@@ -118,8 +118,8 @@
                                 <Tooltip.Root>
                                     <Tooltip.Trigger
                                         class={cn(
-                                            "cursor-default rounded-md px-4 py-1 font-mono font-bold",
-                                            ability.class
+                                            ability.class,
+                                            "cursor-default rounded-md px-4 py-1 font-mono font-bold"
                                         )}
                                     >
                                         {ability.name}

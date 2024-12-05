@@ -30,7 +30,7 @@
 </script>
 
 <div class="flex h-navscreen justify-center bg-background">
-    <Card.Root class="h-fit w-[350px] mt-12">
+    <Card.Root class="mt-12 h-fit w-[350px]">
         <Card.Header>
             <div class="my-3 flex w-full justify-center">
                 <LogoVertical />

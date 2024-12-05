@@ -28,7 +28,7 @@
                     <Avatar.Fallback>CN</Avatar.Fallback>
                 </Avatar.Root>
                 <div class="flex flex-col">
-                    <p class="mb-1 font-medium">{user.display_name}</p>
+                    <p class="mb-1 text-left font-medium">{user.display_name}</p>
                     <div
                         class={cn(
                             "w-fit rounded-sm px-4 pb-px pt-[2px] font-icon text-xs font-bold italic tracking-wider",

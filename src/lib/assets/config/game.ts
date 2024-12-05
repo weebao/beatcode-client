@@ -1,3 +1,14 @@
+import {
+    MatchDecorator,
+    Decoration,
+    ViewPlugin,
+    ViewUpdate,
+    keymap,
+    type EditorView,
+    type DecorationSet
+} from "@codemirror/view";
+import { Prec } from "@codemirror/state";
+
 export const Ratings = [
     { name: "O(n!)", class: "bg-gradient-to-br from-neutral-700 to-neutral-600" },
     { name: "O(2^n)", class: "bg-gradient-to-br from-green-400 to-green-300 text-green-950" },
@@ -9,20 +20,81 @@ export const Ratings = [
 ];
 
 export const Abilities = [
-    { name: "healio", desc: "Heal your HP by 20", class: "bg-green-300 text-green-950" },
+    {
+        name: "healio",
+        desc: "Heal your HP by 20",
+        class: "bg-green-300 text-green-950 rounded-[1px] px-px font-bold"
+    },
     {
         name: "deletio",
         desc: "Delete a random line of your opponent's code",
-        class: "bg-rose text-rose-foreground"
+        class: "bg-rose text-rose-foreground rounded-[1px] px-px font-bold"
     },
     {
         name: "syntaxio",
         desc: "Turn off your opponent's syntax highlighting for 30 seconds",
-        class: "bg-slate-900 text-green-400"
+        class: "bg-slate-900 text-green-400 rounded-[1px] px-px font-bold"
     },
     {
         name: "lightio",
         desc: "Turn your opponent's editor to light mode for 30 seconds",
-        class: "bg-neutral-100 text-amber-600"
+        class: "bg-neutral-100 text-amber-600 rounded-[1px] px-px font-bold"
     }
 ];
+
+export const AbilitiesDecorators = Abilities.map((ability) => {
+    const regexp = new RegExp(`\\b${ability.name}\\b`, "g");
+    const decoration = Decoration.mark({
+        class: `ability ${ability.class}`,
+        tagName: "span",
+        attributes: { title: ability.desc }
+    });
+    return new MatchDecorator({ regexp, decoration });
+});
+
+export const AbilitiesHighlighters = AbilitiesDecorators.map((decorator) =>
+    Prec.highest(
+        ViewPlugin.fromClass(
+            class {
+                decorations: DecorationSet;
+
+                constructor(view: EditorView) {
+                    this.decorations = decorator.createDeco(view);
+                }
+                update(update: ViewUpdate) {
+                    this.decorations = decorator.updateDeco(update, this.decorations);
+                }
+            },
+            {
+                decorations: (v) => v.decorations
+            }
+        )
+    )
+);
+
+export const AbilitiesKeymap = (trigger: (ability: string) => void) =>
+    keymap.of(
+        Abilities.map((ability) => ({
+            key: "Enter",
+            run: (view: EditorView) => {
+                const state = view.state;
+                const content = state.doc.toString();
+                if (content.includes(ability.name)) {
+                    trigger(ability.name);
+
+                    // Remove the word from editor
+                    const updatedContent = content.replace(ability.name, "").trim();
+                    view.dispatch({
+                        changes: {
+                            from: 0,
+                            to: state.doc.length,
+                            insert: updatedContent
+                        }
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+        }))
+    );

@@ -7,11 +7,12 @@ import { RoomSettingsSchema, JoinRoomSchema } from "$models/room";
 import { WEBSOCKET_URL } from "$env/static/private";
 import { createRoom } from "$lib/server/room";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, cookies }) => {
     return {
         createRoomForm: await superValidate(zod(RoomSettingsSchema)),
         joinRoomForm: await superValidate(zod(JoinRoomSchema)),
-        webSocketUrl: WEBSOCKET_URL
+        webSocketUrl: WEBSOCKET_URL,
+        token: cookies.get("access_token")
     };
 };
 
@@ -52,7 +53,6 @@ export const actions = {
         if (!joinRoomForm.valid) {
             return fail(400, { joinRoomForm });
         }
-
-        return { joinRoomForm };
+        redirect(303, `/room/${joinRoomForm.data.room_code}`);
     }
 } satisfies Actions;
