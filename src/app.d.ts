@@ -4,11 +4,16 @@
 declare namespace App {
     interface Locals {
         user?: {
-            name?: string;
-            token?: string;
-            // will add more when auth is done
+            username: string;
+            email: string;
+            display_name: string;
+            rating: number;
+            is_verified?: boolean;
+            is_guest?: boolean;
+            created_at: number;
+            updated_at: number;
+            room?: string;
         };
-        roomCode: string;
     }
     // interface PageData {}
     // interface Error {}

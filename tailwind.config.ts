@@ -1,5 +1,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
     darkMode: ["class"],
@@ -16,7 +18,11 @@ const config: Config = {
         extend: {
             height: {
                 nav: "var(--navbar-height)",
-                navscreen: "calc(100dvh - var(--navbar-height))"
+                navscreen: "calc(100dvh - var(--navbar-height) - 1px)"
+            },
+            minHeight: {
+                nav: "var(--navbar-height)",
+                navscreen: "calc(100vh - var(--navbar-height) - 1px)"
             },
             colors: {
                 border: "hsl(var(--border) / <alpha-value>)",
@@ -30,10 +36,6 @@ const config: Config = {
                 primary: {
                     DEFAULT: "hsl(var(--primary) / <alpha-value>)",
                     foreground: "hsl(var(--primary-foreground) / <alpha-value>)"
-                },
-                neutral: {
-                    DEFAULT: "hsl(var(--neutral) / <alpha-value>)",
-                    foreground: "hsl(var(--neutral-foreground) / <alpha-value>)"
                 },
                 secondary: {
                     DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
@@ -59,12 +61,27 @@ const config: Config = {
                     DEFAULT: "hsl(var(--card) / <alpha-value>)",
                     foreground: "hsl(var(--card-foreground) / <alpha-value>)"
                 },
+                neutral: {
+                    DEFAULT: "hsl(var(--neutral) / <alpha-value>)",
+                    foreground: "hsl(var(--neutral-foreground) / <alpha-value>)"
+                },
                 rose: {
                     DEFAULT: "hsl(var(--rose) / <alpha-value>)",
                     foreground: "hsl(var(--rose-foreground) / <alpha-value>)"
+                },
+                sidebar: {
+                    DEFAULT: "hsl(var(--sidebar-background))",
+                    foreground: "hsl(var(--sidebar-foreground))",
+                    primary: "hsl(var(--sidebar-primary))",
+                    "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+                    accent: "hsl(var(--sidebar-accent))",
+                    "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+                    border: "hsl(var(--sidebar-border))",
+                    ring: "hsl(var(--sidebar-ring))"
                 }
             },
             borderRadius: {
+                xl: "calc(var(--radius) + 4px)",
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)"
@@ -79,13 +96,56 @@ const config: Config = {
                     "Arial",
                     "sans-serif"
                 ],
-                mono: ["Consolas", "Monaco", "Courier New", "monospace"]
+                mono: ["Consolas", "Monaco", "Courier New", "monospace"],
+                icon: ["Typori"]
             },
-            fontSize: {
-                base: "var(--font-base)"
+            textShadow: {
+                sm: "0 1px 2px var(--tw-shadow-color)",
+                DEFAULT: "0 2px 4px var(--tw-shadow-color)",
+                lg: "0 8px 16px var(--tw-shadow-color)",
+                center: "0 0 12px var(--tw-shadow-color)"
+            },
+            keyframes: {
+                "accordion-down": {
+                    from: { height: "0" },
+                    to: { height: "var(--bits-accordion-content-height)" }
+                },
+                "accordion-up": {
+                    from: { height: "var(--bits-accordion-content-height)" },
+                    to: { height: "0" }
+                },
+                "caret-blink": {
+                    "0%,70%,100%": { opacity: "1" },
+                    "20%,50%": { opacity: "0" }
+                }
+            },
+            animation: {
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+                "caret-blink": "caret-blink 1.25s ease-out infinite"
             }
         }
-    }
+    },
+    plugins: [
+        tailwindcssAnimate,
+        plugin(function ({ addUtilities, matchUtilities, theme }) {
+            addUtilities({
+                ".my-center": {
+                    marginTop: "auto",
+                    marginBottom: "auto",
+                    transform: "translateY(calc(-1 * var(--navbar-height)))"
+                }
+            });
+            matchUtilities(
+                {
+                    "text-shadow": (value) => ({
+                        textShadow: value
+                    })
+                },
+                { values: theme("textShadow") }
+            );
+        })
+    ]
 };
 
 export default config;

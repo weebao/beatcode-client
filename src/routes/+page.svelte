@@ -1,36 +1,88 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { gsap } from "gsap";
+    import { TextPlugin } from "gsap/TextPlugin";
+
+    gsap.registerPlugin(TextPlugin);
+
+    import { SparkleIcon } from "lucide-svelte";
+
     import HeroImg from "$assets/images/hero.png";
     import { Button } from "$components/ui/button";
+    import { cn } from "$lib/utils.js";
 
-    let count = 0;
+    let username = "";
+    let isNotMounted = true;
+
+    onMount(() => {
+        isNotMounted = false;
+        gsap.registerPlugin(TextPlugin);
+        const tl = gsap.timeline();
+        tl.to(".header-1", {
+            duration: 1.5,
+            text: "Head-to-head code battle",
+            ease: "none"
+        });
+        tl.to(".header-2", {
+            duration: 0.25,
+            text: "with",
+            ease: "none"
+        });
+        tl.from(".header-3", {
+            opacity: 0
+        });
+        tl.to(".header-3", {
+            duration: 1,
+            text: "magic",
+            ease: "none"
+        });
+        tl.from(".sparkle", {
+            duration: 0.5,
+            opacity: 0,
+            scale: 0,
+            ease: "back.out(2)"
+        });
+        tl.to(".sparkle", {
+            duration: 3,
+            rotation: 360,
+            ease: "elastic.out(1,0.5)",
+            repeat: -1,
+            repeatDelay: 0
+        });
+    });
 </script>
 
 <section class="flex flex-col items-center overflow-hidden">
-    <div
-        class="mb-4 mt-24 flex flex-col items-center px-4 text-2xl leading-none max-md:mt-10 max-md:max-w-full md:text-5xl"
-    >
-        <h1
-            class="text-center text-2xl font-semibold text-neutral-100 max-md:max-w-full md:text-4xl"
-        >
-            Head-to-head live coding battle
+    <div class="mb-8 mt-24 flex flex-col items-center">
+        <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
+            Head-to-head code battle with magic
         </h1>
         <div
-            class="mt-3 flex items-center justify-center gap-2 whitespace-nowrap text-2xl md:gap-4 md:text-4xl"
+            class="relative flex flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"
         >
-            <span
-                class="my-auto gap-2.5 self-stretch pb-2 text-2xl font-semibold text-neutral-100 md:text-4xl"
-            >
-                with
-            </span>
-            <span
-                class="my-auto gap-2.5 self-stretch bg-rose px-1 py-0 font-mono text-2xl text-rose-foreground md:px-2 md:py-0.5 md:text-4xl"
-            >
-                magic
+            <span class="header-1 w-full"></span>
+            <span class="flex w-full justify-center">
+                <span class="header-2"></span>
+                &nbsp;
+                <span
+                    class="header-3 mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose text-shadow-center md:mt-1.5"
+                    class:hidden={isNotMounted}
+                ></span>
+                <SparkleIcon
+                    class={cn(
+                        "sparkle ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose text-shadow-[0_0_12px_#EBADC1]",
+                        isNotMounted ? "hidden" : ""
+                    )}
+                    fill="#EBADC1"
+                />
             </span>
         </div>
     </div>
-    <a href="/custom">
-        <Button class="text-md font-medium lg:text-lg">Start now</Button>
-    </a>
-    <img loading="lazy" src={HeroImg} alt="Hero" class="w-[50%] object-contain max-md:w-[80%]" />
+    <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
+    <img
+        loading="lazy"
+        src={HeroImg}
+        alt="Hero"
+        class="w-2/3 max-w-[1280px] flex-1 object-contain"
+    />
 </section>

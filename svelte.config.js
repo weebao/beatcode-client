@@ -25,8 +25,7 @@ const config = {
             $lib: path.resolve("./src/lib"),
             $models: path.resolve("./src/lib/models"),
             $stores: path.resolve("./src/lib/stores"),
-            $types: path.resolve("./src/lib/types"),
-            $utils: path.resolve("./src/lib/utils")
+            $types: path.resolve("./src/lib/types")
         }
     }
 };

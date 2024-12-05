@@ -13,11 +13,11 @@
         --muted: 220 12% 95%;
         --muted-foreground: 210 13% 50%;
 
-        --popover: 120 22% 10%;
-        --popover-foreground: 210 31% 95%;
+        --popover: 214 31% 16%;
+        --popover-foreground: 120 22% 92%;
 
-        --card: 120 22% 10%;
-        --card-foreground: 210 31% 95%;
+        --card: 214 31% 16%;
+        --card-foreground: 120 22% 92%;
 
         --border: 220 12% 30%;
         --input: 210 13% 50%;
@@ -32,7 +32,7 @@
         --accent-foreground: 210 31% 95%;
 
         --destructive: 10 75% 64%;
-        --destructive-foreground: 10 59% 48%;
+        --destructive-foreground: 11 91% 24%;
 
         --neutral: 211 15% 30%;
         --neutral-foreground: 210 31% 95%;
@@ -69,6 +69,16 @@
         @apply mb-4 mt-2 rounded-sm bg-neutral px-4 py-2;
     }
     code {
-        @apply rounded-sm border border-secondary bg-neutral px-1;
+        @apply rounded-sm border border-secondary bg-neutral px-1 py-px text-sm;
     }
+    .example-block {
+        @apply mb-4 mt-2 rounded-sm bg-neutral px-4 py-2 font-mono;
+    }
+}
+
+@font-face {
+    font-family: "Typori";
+    src: url("/fonts/Typori-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
