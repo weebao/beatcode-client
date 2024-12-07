@@ -27,7 +27,7 @@ describe("Testing Navbar", () => {
 
     it("should render correctly (authorized)", () => {
         const results = render(Navbar, { user });
-        
+
         expect(() => results.getByText(user.display_name)).not.toThrow();
         expect(() => results.getByText("O(log(n))")).not.toThrow();
     });
@@ -36,7 +36,9 @@ describe("Testing Navbar", () => {
         const results = render(Navbar, { user });
 
         const profileMenuBtn = results.getByRole("button");
-        expect(profileMenuBtn, "profile menu isn't a dropdown menu").toHaveAttribute("data-dropdown-menu-trigger");
+        expect(profileMenuBtn, "profile menu isn't a dropdown menu").toHaveAttribute(
+            "data-dropdown-menu-trigger"
+        );
 
         await userEvent.click(profileMenuBtn);
         expect(() => screen.getByText("Sign out")).not.toThrow();

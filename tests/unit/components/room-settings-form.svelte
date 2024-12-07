@@ -3,7 +3,7 @@
     import { RoomSettingsForm } from "$components/game/room";
     import { superForm, type Infer, type SuperForm } from "sveltekit-superforms";
     import { RoomSettingsSchema } from "$lib/models/room";
-    
+
     // interface Props {
     //     form: SuperForm<Infer<typeof RoomSettingsSchema>>
     // }
@@ -25,7 +25,7 @@
             starting_sp: 50,
             starting_mp: 30,
             mana_recharge: 10
-        })
+        });
     });
 </script>
 
