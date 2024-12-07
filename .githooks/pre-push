@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Exit and block git push if there's any error
+set -e
+
+# Commands
+npm install
+npm run format
+npm run test

@@ -1,1 +1,0 @@
-<button data-testid="submit-btn" type="submit">Submit</button>
