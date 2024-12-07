@@ -10,9 +10,10 @@ global.fetch = vi.fn(() =>
     Promise.resolve({
         ok: true,
         status: 200,
-        text: () => Promise.resolve(
-            JSON.stringify({ type: "Unhandled Rejection", data: devalue.stringify({}) })
-        ),
+        text: () =>
+            Promise.resolve(
+                JSON.stringify({ type: "Unhandled Rejection", data: devalue.stringify({}) })
+            )
     } as Response)
 );
 
@@ -28,14 +29,13 @@ describe("Testing Room Settings Form", () => {
     it("should call fetch when form is submitted", async () => {
         const results = render(RoomSettingsForm);
 
-
         try {
             const submitEventFn = vi.fn();
             results.container.addEventListener("submit", submitEventFn);
-    
+
             const submitBtn = results.getByTestId("room-settings-submit-btn");
             await userEvent.click(submitBtn);
-    
+
             expect(submitEventFn).toHaveBeenCalled();
         } catch (e) {
             console.log("Unavoidable fetch error for now: ", e);
