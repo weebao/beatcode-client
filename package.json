@@ -12,9 +12,11 @@
     "lint": "eslint \"src/**/*.{js,ts,svelte}\"",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/adapter-node": "^5.2.8",
     "@sveltejs/kit": "^2.5.27",

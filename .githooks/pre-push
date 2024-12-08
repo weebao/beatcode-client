@@ -5,6 +5,7 @@ set -e
 
 # Commands
 npm install
+npm run build
 
 echo "Running formatter..."
 npm run format
@@ -17,5 +18,7 @@ npm run lint
 
 echo "Running tests..."
 npm run test
+npm run preview
+npm run test:e2e
 
 echo "All checks passed. Proceeding with push."
