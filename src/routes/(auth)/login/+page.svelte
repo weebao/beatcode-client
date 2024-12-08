@@ -19,20 +19,17 @@
     }
 
     let { data }: Props = $props();
-    let loading = $state(false);
 
     const form = superForm<Infer<typeof LoginSchema>>(data.form, {
         onResult: async ({ result }) => {
-            loading = false;
-            console.log(result);
+            announce(result, "Logged in successfully");
             if (result.type === "redirect") {
                 goto("/home");
             }
-            announce(result, "Logged in successfully");
         }
     });
 
-    const { form: formData, enhance } = form;
+    const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="flex h-navscreen justify-center bg-background">
@@ -98,8 +95,8 @@
                 </div>
             </Card.Content>
             <Card.Footer class="flex flex-col gap-2">
-                <Button class="w-full" type="submit" disabled={loading}>
-                    {#if loading}
+                <Button class="w-full" type="submit" disabled={$submitting}>
+                    {#if $submitting}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                     {/if}
                     Sign In
