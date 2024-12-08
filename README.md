@@ -19,6 +19,7 @@ npm install
 ## Configuration
 
 For running the backend, you should find an `.env.example` file that looks something like below:
+
 ```
 API_URL = backend-api-url
 WEBSOCKET_URL = websocket-api-url
@@ -42,17 +43,20 @@ npm test
 Have the backend running before testing, the instructions for setting up can be found in [beatcode-server](https://github.com/beatcode-official/beatcode-server)
 
 Also, make sure you run the commands below in a different terminal
+
 ```
 npm build
 npm run preview
 ```
 
 Running E2E tests with Playwright
+
 ```bash
 npm run test:e2e
 ```
 
 For better feedbacks, I recommend installing the VSCode extension for Playwright since you can have live browser view and traces which are pretty neat. You can also get that browser view with the normal command:
+
 ```bash
 npx playwright test
 ```

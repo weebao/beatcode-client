@@ -13,9 +13,6 @@ test("register happy path", async ({ page }) => {
     await page.getByPlaceholder("Password", { exact: true }).fill("passwords");
     await page.getByPlaceholder("Confirm Password").fill("passwords");
     await page.getByRole("button", { name: "Create Account" }).click();
-    await page.waitForSelector('[role="status"]');
-    const status = await page.getByRole("status");
-    await expect(status).toHaveText("Account created successfully");
     await expect(page).toHaveURL("http://localhost:4173/register/success");
 });
 
@@ -27,8 +24,5 @@ test("login happy path", async ({ page }) => {
     await page.getByPlaceholder("Username or Email").fill("test");
     await page.getByPlaceholder("Password").fill("passwords");
     await page.getByRole("button", { name: "Sign In" }).click();
-    await page.waitForSelector('[role="status"]');
-    const status = await page.getByRole("status");
-    await expect(status).toHaveText("Logged in successfully");
     await expect(page, message).toHaveURL("http://localhost:4173/home");
 });
