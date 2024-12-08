@@ -6,7 +6,6 @@
     import { createWebSocket } from "$lib/websocket.svelte";
     import type { GameState, ProblemDetails, SubmissionResults } from "$models/game";
     import { Problem, Test, Abilities } from "$components/game/panel";
-    import type { User } from "$models/user";
 
     import AvatarImg from "$assets/images/avatar.jpg";
 
@@ -17,11 +16,9 @@
     import * as Resizable from "$components/ui/resizable";
 
     import { Editor, EditorData } from "$components/game/editor";
-    import { cn } from "$lib/utils";
 
     import {
         Play,
-        Send,
         FileText,
         SquareCode,
         CheckSquare,

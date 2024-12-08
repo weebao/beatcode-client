@@ -1,8 +1,9 @@
 const RETRIES = 3;
 
+export type JSONData = Record<string, any>;
 export interface WebSocketMessage {
     type: string;
-    data: any;
+    data: JSONData;
 }
 
 export function createWebSocket(token: string, socketUrl?: string) {
@@ -64,7 +65,7 @@ export function createWebSocket(token: string, socketUrl?: string) {
         };
     }
 
-    function send(type: string, data?: any) {
+    function send(type: string, data?: JSONData) {
         console.log("[WS] Sending message:", type, data);
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ type, data }));
