@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test --reporter=list"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
