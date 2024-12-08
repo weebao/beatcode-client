@@ -17,7 +17,8 @@ test("register happy path", async ({ page }) => {
 });
 
 test("login happy path", async ({ page }) => {
-    const message = "Did you have the user `test` with the password `passwords` registered and verified?";
+    const message =
+        "Did you have the user `test` with the password `passwords` registered and verified?";
     await page.goto("http://localhost:4173/");
     await page.getByRole("link", { name: "Sign in" }).click();
     await page.getByPlaceholder("Username or Email").fill("test");

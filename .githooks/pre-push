@@ -5,7 +5,6 @@ set -e
 
 # Commands
 npm install
-npm run build
 
 echo "Running formatter..."
 npm run format
@@ -18,7 +17,9 @@ npm run lint
 
 echo "Running tests..."
 npm run test
-npm run preview
+
+echo "Running Playwright..."
+echo -e "\033[1;33mWARNING: Make sure you already ran \`npm run preview\` and it is running in another terminal.\033[0m"
 npm run test:e2e
 
 echo "All checks passed. Proceeding with push."
