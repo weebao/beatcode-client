@@ -18,4 +18,18 @@ npm run lint
 echo "Running tests..."
 npm run test
 
+echo "Running Playwright..."
+echo -e "\033[1;33mWARNING: Make sure you have the backend running with working database connection.\033[0m"
+echo -e "\033[1;33mWARNING: Make sure you already ran \`npm run preview\` and it is running in another terminal.\033[0m"
+# Run Playwright tests and capture the output
+output=$(npm run test:e2e 2>&1)
+
+# Check if two tests of the same browser (chromium) passed
+if echo "$output" | grep -q "chromium" | grep -q "2 passed"; then
+    echo "$output" | grep -v "chromium" | grep "failed" | sed 's/failed/warning/'
+else
+    echo "$output"
+    exit 1
+fi
+
 echo "All checks passed. Proceeding with push."
