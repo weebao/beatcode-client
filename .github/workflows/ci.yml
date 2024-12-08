@@ -23,12 +23,12 @@ jobs:
 
             - name: Install dependencies
               run: npm ci
+              
+            - name: Copy .env.example to .env
+              run: cp .env.example .env
 
             - name: Build project
               run: npm run build
-
-            - name: Copy .env.example to .env
-              run: cp .env.example .env
 
             - name: Run lint
               run: npm run lint
