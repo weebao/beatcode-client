@@ -31,10 +31,7 @@
         }
     });
 
-    const {
-        form: joinRoomFormData,
-        enhance: enhanceJoinRoom,
-    } = joinRoomForm;
+    const { form: joinRoomFormData, enhance: enhanceJoinRoom } = joinRoomForm;
 </script>
 
 <svelte:head>

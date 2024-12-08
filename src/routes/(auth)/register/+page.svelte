@@ -17,7 +17,7 @@
         data: PageData;
     }
 
-    let { data }:Props = $props();
+    let { data }: Props = $props();
 
     const form = superForm<Infer<typeof RegisterSchema>>(data.form, {
         onResult: async ({ result }) => {

@@ -1,6 +1,4 @@
-import type { JSONData } from "$lib/websocket.svelte";
-
-export interface GameState extends JSONData {
+export interface GameState {
     match_id: string;
     opponent_name: string;
     opponent_display_name: string;
@@ -19,7 +17,7 @@ export interface GameState extends JSONData {
     abilities: string[];
 }
 
-export interface ProblemDetails extends JSONData {
+export interface ProblemDetails {
     title: string;
     description: string; // HTML btw
     difficulty: "easy" | "medium" | "hard";
@@ -28,7 +26,7 @@ export interface ProblemDetails extends JSONData {
     boilerplate: string; // code
 }
 
-export interface SubmissionResults extends JSONData {
+export interface SubmissionResults {
     success: boolean;
     message: string | null;
     test_results: {
@@ -45,7 +43,7 @@ export interface SubmissionResults extends JSONData {
     problem_solved: boolean;
 }
 
-export interface Chat extends JSONData {
+export interface Chat {
     message: string;
     sender: string;
     timestamp: number;
