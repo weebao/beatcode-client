@@ -19,6 +19,7 @@ echo "Running tests..."
 npm run test
 
 echo "Running Playwright..."
+echo -e "\033[1;33mWARNING: Make sure you have the backend running with working database connection.\033[0m"
 echo -e "\033[1;33mWARNING: Make sure you already ran \`npm run preview\` and it is running in another terminal.\033[0m"
 npm run test:e2e
 
