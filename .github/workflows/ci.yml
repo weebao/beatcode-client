@@ -24,14 +24,17 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Build project
+              run: npm run build
+
+            - name: Copy .env.example to .env
+              run: cp .env.example .env
+
             - name: Run lint
               run: npm run lint
 
             - name: Run unit tests
               run: npm test
-              
-            - name: Copy .env.example to .env
-              run: cp .env.example .env
-              
+
             - name: Run E2E tests with Playwright
-              run: npm run build && npm run preview & npm run test:e2e
+              run: npm run test:e2e
