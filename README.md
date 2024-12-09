@@ -1,6 +1,6 @@
 # BeatCode Client
 
-Ship fast
+Live LeetCode battle where users can also use abilities to sabotage their opponents like forcing them to code in light mode :>
 
 ## Installation
 
@@ -16,25 +16,80 @@ Install dependencies (Make sure you had node.js installed)
 npm install
 ```
 
+## Configuration
+
+For running the backend, you should find an `.env.example` file that looks something like below:
+
+```
+API_URL = backend-api-url
+WEBSOCKET_URL = websocket-api-url
+FRONTEND_URL = client-localhost-url
+```
+
+Copying straight from the file should work out of the box, but if not, please check the hostname of your backend local server.
+
+## Testing
+
+### Unit Tests
+
+This will test the custom components except those in `src/lib/components/ui` which are mostly components installed from [@huntabyte/shadcn-svelte](https://github.com/huntabyte/shadcn-svelte)
+
+```bash
+npm test
+```
+
+### End-to-end (E2E) Tests
+
+Have the backend running before testing, the instructions for setting up can be found in [beatcode-server](https://github.com/beatcode-official/beatcode-server)
+
+Also, make sure you run the commands below in a different terminal
+
+```
+npm build
+npm run preview
+```
+
+Running E2E tests with Playwright
+
+```bash
+npm run test:e2e
+```
+
+For better feedbacks, I recommend installing the VSCode extension for Playwright since you can have live browser view and traces which are pretty neat. You can also get that browser view with the normal command:
+
+```bash
+npx playwright test
+```
+
+#### Writing E2E tests
+
+I recommend using the command below for tracing the user flow
+
+```bash
+npx playwright codegen
+```
+
+There will be an inspector on the side for you to copy the code and put it in your `*.spec.ts` file for writing your Playwright code.
+
 ## Contribution guidelines
 
 ### Git
 
+#### Creating branches
+
 Make sure you create a new branch following the below format every time you upload your code
 
 ```bash
-git checkout -b "your name-feature"
+git checkout -b "<your-name>-feature"
 ```
 
-When creating a PR, make sure to add [NO-??] to link a task from Notion with your PR. Example:
-
-```
-[NO-69] Centered a div after 5 days
-```
-
-Make sure you request review from at least one other person and have it approved before you merge your branch to main. You can always request me @weebao and I will make sure to review it by the end of the day.
+Make sure you request review from at least one other person and have it approved before you merge your branch to main. You can always request me [@weebao](https://github.com/weebao) and I will make sure to review it by the end of the day.
 
 Also, please delete the branch after having it merged to keep things clean :D
+
+#### Pre-push
+
+Just so you won't be confused, I set up a pre-push script that will run every time you run `git push`. It will be quite annoying so please bare with it :>
 
 ### Updating the frontend
 

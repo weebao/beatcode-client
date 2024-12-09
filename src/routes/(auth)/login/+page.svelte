@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import SuperDebug, { type Infer, superForm } from "sveltekit-superforms";
+    import { type Infer, superForm } from "sveltekit-superforms";
     import { goto } from "$app/navigation";
 
     import * as Card from "$components/ui/card";
@@ -18,21 +18,18 @@
         data: PageData;
     }
 
-    let { data } = $props();
-    let loading = $state(false);
+    let { data }: Props = $props();
 
     const form = superForm<Infer<typeof LoginSchema>>(data.form, {
         onResult: async ({ result }) => {
-            loading = false;
-            console.log(result);
+            announce(result, "Logged in successfully");
             if (result.type === "redirect") {
                 goto("/home");
             }
-            announce(result, "Logged in successfully");
         }
     });
 
-    const { form: formData, errors, enhance } = form;
+    const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="flex h-navscreen justify-center bg-background">
@@ -98,8 +95,8 @@
                 </div>
             </Card.Content>
             <Card.Footer class="flex flex-col gap-2">
-                <Button class="w-full" type="submit" disabled={loading}>
-                    {#if loading}
+                <Button class="w-full" type="submit" disabled={$submitting}>
+                    {#if $submitting}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                     {/if}
                     Sign In
