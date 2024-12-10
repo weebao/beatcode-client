@@ -139,10 +139,10 @@ test("Registration - Password and Confirm Password must match", async ({ page })
 });
 
 test("Login - Valid username/email with incorrect password", async ({ page }) => {
-  await page.goto("http://localhost:4173/login", { waitUntil: "domcontentloaded" });
+  await page.goto("http://localhost:4173/login", { waitUntil: "networkidle2" });
 
   await page.getByPlaceholder("Username or Email").fill("test");
-  await page.getByPlaceholder("Password").fill("wrongpassword");
+  await page.getByPlaceholder("Password").fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
   await page.getByRole("button", { name: "Sign In" }).click();
 
   await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
