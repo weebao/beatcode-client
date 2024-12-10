@@ -37,12 +37,12 @@ export default defineConfig({
     projects: [
         {
             name: "chromium",
-            use: { ...devices["Desktop Chrome"] }
+            use: { ...devices["Desktop Chrome"] } // headless: false
         },
 
         {
             name: "firefox",
-            use: { ...devices["Desktop Firefox"] }
+            use: { ...devices["Desktop Firefox"] } // headless: false
         }
 
         // {
