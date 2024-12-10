@@ -146,5 +146,6 @@ test("Login - Valid username/email with incorrect password", async ({ page }) =>
         .fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
     await page.getByRole("button", { name: "Sign In" }).click();
 
+    await expect(page.getByText("Don't have an account yet?", { exact: true })).toBeVisible();
     await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
 });
