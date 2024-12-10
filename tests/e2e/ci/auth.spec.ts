@@ -3,147 +3,148 @@ import { test, expect } from "@playwright/test";
 test.describe.configure({ mode: "parallel" });
 
 test("(register) password must be at least 8 characters", async ({ page }) => {
-  const random = Math.floor(10000 + Math.random() * 90000);
+    const random = Math.floor(10000 + Math.random() * 90000);
 
-  // Go to the initial URL and wait for the page to be fully loaded
-  await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
+    // Go to the initial URL and wait for the page to be fully loaded
+    await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
-  // Click "Sign in" and wait for the URL to change
-  await page.getByRole("link", { name: "Sign in" }).click();
-  await page.waitForURL("http://localhost:4173/login");
+    // Click "Sign in" and wait for the URL to change
+    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.waitForURL("http://localhost:4173/login");
 
-  // Click "Sign up" and wait for the URL to change
-  await page.getByRole("link", { name: "Sign up" }).click();
-  await page.waitForURL("http://localhost:4173/register");
+    // Click "Sign up" and wait for the URL to change
+    await page.getByRole("link", { name: "Sign up" }).click();
+    await page.waitForURL("http://localhost:4173/register");
 
-  // Ensure the page is fully loaded
-  await page.waitForLoadState("domcontentloaded");
+    // Ensure the page is fully loaded
+    await page.waitForLoadState("domcontentloaded");
 
-  // Fill in the form fields
-  await page.getByPlaceholder("Username").fill(`test-${random}`);
-  await page.getByPlaceholder("Display Name").fill(`test-${random}`);
-  await page.getByPlaceholder("Email").fill(`test-${random}@gmail.com`);
-  await page.getByPlaceholder("Password", { exact: true }).fill("1");
-  await page.getByPlaceholder("Confirm Password").fill("1");
+    // Fill in the form fields
+    await page.getByPlaceholder("Username").fill(`test-${random}`);
+    await page.getByPlaceholder("Display Name").fill(`test-${random}`);
+    await page.getByPlaceholder("Email").fill(`test-${random}@gmail.com`);
+    await page.getByPlaceholder("Password", { exact: true }).fill("1");
+    await page.getByPlaceholder("Confirm Password").fill("1");
 
-  // Click the "Create Account" button
-  await page.getByRole("button", { name: "Create Account" }).click();
+    // Click the "Create Account" button
+    await page.getByRole("button", { name: "Create Account" }).click();
 
-  // Verify that the error message is visible
-  await expect(
-      page.getByText("Password must be at least 8 characters", { exact: true })
-  ).toBeVisible();
+    // Verify that the error message is visible
+    await expect(
+        page.getByText("Password must be at least 8 characters", { exact: true })
+    ).toBeVisible();
 });
 
 test("(register) password and confirm password must match", async ({ page }) => {
-  const random = Math.floor(10000 + Math.random() * 90000);
+    const random = Math.floor(10000 + Math.random() * 90000);
 
-  // Go to the initial URL and wait for the page to load
-  await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
+    // Go to the initial URL and wait for the page to load
+    await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
-  // Click "Sign in" and wait for navigation
-  await page.getByRole("link", { name: "Sign in" }).click();
-  await page.waitForURL("http://localhost:4173/login");
+    // Click "Sign in" and wait for navigation
+    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.waitForURL("http://localhost:4173/login");
 
-  // Click "Sign up" and wait for navigation
-  await page.getByRole("link", { name: "Sign up" }).click();
-  await page.waitForURL("http://localhost:4173/register");
+    // Click "Sign up" and wait for navigation
+    await page.getByRole("link", { name: "Sign up" }).click();
+    await page.waitForURL("http://localhost:4173/register");
 
-  // Ensure the registration page is fully loaded
-  await page.waitForLoadState("domcontentloaded");
+    // Ensure the registration page is fully loaded
+    await page.waitForLoadState("domcontentloaded");
 
-  // Fill in the form fields with mismatched passwords
-  await page.getByPlaceholder("Username").fill(`test-${random}`);
-  await page.getByPlaceholder("Display Name").fill(`test-${random}`);
-  await page.getByPlaceholder("Email").fill(`test-${random}@gmail.com`);
-  await page.getByPlaceholder("Password", { exact: true }).fill("passwords");
-  await page.getByPlaceholder("Confirm Password").fill("passwordss");
+    // Fill in the form fields with mismatched passwords
+    await page.getByPlaceholder("Username").fill(`test-${random}`);
+    await page.getByPlaceholder("Display Name").fill(`test-${random}`);
+    await page.getByPlaceholder("Email").fill(`test-${random}@gmail.com`);
+    await page.getByPlaceholder("Password", { exact: true }).fill("passwords");
+    await page.getByPlaceholder("Confirm Password").fill("passwordss");
 
-  // Click the "Create Account" button
-  await page.getByRole("button", { name: "Create Account" }).click();
+    // Click the "Create Account" button
+    await page.getByRole("button", { name: "Create Account" }).click();
 
-  // Verify the error message for mismatched passwords is visible
-  await expect(page.getByText("Passwords do not match", { exact: true })).toBeVisible();
+    // Verify the error message for mismatched passwords is visible
+    await expect(page.getByText("Passwords do not match", { exact: true })).toBeVisible();
 });
 
-
 test("Registration - Username must not exceed 20 characters", async ({ page }) => {
-  await page.goto("http://localhost:4173/register", { waitUntil: "networkidle" });
+    await page.goto("http://localhost:4173/register", { waitUntil: "networkidle" });
 
-  // Fill out the form with an excessively long username
-  await page.getByPlaceholder("Username").fill("c".repeat(300));
-  await page.getByPlaceholder("Display Name").fill("Valid Display Name");
-  await page.getByPlaceholder("Email").fill("valid@gmail.com");
-  await page.getByPlaceholder("Password", { exact: true }).fill("password123");
-  await page.getByPlaceholder("Confirm Password").fill("password123");
+    // Fill out the form with an excessively long username
+    await page.getByPlaceholder("Username").fill("c".repeat(300));
+    await page.getByPlaceholder("Display Name").fill("Valid Display Name");
+    await page.getByPlaceholder("Email").fill("valid@gmail.com");
+    await page.getByPlaceholder("Password", { exact: true }).fill("password123");
+    await page.getByPlaceholder("Confirm Password").fill("password123");
 
-  // Submit the form
-  await page.getByRole("button", { name: "Create Account" }).click();
+    // Submit the form
+    await page.getByRole("button", { name: "Create Account" }).click();
 
-  // Validate the error message
-  await expect(
-      page.getByText("Username must be at most 20 characters", { exact: true })
-  ).toBeVisible();
+    // Validate the error message
+    await expect(
+        page.getByText("Username must be at most 20 characters", { exact: true })
+    ).toBeVisible();
 });
 
 test("Registration - Display Name must not exceed 50 characters", async ({ page }) => {
-  await page.goto("http://localhost:4173/register", { waitUntil: "domcontentloaded" });
+    await page.goto("http://localhost:4173/register", { waitUntil: "domcontentloaded" });
 
-  // Fill out the form with an excessively long display name
-  await page.getByPlaceholder("Username").fill("validUser");
-  await page.getByPlaceholder("Display Name").fill("a".repeat(300));
-  await page.getByPlaceholder("Email").fill("valid@gmail.com");
-  await page.getByPlaceholder("Password", { exact: true }).fill("password123");
-  await page.getByPlaceholder("Confirm Password").fill("password123");
+    // Fill out the form with an excessively long display name
+    await page.getByPlaceholder("Username").fill("validUser");
+    await page.getByPlaceholder("Display Name").fill("a".repeat(300));
+    await page.getByPlaceholder("Email").fill("valid@gmail.com");
+    await page.getByPlaceholder("Password", { exact: true }).fill("password123");
+    await page.getByPlaceholder("Confirm Password").fill("password123");
 
-  // Submit the form
-  await page.getByRole("button", { name: "Create Account" }).click();
+    // Submit the form
+    await page.getByRole("button", { name: "Create Account" }).click();
 
-  // Validate the error message
-  await expect(
-      page.getByText("Display name must be at most 50 characters", { exact: true })
-  ).toBeVisible();
+    // Validate the error message
+    await expect(
+        page.getByText("Display name must be at most 50 characters", { exact: true })
+    ).toBeVisible();
 });
 
 test("Registration - Invalid email formats", async ({ page }) => {
-  const invalidEmails = ["vl@com", "vl@gmail", "vl@gmail.c"];
-  for (const email of invalidEmails) {
-      await page.goto("http://localhost:4173/register", { waitUntil: "networkidle" });
+    const invalidEmails = ["vl@com", "vl@gmail", "vl@gmail.c"];
+    for (const email of invalidEmails) {
+        await page.goto("http://localhost:4173/register", { waitUntil: "networkidle" });
 
-      await page.getByPlaceholder("Username").fill("validUser");
-      await page.getByPlaceholder("Display Name").fill("Valid Display Name");
-      await page.getByPlaceholder("Email").fill(email);
-      await page.getByPlaceholder("Password", { exact: true }).fill("password123");
-      await page.getByPlaceholder("Confirm Password").fill("password123");
+        await page.getByPlaceholder("Username").fill("validUser");
+        await page.getByPlaceholder("Display Name").fill("Valid Display Name");
+        await page.getByPlaceholder("Email").fill(email);
+        await page.getByPlaceholder("Password", { exact: true }).fill("password123");
+        await page.getByPlaceholder("Confirm Password").fill("password123");
 
-      await page.getByRole("button", { name: "Create Account" }).click();
+        await page.getByRole("button", { name: "Create Account" }).click();
 
-      await expect(
-          page.getByText("Please enter a valid email address", { exact: true })
-      ).toBeVisible();
-  }
+        await expect(
+            page.getByText("Please enter a valid email address", { exact: true })
+        ).toBeVisible();
+    }
 });
 
 test("Registration - Password and Confirm Password must match", async ({ page }) => {
-  await page.goto("http://localhost:4173/register", { waitUntil: "domcontentloaded" });
+    await page.goto("http://localhost:4173/register", { waitUntil: "domcontentloaded" });
 
-  await page.getByPlaceholder("Username").fill("validUser");
-  await page.getByPlaceholder("Display Name").fill("Valid Display Name");
-  await page.getByPlaceholder("Email").fill("valid@gmail.com");
-  await page.getByPlaceholder("Password", { exact: true }).fill("password123");
-  await page.getByPlaceholder("Confirm Password").fill("password124");
+    await page.getByPlaceholder("Username").fill("validUser");
+    await page.getByPlaceholder("Display Name").fill("Valid Display Name");
+    await page.getByPlaceholder("Email").fill("valid@gmail.com");
+    await page.getByPlaceholder("Password", { exact: true }).fill("password123");
+    await page.getByPlaceholder("Confirm Password").fill("password124");
 
-  await page.getByRole("button", { name: "Create Account" }).click();
+    await page.getByRole("button", { name: "Create Account" }).click();
 
-  await expect(page.getByText("Passwords do not match", { exact: true })).toBeVisible();
+    await expect(page.getByText("Passwords do not match", { exact: true })).toBeVisible();
 });
 
 test("Login - Valid username/email with incorrect password", async ({ page }) => {
-  await page.goto("http://localhost:4173/login", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:4173/login", { waitUntil: "networkidle" });
 
-  await page.getByPlaceholder("Username or Email").fill("test");
-  await page.getByPlaceholder("Password").fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
-  await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByPlaceholder("Username or Email").fill("test");
+    await page
+        .getByPlaceholder("Password")
+        .fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
+    await page.getByRole("button", { name: "Sign In" }).click();
 
-  await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
+    await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
 });
