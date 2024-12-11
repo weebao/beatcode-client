@@ -329,7 +329,9 @@
             <Dialog.Title class="text-center">You solved the problem!</Dialog.Title>
         </Dialog.Header>
         <div class="flex flex-col justify-center text-center">
-            <div class="font-icon font-bold text-6xl my-4">{submissionResults?.runtime_analysis ?? "O(n)"}</div>
+            <div class="my-4 font-icon text-6xl font-bold">
+                {submissionResults?.runtime_analysis ?? "O(n)"}
+            </div>
             <div>Time Complexity</div>
         </div>
         <Dialog.Footer>

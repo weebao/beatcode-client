@@ -31,6 +31,14 @@ export interface RoomState {
     guest_ready: boolean | null;
 }
 
+export interface RoomInfo {
+    room_code: string;
+    host_name: string;
+    host_display_name: string;
+    settings?: RoomSettings;
+    player_count: number;
+}
+
 export const RoomSettingsSchema = z
     .object({
         problem_count: z.number().int().min(1).max(100).default(DefaultRoomSettings.problem_count),
