@@ -292,9 +292,12 @@
                             </div>
                         </div>
                         {#if selected === 0}
-                            <Test results={submissionResults} sampleTestCases={currentProblem?.sample_test_cases} />
+                            <Test
+                                results={submissionResults}
+                                sampleTestCases={currentProblem?.sample_test_cases}
+                            />
                         {:else}
-                            <Abilities {gameState} {useAbility} {buyAbility} />
+                            <Abilities {gameState} {buyAbility} />
                         {/if}
                     </div>
                 </Resizable.Pane>

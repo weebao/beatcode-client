@@ -13,7 +13,7 @@
     `;
 </script>
 
-<div class="h-full bg-background px-4 py-5 overflow-y-auto">
+<div class="h-full overflow-y-auto bg-background px-4 py-5">
     <h2 class="mb-4 text-2xl font-bold">{title ?? titleFallback}</h2>
     <div>
         <!-- eslint-disable svelte/no-at-html-tags -->

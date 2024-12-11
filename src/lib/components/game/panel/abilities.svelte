@@ -7,11 +7,10 @@
 
     interface Props {
         gameState?: GameState;
-        useAbility: (ability: string) => void;
         buyAbility: (ability: string) => void;
     }
 
-    let { gameState, useAbility, buyAbility }: Props = $props();
+    let { gameState, buyAbility }: Props = $props();
 </script>
 
 <div class="w-full overflow-y-auto bg-background p-4">
@@ -34,25 +33,22 @@
                     <p class="text-sm font-semibold">5 MP</p>
                 </div>
                 <Tooltip.Provider delayDuration={50}>
-                {#if gameState?.abilities.includes(item.name)}
-                <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
-                    <Tooltip.Trigger>
-                        <Button variant="accent" disabled
-                        >Bought</Button
-                    >
-                    </Tooltip.Trigger>
-                    <Tooltip.Content
-                        class="border border-secondary bg-background-dark text-sm text-foreground"
-                        >Use by typing the ability name and hit Enter</Tooltip.Content
-                    >
-                </Tooltip.Root>
-                    
-                {:else}
-                    <Button variant="accent" onclick={() => buyAbility(item.name)}
-                        >Buy: 10 SP</Button
-                    >
-                {/if}
-            </Tooltip.Provider>
+                    {#if gameState?.abilities.includes(item.name)}
+                        <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
+                            <Tooltip.Trigger>
+                                <Button variant="accent" disabled>Bought</Button>
+                            </Tooltip.Trigger>
+                            <Tooltip.Content
+                                class="border border-secondary bg-background-dark text-sm text-foreground"
+                                >Use by typing the ability name and hit Enter</Tooltip.Content
+                            >
+                        </Tooltip.Root>
+                    {:else}
+                        <Button variant="accent" onclick={() => buyAbility(item.name)}
+                            >Buy: 10 SP</Button
+                        >
+                    {/if}
+                </Tooltip.Provider>
             </div>
         {/each}
     </div>

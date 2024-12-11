@@ -6,7 +6,7 @@
         sampleTestCases?: string[];
         results?: SubmissionResults;
     }
-    
+
     let { sampleTestCases, results }: Props = $props();
     let selected = $state<number>(results?.test_results?.findIndex((test) => !test.passed) ?? 0);
     let isSelectedPassed = $derived<boolean>(results?.test_results?.[selected].passed ?? false);
@@ -16,7 +16,12 @@
     {#if results}
         {#if results.success}
             <div class="space-y-4">
-                <span class="text-xl font-medium {isSelectedPassed ? 'text-green-400' : 'text-destructive'}">{isSelectedPassed ? "Correct Answer": "Wrong Answer"}</span>
+                <span
+                    class="text-xl font-medium {isSelectedPassed
+                        ? 'text-green-400'
+                        : 'text-destructive'}"
+                    >{isSelectedPassed ? "Correct Answer" : "Wrong Answer"}</span
+                >
                 <div class="flex flex-wrap gap-x-2 gap-y-4">
                     {#each results.test_results as details, i}
                         <button
