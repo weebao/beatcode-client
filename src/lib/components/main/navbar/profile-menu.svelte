@@ -13,7 +13,7 @@
     }
 
     let { user }: Props = $props();
-    const { name: rating, class: ratingClass } = Ratings[user.rating];
+    const rating = Ratings[user.rating];
 </script>
 
 <DropdownMenu.Root>
@@ -31,10 +31,10 @@
                     <div
                         class={cn(
                             "w-fit rounded-sm px-4 pb-px pt-[2px] font-icon text-xs font-bold italic tracking-wider",
-                            ratingClass
+                            rating?.class ?? ""
                         )}
                     >
-                        {rating}
+                        {rating?.name}
                     </div>
                 </div>
             </div>
