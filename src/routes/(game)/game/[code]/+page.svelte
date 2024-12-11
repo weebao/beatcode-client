@@ -38,7 +38,9 @@
     let isSubmitting = $state(false);
     let submissionResults = $state<SubmissionResults>();
     let winner = $state<string | null>(null);
+
     let lightMode = $state<boolean>(false);
+    let showRuntimeAnalysis = $state(false);
 
     const tabs = [
         { name: "Test Cases", icon: CheckSquare },
@@ -118,6 +120,9 @@
                     break;
                 case "submission_result":
                     submissionResults = data;
+                    if (submissionResults?.runtime_analysis) {
+                        showRuntimeAnalysis = true;
+                    }
                     break;
                 case "error":
                     toast.error(data.message);
@@ -315,6 +320,22 @@
         </div>
         <Dialog.Footer class="mt-4">
             <Button href="/home">Home</Button>
+        </Dialog.Footer>
+    </Dialog.Content>
+</Dialog.Root>
+<Dialog.Root bind:open={showRuntimeAnalysis}>
+    <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
+        <Dialog.Header>
+            <Dialog.Title class="text-center">You solved the problem!</Dialog.Title>
+        </Dialog.Header>
+        <div class="flex flex-col justify-center text-center">
+            <div class="font-icon font-bold text-6xl my-4">{submissionResults?.runtime_analysis ?? "O(n)"}</div>
+            <div>Time Complexity</div>
+        </div>
+        <Dialog.Footer>
+            <Dialog.Close>
+                <Button>Continue</Button>
+            </Dialog.Close>
         </Dialog.Footer>
     </Dialog.Content>
 </Dialog.Root>
