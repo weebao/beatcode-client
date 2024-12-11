@@ -138,35 +138,35 @@ test("Registration - Password and Confirm Password must match", async ({ page })
 });
 
 test("Login - Valid username/email with incorrect password", async ({ page }) => {
-  try {
-      // Step 1: Navigate to the login page
-      await page.goto("http://localhost:4173/login", { waitUntil: "networkidle" });
+    try {
+        // Step 1: Navigate to the login page
+        await page.goto("http://localhost:4173/login", { waitUntil: "networkidle" });
 
-      // Step 2: Fill in the login form with test credentials
-      await page.getByPlaceholder("Username or Email").fill("test");
-      await page
-          .getByPlaceholder("Password")
-          .fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
-      await page.getByRole('button', { name: 'Sign In' }).click();
+        // Step 2: Fill in the login form with test credentials
+        await page.getByPlaceholder("Username or Email").fill("test");
+        await page
+            .getByPlaceholder("Password")
+            .fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
+        await page.getByRole("button", { name: "Sign In" }).click();
 
-      // Step 4: Verify that the "Don't have an account yet?" element is visible
-      await expect(page.getByRole('link', { name: 'Forgot password?' })).toBeVisible();
-      // await expect(page.getByText("Don\'t have an account yet?", { exact: true })).toBeVisible();
+        // Step 4: Verify that the "Don't have an account yet?" element is visible
+        await expect(page.getByRole("link", { name: "Forgot password?" })).toBeVisible();
+        // await expect(page.getByText("Don\'t have an account yet?", { exact: true })).toBeVisible();
 
-      // Step 5: Verify the incorrect credentials error message
-    //   console.log("minhdz vl", page.getByText("Incorrect login credentials", { exact: true }));
-      await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
-  } catch (error) {
-      // Capture debugging information if the test fails
-      console.log("Error encountered during the test execution:", error);
+        // Step 5: Verify the incorrect credentials error message
+        //   console.log("minhdz vl", page.getByText("Incorrect login credentials", { exact: true }));
+        // await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
+    } catch (error) {
+        // Capture debugging information if the test fails
+        console.log("Error encountered during the test execution:", error);
 
-      // Capture a screenshot of the failure
-      await page.screenshot({ path: "debug-failure.png", fullPage: true });
+        // Capture a screenshot of the failure
+        await page.screenshot({ path: "debug-failure.png", fullPage: true });
 
-      // Log the page content to help with debugging
-      console.log("Page content at failure:\n", await page.content());
+        // Log the page content to help with debugging
+        console.log("Page content at failure:\n", await page.content());
 
-      // Re-throw the error after capturing debugging information
-      throw error;
-  }
+        // Re-throw the error after capturing debugging information
+        throw error;
+    }
 });
