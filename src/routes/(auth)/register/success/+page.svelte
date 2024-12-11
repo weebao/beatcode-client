@@ -16,7 +16,7 @@
         <Card.Header>
             <div class="flex w-full flex-col items-center">
                 <Logo class="h-24 w-24" />
-                <h1 class="text-bold font-icon text-3xl font-bold">Please verify your email</h1>
+                <h1 class="text-bold font-icon text-3xl text-center font-bold">Please verify your email</h1>
             </div>
         </Card.Header>
         <Card.Content class="text-center">

@@ -47,16 +47,8 @@
 
     // Editor
     const editorData = new EditorData();
-    // Reset code in editor when currentProblem changes if it's a new one
-    // $effect.pre(() => {
-    //     let prevProblemTitle = currentProblem?.title;
-    //     tick().then(() => {
-    //         if (currentProblem?.title !== prevProblemTitle) {
-    //             editorData.setCode(`${currentProblem?.boilerplate ?? "def Solution():"}\n    `);
-    //         }
-    //     });
-    // });
 
+    // Reset code editor when new problem is received
     $effect(() => {
         editorData.setCode(`${currentProblem?.boilerplate ?? "def Solution():"}\n    `);
     });
@@ -122,6 +114,7 @@
                     break;
                 case "problem":
                     currentProblem = data;
+                    submissionResults = undefined;
                     break;
                 case "submission_result":
                     submissionResults = data;
@@ -131,6 +124,7 @@
                     break;
                 case "match_end":
                     toast.success("Match ended");
+                    goto("/home");
                     break;
                 default:
                     break;
@@ -172,7 +166,7 @@
 </script>
 
 <div
-    class="absolute left-0 top-0 flex min-h-screen w-screen flex-col overflow-hidden bg-background-dark"
+    class="absolute left-0 top-0 flex h-screen w-screen flex-col overflow-hidden bg-background-dark"
 >
     <div class="flex items-center justify-between gap-4 px-4 py-2 text-white">
         <div class="flex w-full">
@@ -266,7 +260,7 @@
                                 ? 'bg-white'
                                 : 'bg-background'}"
                         >
-                            <Editor data={editorData} />
+                            <Editor data={editorData} {useAbility} />
                         </div>
                     </div>
                 </Resizable.Pane>
@@ -298,7 +292,7 @@
                             </div>
                         </div>
                         {#if selected === 0}
-                            <Test results={submissionResults} />
+                            <Test results={submissionResults} sampleTestCases={currentProblem?.sample_test_cases} />
                         {:else}
                             <Abilities {gameState} {useAbility} {buyAbility} />
                         {/if}

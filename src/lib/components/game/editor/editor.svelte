@@ -5,9 +5,10 @@
 
     interface Props {
         data: EditorData;
+        useAbility: (ability: string) => void;
     }
 
-    let { data }: Props = $props();
+    let { data, useAbility }: Props = $props();
     let editor = $state<HTMLDivElement>();
     let editorView: EditorView;
 
@@ -16,7 +17,7 @@
             parent: editor
         });
 
-        data.link(editorView);
+        data.link(editorView, useAbility);
 
         return () => {
             editorView.destroy();
