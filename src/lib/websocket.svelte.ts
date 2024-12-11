@@ -1,8 +1,11 @@
+import type { RoomInfo } from "./models/room";
+
 const RETRIES = 3;
 
 export interface WebSocketMessage {
     type: string;
     data: any;
+    rooms?: RoomInfo[]; // For some reasons...
 }
 
 export function createWebSocket(token: string, socketUrl?: string) {

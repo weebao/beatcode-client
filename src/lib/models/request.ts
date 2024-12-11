@@ -9,7 +9,7 @@ import type { Cookies } from "@sveltejs/kit";
  * @property {string | number | boolean | null | undefined} [key] - A key-value pair where the key is a string and the value can be a string, number, boolean, null, or undefined.
  */
 export interface HttpJSONPayload {
-    [key: string]: string | number | boolean | null | undefined;
+    [key: string]: string | number | boolean | null | HttpJSONPayload | undefined;
 }
 
 export type HttpPayload = HttpJSONPayload | FormData | URLSearchParams;
