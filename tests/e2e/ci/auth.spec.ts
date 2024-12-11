@@ -154,8 +154,8 @@ test("Login - Valid username/email with incorrect password", async ({ page }) =>
       // await expect(page.getByText("Don\'t have an account yet?", { exact: true })).toBeVisible();
 
       // Step 5: Verify the incorrect credentials error message
-      console.log("minhdz vl", page.getByText("Incorrect login credentials", { exact: true }));
-    //   await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
+    //   console.log("minhdz vl", page.getByText("Incorrect login credentials", { exact: true }));
+      await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
   } catch (error) {
       // Capture debugging information if the test fails
       console.log("Error encountered during the test execution:", error);
