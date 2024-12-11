@@ -1,12 +1,7 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import { slide } from "svelte/transition";
-    import type { RoomInfo } from "$models/room";
-    import { Input } from "$components/ui/input";
-    import { Button } from "$components/ui/button";
-    import { Search, Swords } from "lucide-svelte";
+    import { Swords } from "lucide-svelte";
     import { createWebSocket } from "$lib/websocket.svelte";
-    import { toast } from "svelte-sonner";
     import { goto } from "$app/navigation";
 
     interface Props {
@@ -32,7 +27,9 @@
     <title>BeatCode</title>
 </svelte:head>
 
-<div class="mx-auto mt-16 flex h-full max-w-96 flex-col items-center space-y-4 p-6 border border-secondary rounded-lg">
+<div
+    class="mx-auto mt-16 flex h-full max-w-96 flex-col items-center space-y-4 rounded-lg border border-secondary p-6"
+>
     <Swords />
     <h1 class="mb-4 text-center font-icon text-4xl font-medium">Solo Ranked</h1>
     <div>Matchmaking...</div>

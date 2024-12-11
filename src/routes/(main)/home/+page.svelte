@@ -102,7 +102,10 @@
             >
                 <div class="mb-4 h-24 w-24 rounded-lg bg-secondary"></div>
                 <div
-                    class={cn("rounded-md px-4 pb-1 pt-2 font-icon font-bold italic", rating?.class ?? "")}
+                    class={cn(
+                        "rounded-md px-4 pb-1 pt-2 font-icon font-bold italic",
+                        rating?.class ?? ""
+                    )}
                 >
                     {rating?.name}
                 </div>
