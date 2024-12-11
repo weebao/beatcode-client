@@ -1,49 +1,61 @@
 import { basicSetup, EditorView } from "codemirror";
-import { EditorState, StateEffect, StateField } from "@codemirror/state";
+import { EditorState, StateEffect, Prec } from "@codemirror/state";
 import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
 import { indentUnit, type LanguageSupport } from "@codemirror/language";
 import { python } from "@codemirror/lang-python";
-import { Decoration, keymap } from "@codemirror/view";
+import { keymap } from "@codemirror/view";
 
 import { DefaultTheme, LightTheme } from "./themes";
-import { AbilitiesHighlighters } from "$assets/config/game";
+import { Abilities, AbilitiesHighlighters } from "$assets/config/game";
 
-// Ability
-const addLineHighlight = StateEffect.define();
-
-const lineHighlightField = StateField.define({
-    create() {
-        return Decoration.none;
-    },
-    update(lines, tr) {
-        lines = lines.map(tr.changes);
-        for (const e of tr.effects) {
-            if (e.is(addLineHighlight)) {
-                lines = Decoration.none;
-                //   lines = lines.update({add: [lineHighlightMark.range(e.value)]});
-            }
-        }
-        return lines;
-    },
-    provide: (f) => EditorView.decorations.from(f)
-});
-// const lineHighlightMark = Decoration.line({
-//     attributes: { style: "background-color: #d2ffff" }
-// });
+// Use Ability
 
 export class EditorData {
     #view: EditorView | null = null;
     #lang: LanguageSupport = python();
     #tabSize: number = 4;
+    #useAbility: (ability: string) => void = (ability: string) => ability !== "";
     #exts = [
         basicSetup,
         DefaultTheme,
         this.#lang,
         indentUnit.of(" ".repeat(this.#tabSize)),
         keymap.of([{ key: "Tab", run: acceptCompletion }, indentWithTab]),
-        lineHighlightField,
-        ...AbilitiesHighlighters
+        EditorView.lineWrapping,
+        ...AbilitiesHighlighters,
+        Prec.highest(
+            keymap.of([
+                {
+                    key: "Enter",
+                    run: (view: EditorView) => {
+                        console.log("Enter");
+                        const state = view.state;
+                        const content = state.doc.toString();
+                        for (const ability of Abilities) {
+                            if (content.includes(ability.name)) {
+                                console.log(ability.name);
+                                this.#useAbility(ability.name);
+
+                                // Remove the word from editor
+                                const start = content.indexOf(ability.name);
+                                const end = start + ability.name.length;
+                                view.dispatch({
+                                    changes: {
+                                        from: start,
+                                        to: end,
+                                        insert: ""
+                                    }
+                                });
+
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                }
+            ])
+        )
     ];
     #state: EditorState = EditorState.create({ extensions: this.#exts });
 
@@ -52,8 +64,9 @@ export class EditorData {
         this.#view.setState(this.#state);
     }
 
-    link(view: EditorView) {
+    link(view: EditorView, useAbility: (ability: string) => void) {
         this.#view = view;
+        this.#useAbility = useAbility;
         this.#setup();
     }
 
@@ -100,14 +113,14 @@ export class EditorData {
             }, 30000);
         } else if (ability === "lightio") {
             // Turn editor to light mode for 30 seconds
-            const originalExts = this.#exts;
             this.#exts = this.#exts.filter((ext) => ext !== DefaultTheme);
             this.#exts.push(LightTheme);
             this.#view.dispatch({
                 effects: StateEffect.reconfigure.of(this.#exts)
             });
             setTimeout(() => {
-                this.#exts = originalExts;
+                this.#exts = this.#exts.filter((ext) => ext !== LightTheme);
+                this.#exts.push(DefaultTheme);
                 this.#view?.dispatch({
                     effects: StateEffect.reconfigure.of(this.#exts)
                 });

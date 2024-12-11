@@ -35,6 +35,7 @@ export interface SubmissionResults {
         passed: boolean;
         error: string | null;
     }[];
+    runtime_analysis?: string;
     summary: {
         total_tests: number;
         passed_tests: number;
