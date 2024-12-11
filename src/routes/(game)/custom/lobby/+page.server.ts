@@ -8,6 +8,4 @@ export const load: PageServerLoad = async ({ cookies }) => {
     };
 };
 
-export const actions = {
-
-} satisfies Actions;
+export const actions = {} satisfies Actions;
