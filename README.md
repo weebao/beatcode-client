@@ -2,6 +2,21 @@
 
 Live LeetCode battle where users can also use abilities to sabotage their opponents like forcing them to code in light mode :>
 
+## Table of Contents
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Testing](#testing)
+    - [Unit Tests](#unit-tests)
+    - [End-to-end (E2E) Tests](#end-to-end-e2e-tests)
+        - [Writing E2E tests](#writing-e2e-tests)
+- [Contribution guidelines](#contribution-guidelines)
+    - [Git](#git)
+        - [Creating branches](#creating-branches)
+        - [Pre-push](#pre-push)
+        - [Opening PRs](#opening-prs)
+        - [Closing PRs](#closing-prs)
+    - [Updating the frontend](#updating-the-frontend)
+
 ## Installation
 
 Clone this repo
@@ -80,17 +95,25 @@ There will be an inspector on the side for you to copy the code and put it in yo
 Make sure you create a new branch following the below format every time you upload your code
 
 ```bash
-git checkout -b "<your-name>-feature"
+git checkout -b "<your-name>-<feature>"
 ```
 
 Make sure you request review from at least one other person and have it approved before you merge your branch to main. You can always request me [@weebao](https://github.com/weebao) and I will make sure to review it by the end of the day.
 
-Also, please delete the branch after having it merged to keep things clean :D
+Also, please delete the branch after having it merged to keep things clean.
 
 #### Pre-push
 
 Just so you won't be confused, I set up a pre-push script that will run every time you run `git push`. It will be quite annoying so please bare with it :>
 
+#### Opening PRs
+
+It's ideal to link your PRs with an existing issues by writing "Closes #1" or "Fixes #1". Also, make sure you start your PRs' names with "feat", "fix", or "docs".
+
+### Closing PRs
+
+Please delete your branch once your PRs is merged to keep things clean.
+
 ### Updating the frontend
 
-This is a kind of weird request but please use kebab-case instead of camelCase or PascalCase for components and utilities files' names. Why? That's because git cannot differentiate between two files with the same name but different capitalization so it's generally recommended to name them this way :D
+This is a kind of weird request but please use `kebab-case` instead of `camelCase` or `PascalCase` for components and utilities files' names. Why? That's because git cannot differentiate between two files with the same name but different capitalization so it's generally recommended to name them this way.
