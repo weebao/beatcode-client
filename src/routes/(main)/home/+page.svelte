@@ -21,11 +21,11 @@
     let mounted = $state(false);
 
     const mockExp = [
-        { name: "Array", percentage: 70 },
-        { name: "Hash Table", percentage: 60 },
-        { name: "Tree", percentage: 50 },
-        { name: "Binary Search", percentage: 40 },
-        { name: "Dynamic Programming", percentage: 30 }
+        { name: "Array", percentage: 0 },
+        { name: "Hash Table", percentage: 0 },
+        { name: "Tree", percentage: 0 },
+        { name: "Binary Search", percentage: 0 },
+        { name: "Dynamic Programming", percentage: 0 }
     ];
     const gameModes = [
         { name: "Unranked", icon: Shell, link: "/solo/unranked" },

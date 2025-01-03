@@ -17,6 +17,8 @@
 
     import { Editor, EditorData } from "$components/game/editor";
 
+    import { log } from "$lib/utils";
+
     import {
         Play,
         FileText,
@@ -52,7 +54,7 @@
 
     // Reset code editor when new problem is received
     $effect(() => {
-        editorData.setCode(`${currentProblem?.boilerplate ?? "def Solution():"}\n    `);
+        editorData.setCode(`${currentProblem?.boilerplate ?? "class Solution:\n    def pleaseWait():"}\n    `);
     });
 
     const checkHP = (newState: GameState) => {
@@ -97,7 +99,7 @@
     $effect(() => {
         if (ws.status === "CLOSED") {
             toast.error(ws.reason ?? "Failed to connect to game");
-            goto("/home");
+            // goto("/home");
         }
     });
 
@@ -120,6 +122,7 @@
                     break;
                 case "submission_result":
                     submissionResults = data;
+                    isSubmitting = false;
                     if (submissionResults?.runtime_analysis) {
                         showRuntimeAnalysis = true;
                     }
@@ -139,7 +142,7 @@
 
     // Actions
     const buyAbility = (ability: string) => {
-        console.log(ability);
+        log(ability);
         ws.send("ability", {
             action: "buy",
             ability_id: ability
@@ -147,7 +150,7 @@
     };
 
     const useAbility = (ability: string) => {
-        console.log(ability);
+        log(ability);
         ws.send("ability", {
             action: "use",
             ability_id: ability
@@ -156,7 +159,8 @@
 
     const submitCode = () => {
         const code = editorData.getCode();
-        console.log(code);
+        log(code);
+        isSubmitting = true;
         ws.send("submit", { code });
     };
 
@@ -189,6 +193,7 @@
                 variant="secondary"
                 size="sm"
                 class="rounded-r-none bg-neutral"
+                disabled={isSubmitting}
                 onclick={submitCode}
             >
                 {#if isSubmitting}

@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "svelte-sonner";
 import type { ActionResult } from "@sveltejs/kit";
+import { dev } from '$app/environment';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -38,5 +39,11 @@ export function announce(result: ActionResult, successMsg: string, customErrorMs
         toast.error(`${result.status}: ${findErrorMsg(result)}`);
     } else if (result.type === "failure") {
         toast.error(`${result.status}: ${findErrorMsg(result.data)}`);
+    }
+}
+
+export function log(message?: any, ...optionalParams: any[]) {
+    if (dev) {
+        console.log(message, ...optionalParams);
     }
 }

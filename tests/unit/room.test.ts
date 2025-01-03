@@ -1,6 +1,5 @@
-import { mount } from "svelte";
 import * as devalue from "devalue";
-import { render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, afterAll } from "vitest";
 import RoomSettingsForm from "./components/room-settings-form.svelte";
