@@ -2,6 +2,7 @@ import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { getMe } from "$lib/server/auth";
 import { getCurrentGame } from "$lib/server/game";
+import { log } from "$lib/utils";
 
 const preloadFont: Handle = async ({ event, resolve }) => {
     return await resolve(event, {
@@ -9,7 +10,14 @@ const preloadFont: Handle = async ({ event, resolve }) => {
     });
 };
 
-const protectedRoutes: string[] = ["/home", "/settings", "/solo", "/team", "/custom"];
+const protectedRoutes: string[] = [
+    "/home",
+    "/settings",
+    "/solo",
+    "/team",
+    "/custom",
+    "/custom/lobby"
+];
 
 // custom redirect from joy of code `https://github.com/JoysOfCode/sveltekit-auth-cookies/blob/migration/src/hooks.ts`
 function redirect(location: string, body?: string) {
@@ -27,7 +35,7 @@ const checkAuth: Handle = async ({ event, resolve }) => {
     }
     try {
         if (!event.locals.user) {
-            console.log("[Fetch user's latest info]:", event.cookies);
+            log("[Fetch user's latest info]:", event.cookies);
             const user = await getMe(event.cookies);
             event.locals.user = user;
         }
@@ -49,12 +57,12 @@ const checkIfInGame: Handle = async ({ event, resolve }) => {
     ) {
         try {
             const data = await getCurrentGame(event.cookies);
-            console.log("[Check if user is in game]:", data);
+            log("[Check if user is in game]:", data);
             if (data) {
                 return redirect(`/game/${data.match_id}`, "User is currently in game");
             }
         } catch (e) {
-            console.error("Game check error:", e);
+            log("Game check error:", e);
         }
     }
     return resolve(event);

@@ -3,6 +3,7 @@
 Live LeetCode battle where users can also use abilities to sabotage their opponents like forcing them to code in light mode :>
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Testing](#testing)

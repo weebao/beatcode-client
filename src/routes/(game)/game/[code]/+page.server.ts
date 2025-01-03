@@ -11,11 +11,11 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
     try {
         const data = await getCurrentGame(cookies);
         if (data.match_id !== params.code) {
-            redirect(302, "/");
+            redirect(302, "/home");
         }
     } catch (e) {
         console.error(e);
-        redirect(302, "/");
+        redirect(302, "/home");
     }
 
     return {
