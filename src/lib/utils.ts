@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "svelte-sonner";
 import type { ActionResult } from "@sveltejs/kit";
-import { dev } from '$app/environment';
+import { dev } from "$app/environment";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));

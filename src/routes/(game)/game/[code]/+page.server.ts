@@ -8,15 +8,15 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
     if (!locals.user) {
         redirect(302, "/login");
     }
-    // try {
-    //     const data = await getCurrentGame(cookies);
-    //     if (data.match_id !== params.code) {
-    //         redirect(302, "/home");
-    //     }
-    // } catch (e) {
-    //     console.error(e);
-    //     redirect(302, "/home");
-    // }
+    try {
+        const data = await getCurrentGame(cookies);
+        if (data.match_id !== params.code) {
+            redirect(302, "/home");
+        }
+    } catch (e) {
+        console.error(e);
+        redirect(302, "/home");
+    }
 
     return {
         gameId: params.code,

@@ -54,7 +54,9 @@
 
     // Reset code editor when new problem is received
     $effect(() => {
-        editorData.setCode(`${currentProblem?.boilerplate ?? "class Solution:\n    def pleaseWait():"}\n    `);
+        editorData.setCode(
+            `${currentProblem?.boilerplate ?? "class Solution:\n    def pleaseWait():"}\n    `
+        );
     });
 
     const checkHP = (newState: GameState) => {

@@ -4,8 +4,8 @@ import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
 import { indentUnit, type LanguageSupport } from "@codemirror/language";
 import { python } from "@codemirror/lang-python";
-import { keymap, } from "@codemirror/view";
-import { indentationMarkers } from '@replit/codemirror-indentation-markers';
+import { keymap } from "@codemirror/view";
+import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 import { DefaultTheme, LightTheme } from "./themes";
 import { Abilities, AbilitiesHighlighters } from "$assets/config/game";
