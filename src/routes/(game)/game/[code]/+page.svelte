@@ -247,7 +247,7 @@
                     </div>
                 </div>
                 <div class="h-full w-full overflow-auto">
-                    <Problem content={currentProblem}/>
+                    <Problem content={currentProblem} />
                 </div>
             </div>
         </Resizable.Pane>

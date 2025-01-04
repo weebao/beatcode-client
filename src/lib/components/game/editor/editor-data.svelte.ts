@@ -25,11 +25,11 @@ export class EditorData {
         EditorView.lineWrapping,
         EditorView.theme({
             "&.cm-focused": {
-                outline: "none",
-            },
+                outline: "none"
+            }
         }),
         EditorView.editorAttributes.of({
-            "spellcheck": "false",
+            spellcheck: "false",
             "data-enable-grammarly": "false"
         }),
         ...AbilitiesHighlighters,

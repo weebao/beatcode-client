@@ -123,3 +123,16 @@ export function del(path: string, refresh?: boolean, cookies?: Cookies) {
 export function put(path: string, data?: HttpPayload, refresh?: boolean, cookies?: Cookies) {
     return send({ method: "PUT", path, data, refresh, cookies });
 }
+
+/**
+ * Sends a PATCH request to the specified path with the provided data and cookies.
+ *
+ * @param path - The endpoint path to send the PATCH request to.
+ * @param data - Optional payload to include in the PATCH request.
+ * @param refresh - Optional. Whether to refresh the access token if unauthorized.
+ * @param cookies - Optional cookies to include in the request headers.
+ * @returns A promise that resolves with the response of the PATCH request.
+ */
+export function patch(path: string, data?: HttpPayload, refresh?: boolean, cookies?: Cookies) {
+    return send({ method: "PATCH", path, data, refresh, cookies });
+}

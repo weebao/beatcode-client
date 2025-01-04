@@ -54,7 +54,7 @@
         {#each filteredRoomList as room}
             <div
                 class="flex items-center justify-between rounded-lg border border-secondary p-4"
-                transition:slide|global
+                transition:slide
             >
                 <div>
                     <h2 class="text-xl font-semibold">{room.host_display_name}'s Room</h2>

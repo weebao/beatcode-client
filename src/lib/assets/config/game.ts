@@ -72,7 +72,7 @@ export const AbilitiesHighlighters = AbilitiesDecorators.map((decorator) =>
 );
 
 export const DifficultiesStyle = {
-    "easy": "text-green-400",
-    "medium": "text-amber-400",
-    "hard": "text-red-400"
+    easy: "text-green-400",
+    medium: "text-amber-400",
+    hard: "text-red-400"
 };

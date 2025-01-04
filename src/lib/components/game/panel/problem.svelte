@@ -1,12 +1,12 @@
 <script lang="ts">
     import { DifficultiesStyle } from "$assets/config/game";
-import { Skeleton } from "$components/ui/skeleton";
-import * as Tooltip from "$components/ui/tooltip";
+    import { Skeleton } from "$components/ui/skeleton";
+    import * as Tooltip from "$components/ui/tooltip";
 
     import type { ProblemDetails } from "$lib/models/game";
     import { SquareArrowOutUpRight } from "lucide-svelte";
     interface Props {
-        content?: ProblemDetails
+        content?: ProblemDetails;
     }
 
     let { content }: Props = $props();
@@ -19,27 +19,30 @@ import * as Tooltip from "$components/ui/tooltip";
     {:else}
         <Skeleton class="mb-2 h-8 w-[250px]" />
     {/if}
-    <div class="flex space-x-2 mb-4">
+    <div class="mb-4 flex space-x-2">
         {#if content?.difficulty}
-             <div class="bg-neutral px-2 rounded-md {DifficultiesStyle[content.difficulty]}">
+            <div class="rounded-md bg-neutral px-2 {DifficultiesStyle[content.difficulty]}">
                 {capitalize(content.difficulty)}
-             </div>
+            </div>
         {/if}
         {#if content?.source}
-        <Tooltip.Provider delayDuration={50}>
-            <Tooltip.Root>
-            <Tooltip.Trigger>
-                <a href={content.source} class="flex items-center bg-neutral px-2 rounded-md hover:bg-secondary transition-all duration-150">
-                    <SquareArrowOutUpRight class="h-3 w-3 mr-1" />
-                    <span>Source</span>
-                </a>
-            </Tooltip.Trigger>
-            <Tooltip.Content
-                class="border border-secondary bg-background-dark text-sm text-foreground"
-                >Please don't use this to cheat :></Tooltip.Content
-            >
-        </Tooltip.Root>
-        </Tooltip.Provider>
+            <Tooltip.Provider delayDuration={50}>
+                <Tooltip.Root>
+                    <Tooltip.Trigger>
+                        <a
+                            href={content.source}
+                            class="flex items-center rounded-md bg-neutral px-2 transition-all duration-150 hover:bg-secondary"
+                        >
+                            <SquareArrowOutUpRight class="mr-1 h-3 w-3" />
+                            <span>Source</span>
+                        </a>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content
+                        class="border border-secondary bg-background-dark text-sm text-foreground"
+                        >Please don't use this to cheat :></Tooltip.Content
+                    >
+                </Tooltip.Root>
+            </Tooltip.Provider>
         {/if}
     </div>
     <div>
