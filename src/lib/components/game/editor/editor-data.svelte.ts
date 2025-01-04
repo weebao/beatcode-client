@@ -23,13 +23,22 @@ export class EditorData {
         indentationMarkers(),
         keymap.of([{ key: "Tab", run: acceptCompletion }, indentWithTab]),
         EditorView.lineWrapping,
+        EditorView.theme({
+            "&.cm-focused": {
+                outline: "none",
+            },
+        }),
+        EditorView.editorAttributes.of({
+            "spellcheck": "false",
+            "data-enable-grammarly": "false"
+        }),
         ...AbilitiesHighlighters,
         Prec.highest(
+            // For using abilities
             keymap.of([
                 {
                     key: "Enter",
                     run: (view: EditorView) => {
-                        console.log("Enter");
                         const state = view.state;
                         const content = state.doc.toString();
                         for (const ability of Abilities) {

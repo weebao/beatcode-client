@@ -19,6 +19,7 @@ export interface GameState {
 
 export interface ProblemDetails {
     title: string;
+    source: string;
     description: string; // HTML btw
     difficulty: "easy" | "medium" | "hard";
     sample_test_cases: string[];
