@@ -247,10 +247,7 @@
                     </div>
                 </div>
                 <div class="h-full w-full overflow-auto">
-                    <Problem
-                        title={currentProblem?.title}
-                        description={currentProblem?.description}
-                    />
+                    <Problem content={currentProblem}/>
                 </div>
             </div>
         </Resizable.Pane>

@@ -1,23 +1,51 @@
 <script lang="ts">
-    import { Skeleton } from "$components/ui/skeleton";
+    import { DifficultiesStyle } from "$assets/config/game";
+import { Skeleton } from "$components/ui/skeleton";
+import * as Tooltip from "$components/ui/tooltip";
+
+    import type { ProblemDetails } from "$lib/models/game";
+    import { SquareArrowOutUpRight } from "lucide-svelte";
     interface Props {
-        title?: string;
-        description?: string;
+        content?: ProblemDetails
     }
 
-    let { title, description }: Props = $props();
+    let { content }: Props = $props();
+    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 </script>
 
 <div class="h-full overflow-y-auto bg-background px-4 py-5">
-    {#if title}
-        <h2 class="mb-4 text-2xl font-bold">{title}</h2>
+    {#if content?.title}
+        <h2 class="mb-2 text-2xl font-bold">{content.title}</h2>
     {:else}
-        <Skeleton class="mb-4 h-8 w-[250px]" />
+        <Skeleton class="mb-2 h-8 w-[250px]" />
     {/if}
+    <div class="flex space-x-2 mb-4">
+        {#if content?.difficulty}
+             <div class="bg-neutral px-2 rounded-md {DifficultiesStyle[content.difficulty]}">
+                {capitalize(content.difficulty)}
+             </div>
+        {/if}
+        {#if content?.source}
+        <Tooltip.Provider delayDuration={50}>
+            <Tooltip.Root>
+            <Tooltip.Trigger>
+                <a href={content.source} class="flex items-center bg-neutral px-2 rounded-md hover:bg-secondary transition-all duration-150">
+                    <SquareArrowOutUpRight class="h-3 w-3 mr-1" />
+                    <span>Source</span>
+                </a>
+            </Tooltip.Trigger>
+            <Tooltip.Content
+                class="border border-secondary bg-background-dark text-sm text-foreground"
+                >Please don't use this to cheat :></Tooltip.Content
+            >
+        </Tooltip.Root>
+        </Tooltip.Provider>
+        {/if}
+    </div>
     <div>
-        {#if description}
+        {#if content?.description}
             <!-- eslint-disable svelte/no-at-html-tags -->
-            {@html description}
+            {@html content.description}
         {:else}
             <div class="mb-8 space-y-2">
                 <Skeleton class="h-4 w-full" />

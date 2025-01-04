@@ -3,7 +3,6 @@ import {
     Decoration,
     ViewPlugin,
     ViewUpdate,
-    keymap,
     type EditorView,
     type DecorationSet
 } from "@codemirror/view";
@@ -72,29 +71,8 @@ export const AbilitiesHighlighters = AbilitiesDecorators.map((decorator) =>
     )
 );
 
-export const AbilitiesKeymap = (trigger: (ability: string) => void) =>
-    keymap.of(
-        Abilities.map((ability) => ({
-            key: "Enter",
-            run: (view: EditorView) => {
-                const state = view.state;
-                const content = state.doc.toString();
-                if (content.includes(ability.name)) {
-                    trigger(ability.name);
-
-                    // Remove the word from editor
-                    const updatedContent = content.replace(ability.name, "").trim();
-                    view.dispatch({
-                        changes: {
-                            from: 0,
-                            to: state.doc.length,
-                            insert: updatedContent
-                        }
-                    });
-
-                    return true;
-                }
-                return false;
-            }
-        }))
-    );
+export const DifficultiesStyle = {
+    "easy": "text-green-400",
+    "medium": "text-amber-400",
+    "hard": "text-red-400"
+};
