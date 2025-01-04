@@ -5,17 +5,19 @@
     import { goto } from "$app/navigation";
     import { createWebSocket } from "$lib/websocket.svelte";
     import type { GameState, ProblemDetails, SubmissionResults } from "$models/game";
-    import { Problem, Test, Abilities } from "$components/game/panel";
-
+    import type { ChatMessage } from "$models/room";
+    
     import AvatarImg from "$assets/images/avatar.jpg";
-
+    
     import * as Avatar from "$components/ui/avatar";
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import { Progress } from "$components/ui/progress";
     import * as Resizable from "$components/ui/resizable";
-
+    
+    import { Problem, Test, Abilities } from "$components/game/panel";
     import { Editor, EditorData } from "$components/game/editor";
+    import { Chat } from "$components/game/chat";
 
     import { log } from "$lib/utils";
 
@@ -43,6 +45,8 @@
 
     let lightMode = $state<boolean>(false);
     let showRuntimeAnalysis = $state(false);
+
+    let chatHistory = $state<ChatMessage[]>([]);
 
     const tabs = [
         { name: "Test Cases", icon: CheckSquare },
@@ -86,7 +90,6 @@
         editorData.triggerAbility(ability);
         if (ability === "lightio") {
             lightMode = true;
-            console.log(lightMode);
             setTimeout(() => {
                 lightMode = false;
             }, 30000);
@@ -129,6 +132,11 @@
                         showRuntimeAnalysis = true;
                     }
                     break;
+                case "chat":
+                if (chatHistory.length === 0 || chatHistory[chatHistory.length - 1].timestamp !== data.timestamp) {
+                        chatHistory = [...chatHistory, data];
+                    }
+                    break;
                 case "error":
                     toast.error(data.message);
                     break;
@@ -164,6 +172,10 @@
         log(code);
         isSubmitting = true;
         ws.send("submit", { code });
+    };
+
+    const sendMessage = (message: string) => {
+        ws.send("chat", { message });
     };
 
     const forfeit = () => {
@@ -345,6 +357,8 @@
         </Dialog.Footer>
     </Dialog.Content>
 </Dialog.Root>
+
+<Chat username={data?.user?.username} history={chatHistory} onSend={sendMessage} />
 
 <style>
 </style>

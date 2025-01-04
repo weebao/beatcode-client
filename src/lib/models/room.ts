@@ -68,3 +68,9 @@ export const RoomSettingsSchema = z
 export const JoinRoomSchema = z.object({
     room_code: z.string().length(6, "Room code must be exactly 6 characters")
 });
+
+export interface ChatMessage {
+    message: string;
+    sender: string;
+    timestamp: number;
+}
