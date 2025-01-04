@@ -33,7 +33,7 @@ export type HttpPayload = HttpJSONPayload | FormData | URLSearchParams;
  * Whether to refresh the access token if the request is unauthorized. This is optional and can be used to refresh the access token if it has expired.
  */
 export interface HttpRequestFetch {
-    method: "GET" | "POST" | "DELETE" | "PUT";
+    method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
     path: string;
     data?: HttpPayload;
     cookies?: Cookies;

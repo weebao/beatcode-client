@@ -67,7 +67,7 @@
     <!-- Create room -->
     <Dialog.Root>
         <Dialog.Trigger class="w-full {buttonVariants()}">Create New Room</Dialog.Trigger>
-        <Dialog.Content class="sm:max-w-[425px]">
+        <Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
             <Dialog.Header>
                 <Dialog.Title>Create a new room</Dialog.Title>
                 <Dialog.Description>Please fill out the room settings below.</Dialog.Description>

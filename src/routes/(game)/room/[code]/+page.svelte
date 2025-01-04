@@ -1,17 +1,21 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import { toast } from "svelte-sonner";
+    import { type Infer, superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
-    import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
+
     import { createWebSocket } from "$lib/websocket.svelte";
 
-    import { Button } from "$components/ui/button";
+    import { Button, buttonVariants } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import { Separator } from "$components/ui/separator";
+    import { RoomSettingsForm } from "$components/game/room";
     import StatusIndicator from "$components/misc/status-indicator.svelte";
 
-    import type { RoomState } from "$models/room";
+    import type { RoomState, RoomSettingsSchema } from "$models/room";
+    import { announce } from "$lib/utils";
+
     import { Copy, LogOut, Link, Settings } from "lucide-svelte";
 
     interface Props {
@@ -35,15 +39,17 @@
     let opponentStatus = $derived(opponentName ? (opponentReady ? 1 : 0) : -1);
 
     // Room WebSocket
-    const ws = createWebSocket(data?.token ?? "");
-    if (data.user) {
+    let ws: ReturnType<typeof createWebSocket>;
+    if (data.user && data.token) {
+        ws = createWebSocket(data.token);
         ws.setUrl(`${data.websocketUrl}/rooms/${data.roomCode}`);
         ws.connect();
     }
 
     $effect(() => {
         if (ws.status === "CLOSED") {
-            toast.error(ws.reason ?? "Failed to connect to room");
+            toast.error(ws.reason ?? "You left the room");
+            goto("/custom");
         }
     });
 
@@ -87,7 +93,6 @@
         } else if (!opponentReady) {
             toast.error("Opponent is not ready");
         } else {
-            console.log("game started");
             ws.send("start_game");
         }
     };
@@ -100,6 +105,17 @@
         ws.close();
         goto("/custom");
     };
+
+    // Update room settings
+    const updateRoomSettingsForm = superForm<Infer<typeof RoomSettingsSchema>>(
+        data.updateRoomSettingsForm,
+        {
+            id: "update-room-settings",
+            onResult: ({ result }) => {
+                announce(result, "Room settings updated");
+            }
+        }
+    );
 
     // Utils
     const copy = (text: string) => {
@@ -134,11 +150,26 @@
         >
             <Link />
         </Button>
-        <form use:enhance action="?/changeSettings" method="post">
-            <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" type="submit">
-                <Settings />
-            </Button>
-        </form>
+        <Dialog.Root>
+            <Dialog.Trigger
+                class="h-8 w-8 p-1.5 {buttonVariants({
+                    variant: 'outline',
+                    size: 'icon'
+                })}"><Settings /></Dialog.Trigger
+            >
+            <Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
+                <Dialog.Header>
+                    <Dialog.Title>Update room settings</Dialog.Title>
+                    <Dialog.Description>Please fill out the room settings below.</Dialog.Description
+                    >
+                </Dialog.Header>
+                <RoomSettingsForm form={updateRoomSettingsForm} action="?/updateSettings">
+                    <Dialog.Footer>
+                        <Button type="submit">Update</Button>
+                    </Dialog.Footer>
+                </RoomSettingsForm>
+            </Dialog.Content>
+        </Dialog.Root>
         <Button variant="outline" size="icon" class="h-8 w-8 p-1.5" onclick={leaveRoom}>
             <LogOut />
         </Button>
@@ -197,7 +228,7 @@
             <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
             <Dialog.Description>Please sign in to join</Dialog.Description>
         </Dialog.Header>
-        <form method="POST" use:enhance action="?/joinRoomAsGuest">
+        <form method="POST" action="?/joinRoomAsGuest">
             <Button href={`/login?joining=${data.roomCode}`}>Sign in</Button>
             <Button type="submit" variant="ghost">Play as guest</Button>
         </form>
