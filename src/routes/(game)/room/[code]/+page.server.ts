@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
         websocketUrl: WEBSOCKET_URL,
         websiteUrl: FRONTEND_URL,
         token: cookies.get("access_token"),
-        updateRoomSettingsForm: await superValidate(zod(RoomSettingsSchema)),
+        updateRoomSettingsForm: await superValidate(zod(RoomSettingsSchema))
     };
 };
 

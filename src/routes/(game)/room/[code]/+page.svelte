@@ -3,7 +3,6 @@
     import { toast } from "svelte-sonner";
     import { type Infer, superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
-    import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
 
     import { createWebSocket } from "$lib/websocket.svelte";
@@ -16,7 +15,7 @@
 
     import type { RoomState, RoomSettingsSchema } from "$models/room";
     import { announce } from "$lib/utils";
-    
+
     import { Copy, LogOut, Link, Settings } from "lucide-svelte";
 
     interface Props {
@@ -108,12 +107,15 @@
     };
 
     // Update room settings
-    const updateRoomSettingsForm = superForm<Infer<typeof RoomSettingsSchema>>(data.updateRoomSettingsForm, {
-        id: "update-room-settings",
-        onResult: ({ result }) => {
-            announce(result, "Room settings updated");
+    const updateRoomSettingsForm = superForm<Infer<typeof RoomSettingsSchema>>(
+        data.updateRoomSettingsForm,
+        {
+            id: "update-room-settings",
+            onResult: ({ result }) => {
+                announce(result, "Room settings updated");
+            }
         }
-    });
+    );
 
     // Utils
     const copy = (text: string) => {
@@ -149,14 +151,17 @@
             <Link />
         </Button>
         <Dialog.Root>
-            <Dialog.Trigger class="h-8 w-8 p-1.5 {buttonVariants({
-                variant: "outline",
-                size: "icon"
-            })}"><Settings /></Dialog.Trigger>
-            <Dialog.Content class="sm:max-w-[425px] max-h-screen overflow-auto">
+            <Dialog.Trigger
+                class="h-8 w-8 p-1.5 {buttonVariants({
+                    variant: 'outline',
+                    size: 'icon'
+                })}"><Settings /></Dialog.Trigger
+            >
+            <Dialog.Content class="max-h-screen overflow-auto sm:max-w-[425px]">
                 <Dialog.Header>
                     <Dialog.Title>Update room settings</Dialog.Title>
-                    <Dialog.Description>Please fill out the room settings below.</Dialog.Description>
+                    <Dialog.Description>Please fill out the room settings below.</Dialog.Description
+                    >
                 </Dialog.Header>
                 <RoomSettingsForm form={updateRoomSettingsForm} action="?/updateSettings">
                     <Dialog.Footer>

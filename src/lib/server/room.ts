@@ -17,12 +17,11 @@ export const createRoom = async (isPublic: boolean, settings: RoomSettings, cook
     return data;
 };
 
-export const updateRoomSettings = async (roomCode: string, settings: RoomSettings, cookies: Cookies) => {
-    const data = await api.patch(
-        `/rooms/${roomCode}/settings`,
-        settings,
-        true,
-        cookies
-    );
+export const updateRoomSettings = async (
+    roomCode: string,
+    settings: RoomSettings,
+    cookies: Cookies
+) => {
+    const data = await api.patch(`/rooms/${roomCode}/settings`, settings, true, cookies);
     return data;
 };

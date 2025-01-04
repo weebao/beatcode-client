@@ -28,8 +28,8 @@
         { name: "Dynamic Programming", percentage: 0 }
     ];
     const gameModes = [
-        { name: "Unranked", icon: Shell, link: "/solo/unranked" },
-        { name: "Ranked", icon: Swords, link: "/solo/ranked" },
+        { name: "Unranked", icon: Shell, link: "/solo/unranked", disabled: user?.is_guest },
+        { name: "Ranked", icon: Swords, link: "/solo/ranked", disabled: user?.is_guest },
         { name: "Custom", icon: Settings, link: "/custom" }
     ];
     const rating = Ratings[user?.rating ?? 0];
@@ -79,7 +79,11 @@
                         <mode.icon class="mr-4 h-8 w-8 text-secondary" />
                         <span class="font-mono text-2xl">{mode.name}</span>
                     </div>
-                    <Button class="px-8 text-base" href={mode.link}>Start</Button>
+                    {#if mode.disabled}
+                        <Button variant="secondary" class="px-8 text-base" disabled>Locked</Button>
+                    {:else}
+                        <Button class="px-8 text-base" href={mode.link}>Start</Button>
+                    {/if}
                 </div>
             {/each}
         </div>
