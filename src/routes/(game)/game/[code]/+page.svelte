@@ -6,15 +6,15 @@
     import { createWebSocket } from "$lib/websocket.svelte";
     import type { GameState, ProblemDetails, SubmissionResults } from "$models/game";
     import type { ChatMessage } from "$models/room";
-    
+
     import AvatarImg from "$assets/images/avatar.jpg";
-    
+
     import * as Avatar from "$components/ui/avatar";
     import { Button } from "$components/ui/button";
     import * as Dialog from "$components/ui/dialog";
     import { Progress } from "$components/ui/progress";
     import * as Resizable from "$components/ui/resizable";
-    
+
     import { Problem, Test, Abilities } from "$components/game/panel";
     import { Editor, EditorData } from "$components/game/editor";
     import { Chat } from "$components/game/chat";
@@ -133,7 +133,10 @@
                     }
                     break;
                 case "chat":
-                if (chatHistory.length === 0 || chatHistory[chatHistory.length - 1].timestamp !== data.timestamp) {
+                    if (
+                        chatHistory.length === 0 ||
+                        chatHistory[chatHistory.length - 1].timestamp !== data.timestamp
+                    ) {
                         chatHistory = [...chatHistory, data];
                     }
                     break;

@@ -78,7 +78,10 @@
                     }
                     break;
                 case "chat":
-                    if (chatHistory.length === 0 || chatHistory[chatHistory.length - 1].timestamp !== data.timestamp) {
+                    if (
+                        chatHistory.length === 0 ||
+                        chatHistory[chatHistory.length - 1].timestamp !== data.timestamp
+                    ) {
                         chatHistory = [...chatHistory, data];
                     }
                     break;
