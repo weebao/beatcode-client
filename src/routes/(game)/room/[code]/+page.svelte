@@ -13,10 +13,11 @@
     import { RoomSettingsForm } from "$components/game/room";
     import StatusIndicator from "$components/misc/status-indicator.svelte";
 
-    import type { RoomState, RoomSettingsSchema } from "$models/room";
+    import type { RoomState, RoomSettingsSchema, ChatMessage } from "$models/room";
     import { announce } from "$lib/utils";
 
     import { Copy, LogOut, Link, Settings } from "lucide-svelte";
+    import { Chat } from "$components/game/chat";
 
     interface Props {
         data: PageData;
@@ -37,6 +38,8 @@
     );
     let opponentReady = $derived(isHost ? roomState?.guest_ready : roomState?.host_ready);
     let opponentStatus = $derived(opponentName ? (opponentReady ? 1 : 0) : -1);
+
+    let chatHistory = $state<ChatMessage[]>([]);
 
     // Room WebSocket
     let ws: ReturnType<typeof createWebSocket>;
@@ -75,6 +78,12 @@
                     }
                     break;
                 case "chat":
+                    if (
+                        chatHistory.length === 0 ||
+                        chatHistory[chatHistory.length - 1].timestamp !== data.timestamp
+                    ) {
+                        chatHistory = [...chatHistory, data];
+                    }
                     break;
                 case "error":
                     console.log(data);
@@ -99,6 +108,10 @@
 
     const toggleReady = () => {
         ws.send("toggle_ready");
+    };
+
+    const sendMessage = (message: string) => {
+        ws.send("chat", { message });
     };
 
     const leaveRoom = () => {
@@ -220,6 +233,8 @@
         aria-label="Game Link"
     ></a>
 </div>
+
+<Chat username={data?.user?.username} history={chatHistory} onSend={sendMessage} />
 
 <!-- If not authenticated - prompt user to sign in -->
 <Dialog.Root open={!data.user}>
