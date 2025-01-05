@@ -21,7 +21,7 @@
     {/if}
     <div class="mb-4 flex space-x-2">
         {#if content?.difficulty}
-            <div class="rounded-md bg-neutral px-2 {DifficultiesStyle[content.difficulty]}">
+            <div class="rounded-md bg-neutral px-2 pb-px text-sm {DifficultiesStyle[content.difficulty]}">
                 {capitalize(content.difficulty)}
             </div>
         {/if}
@@ -31,7 +31,7 @@
                     <Tooltip.Trigger>
                         <a
                             href={content.source}
-                            class="flex items-center rounded-md bg-neutral px-2 transition-all duration-150 hover:bg-secondary"
+                            class="flex items-center rounded-md bg-neutral px-2 pb-px text-sm transition-all duration-150 hover:bg-secondary"
                         >
                             <SquareArrowOutUpRight class="mr-1 h-3 w-3" />
                             <span>Source</span>

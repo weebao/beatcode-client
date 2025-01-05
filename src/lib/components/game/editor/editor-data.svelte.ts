@@ -1,5 +1,5 @@
 import { basicSetup, EditorView } from "codemirror";
-import { EditorState, StateEffect, Prec } from "@codemirror/state";
+import { EditorState, Prec } from "@codemirror/state";
 import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
 import { indentUnit, type LanguageSupport } from "@codemirror/language";
@@ -7,7 +7,8 @@ import { python } from "@codemirror/lang-python";
 import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
-import { DefaultTheme, LightTheme } from "./themes";
+import { DefaultTheme } from "./themes";
+import { handleDeletio, handleSyntaxio, handleLightio } from "./abilities";
 import { Abilities, AbilitiesHighlighters } from "$assets/config/game";
 
 export class EditorData {
@@ -95,45 +96,16 @@ export class EditorData {
 
     triggerAbility(ability: string) {
         if (!this.#view) throw new Error("Editor view not linked");
-        if (ability === "deletio") {
-            // Delete a random line of my code
-            const doc = this.#view.state.doc;
-            const lineCount = doc.lines;
-
-            if (lineCount === 0) return;
-
-            const randomLine = Math.floor(Math.random() * lineCount) + 1;
-            const linePos = doc.line(randomLine);
-            this.#view.dispatch({
-                changes: { from: linePos.from, to: linePos.to }
-            });
-        } else if (ability === "syntaxio") {
-            // Turn off syntax highlighting for 30 seconds
-            const originalExts = this.#exts;
-            this.#exts = this.#exts.filter((ext) => ext !== this.#lang);
-            this.#view.dispatch({
-                effects: StateEffect.reconfigure.of(this.#exts)
-            });
-            setTimeout(() => {
-                this.#exts = originalExts;
-                this.#view?.dispatch({
-                    effects: StateEffect.reconfigure.of(this.#exts)
-                });
-            }, 30000);
-        } else if (ability === "lightio") {
-            // Turn editor to light mode for 30 seconds
-            this.#exts = this.#exts.filter((ext) => ext !== DefaultTheme);
-            this.#exts.push(LightTheme);
-            this.#view.dispatch({
-                effects: StateEffect.reconfigure.of(this.#exts)
-            });
-            setTimeout(() => {
-                this.#exts = this.#exts.filter((ext) => ext !== LightTheme);
-                this.#exts.push(DefaultTheme);
-                this.#view?.dispatch({
-                    effects: StateEffect.reconfigure.of(this.#exts)
-                });
-            }, 30000);
+        switch (ability) {
+            case "deletio":
+                handleDeletio(this.#view);
+                break;
+            case "syntaxio":
+                handleSyntaxio(this.#view, this.#lang, this.#exts);
+                break;
+            case "lightio":
+                handleLightio(this.#view, this.#exts);
+                break;
         }
     }
 }
