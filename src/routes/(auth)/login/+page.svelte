@@ -32,6 +32,10 @@
     const { form: formData, enhance, submitting } = form;
 </script>
 
+<svelte:head>
+    <title>Log in</title>
+</svelte:head>
+
 <div class="flex h-navscreen justify-center bg-background">
     <Card.Root class="mt-12 h-fit w-[350px]">
         <Card.Header>

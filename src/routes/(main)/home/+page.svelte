@@ -37,6 +37,10 @@
     onMount(() => (mounted = true));
 </script>
 
+<svelte:head>
+    <title>Home</title>
+</svelte:head>
+
 <div class="mx-auto mt-16 flex max-w-[1280px] flex-col">
     <h1 class="mb-8 text-center text-4xl font-semibold">
         Time to level up, {user?.display_name ?? "BeatCoder"}.

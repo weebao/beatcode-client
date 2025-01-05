@@ -33,6 +33,11 @@ export class EditorData {
             spellcheck: "false",
             "data-enable-grammarly": "false"
         }),
+        EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+                localStorage.setItem("cachedCode", update.state.doc.toString());
+            }
+        }),
         ...AbilitiesHighlighters,
         Prec.highest(
             // For using abilities
@@ -87,8 +92,9 @@ export class EditorData {
 
     setCode(code: string) {
         if (!this.#view) throw new Error("Editor view not linked");
+        const cachedCode = localStorage.getItem("cachedCode") || "";
         this.#state = EditorState.create({
-            doc: code,
+            doc: cachedCode.trim() !== "" ? cachedCode : code,
             extensions: this.#exts
         });
         this.#view.setState(this.#state);

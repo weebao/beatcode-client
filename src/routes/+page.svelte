@@ -7,7 +7,7 @@
 
     import { SparkleIcon } from "lucide-svelte";
 
-    import HeroImg from "$assets/images/hero.png";
+    import HeroImg from "$assets/images/hero.png?enhanced";
     import { Button } from "$components/ui/button";
     import { cn } from "$lib/utils.js";
 
@@ -78,10 +78,9 @@
         </div>
     </div>
     <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
-    <img
-        loading="lazy"
+    <enhanced:img
         src={HeroImg}
         alt="Hero"
-        class="w-2/3 max-w-[1280px] flex-1 object-contain"
+        class="mx-auto w-2/3 max-w-[1280px] flex-1 object-contain"
     />
 </section>

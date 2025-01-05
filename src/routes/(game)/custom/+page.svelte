@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode</title>
+    <title>Custom Mode</title>
 </svelte:head>
 
 <div class="mx-auto mt-16 max-w-96 space-y-4 rounded-md border border-secondary p-6">

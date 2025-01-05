@@ -14,6 +14,7 @@
     import * as Dialog from "$components/ui/dialog";
     import { Progress } from "$components/ui/progress";
     import * as Resizable from "$components/ui/resizable";
+    import * as Tooltip from "$components/ui/tooltip";
 
     import { Problem, Test, Abilities } from "$components/game/panel";
     import { Editor, EditorData } from "$components/game/editor";
@@ -30,7 +31,6 @@
         LogOut,
         Sparkles
     } from "lucide-svelte";
-
     interface Props {
         data: PageData;
     }
@@ -42,6 +42,7 @@
     let isSubmitting = $state(false);
     let submissionResults = $state<SubmissionResults>();
     let winner = $state<string | null>(null);
+    let isWinner = $derived(winner === data.user?.username);
 
     let lightMode = $state<boolean>(false);
     let showRuntimeAnalysis = $state(false);
@@ -104,7 +105,7 @@
     $effect(() => {
         if (ws.status === "CLOSED") {
             toast.error(ws.reason ?? "Failed to connect to game");
-            // goto("/home");
+            goto("/home");
         }
     });
 
@@ -122,6 +123,7 @@
                     gameState = data;
                     break;
                 case "problem":
+                    localStorage.removeItem("cachedCode");
                     currentProblem = data;
                     submissionResults = undefined;
                     break;
@@ -144,8 +146,8 @@
                     toast.error(data.message);
                     break;
                 case "match_end":
-                    toast.success("Match ended");
-                    goto("/home");
+                    winner = data.winner;
+                    localStorage.removeItem("cachedCode");
                     break;
                 default:
                     break;
@@ -183,13 +185,16 @@
 
     const forfeit = () => {
         ws.send("forfeit");
-        goto("/home");
     };
 
     onDestroy(() => {
         ws.close();
     });
 </script>
+
+<svelte:head>
+    <title>Game</title>
+</svelte:head>
 
 <div
     class="absolute left-0 top-0 flex h-screen w-screen flex-col overflow-hidden bg-background-dark"
@@ -202,33 +207,43 @@
             </Avatar.Root>
             <div class="w-full">
                 <div class="mb-1 font-semibold">{data.user?.display_name ?? "You"}</div>
-                <Progress max={100} value={gameState?.your_hp ?? 0} class="h-2" />
+                <Progress max={100} value={Math.min(gameState?.your_hp ?? 0, 100)} class="h-2" />
             </div>
         </div>
         <div class="flex space-x-0.5">
-            <Button
-                variant="secondary"
-                size="sm"
-                class="rounded-r-none bg-neutral"
-                disabled={isSubmitting}
-                onclick={submitCode}
-            >
-                {#if isSubmitting}
-                    <Loader class="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
-                {:else}
-                    <Play class="mr-2 h-4 w-4" />
-                    Submit Code
-                {/if}
-            </Button>
-            <Button
-                variant="secondary"
-                size="sm"
-                class="rounded-l-none bg-neutral px-2.5"
-                onclick={forfeit}
-            >
-                <LogOut />
-            </Button>
+            <Tooltip.Provider delayDuration={150}>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    class="rounded-r-none bg-neutral"
+                    disabled={isSubmitting}
+                    onclick={submitCode}
+                >
+                    {#if isSubmitting}
+                        <Loader class="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                    {:else}
+                        <Play class="mr-2 h-4 w-4" />
+                        Submit Code
+                    {/if}
+                </Button>
+                <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
+                    <Tooltip.Trigger>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            class="rounded-l-none bg-neutral px-2.5"
+                            onclick={forfeit}
+                        >
+                            <LogOut />
+                        </Button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content
+                        class="border border-secondary bg-background-dark text-sm text-foreground"
+                        >Leave game (Forfeit)</Tooltip.Content
+                    >
+                </Tooltip.Root>
+            </Tooltip.Provider>
         </div>
         <div class="flex w-full">
             <div class="w-full">
@@ -237,7 +252,7 @@
                 </div>
                 <Progress
                     max={100}
-                    value={gameState?.opponent_hp ?? 0}
+                    value={Math.min(gameState?.opponent_hp ?? 0, 100)}
                     isOpposite={true}
                     barClass="bg-rose"
                     class="h-2"
@@ -311,8 +326,16 @@
                                 {/each}
                             </div>
                             <div class="flex space-x-4 pr-4 font-medium">
-                                <div>MP: <span class="text-blue-400">{gameState?.mana_points ?? 0}</span></div>
-                                <div>SP: <span class="text-amber-400">{gameState?.skill_points ?? 0}</span></div>
+                                <div>
+                                    MP: <span class="text-blue-400"
+                                        >{gameState?.mana_points ?? 0}</span
+                                    >
+                                </div>
+                                <div>
+                                    SP: <span class="text-amber-400"
+                                        >{gameState?.skill_points ?? 0}</span
+                                    >
+                                </div>
                             </div>
                         </div>
                         {#if selected === 0}
@@ -331,28 +354,32 @@
 </div>
 <Dialog.Root open={winner !== null}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
-        <Dialog.Header>
-            <Dialog.Title>{winner} won!</Dialog.Title>
-        </Dialog.Header>
-        <div class="my-4 flex justify-center">
-            <img src="/path/to/avatar.png" alt="Winner Avatar" class="h-24 w-24 rounded-full" />
+        <div class="my-4 flex flex-col items-center">
+            <div class="mb-8 text-9xl">
+                {isWinner ? "🎉" : "😢"}
+            </div>
+            <div class="mb-10 font-icon text-5xl font-bold">
+                {isWinner ? "You won!" : "You lost..."}
+            </div>
+            <Button href="/home">Go home</Button>
         </div>
-        <Dialog.Footer class="mt-4">
-            <Button href="/home">Home</Button>
-        </Dialog.Footer>
     </Dialog.Content>
 </Dialog.Root>
 <Dialog.Root bind:open={showRuntimeAnalysis}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
-        <Dialog.Header>
-            <Dialog.Title class="text-center">You solved the problem!</Dialog.Title>
-        </Dialog.Header>
-        <div class="flex flex-col justify-center text-center">
-            <div class="my-4 font-icon text-6xl font-bold">
-                {submissionResults?.runtime_analysis ?? "O(n)"}
+        {#if submissionResults?.runtime_analysis}
+            <div class="flex flex-col justify-center text-center">
+                <div class="my-4 font-icon text-4xl font-bold">
+                    {submissionResults.runtime_analysis}
+                </div>
+                <div>Time Complexity</div>
             </div>
-            <div>Time Complexity</div>
-        </div>
+        {:else}
+            <div class="flex flex-col items-center">
+                <div class="mb-8 text-9xl">🎉</div>
+                <span class="text-xl">Congrats! You solved the problem!</span>
+            </div>
+        {/if}
         <Dialog.Footer>
             <Dialog.Close>
                 <Button>Continue</Button>

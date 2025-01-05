@@ -20,7 +20,7 @@ export const handleDeletio = (view: EditorView) => {
     view.dispatch({
         changes: { from: linePos.from, to: linePos.to }
     });
-}
+};
 
 export const handleSyntaxio = (view: EditorView, lang: LanguageSupport, exts: any[]) => {
     // Turn off syntax highlighting for 30 seconds
@@ -35,7 +35,7 @@ export const handleSyntaxio = (view: EditorView, lang: LanguageSupport, exts: an
             effects: StateEffect.reconfigure.of(exts)
         });
     }, 30000);
-}
+};
 
 export const handleLightio = (view: EditorView, exts: any[]) => {
     // Turn editor to light mode for 30 seconds
@@ -51,4 +51,4 @@ export const handleLightio = (view: EditorView, exts: any[]) => {
             effects: StateEffect.reconfigure.of(exts)
         });
     }, 30000);
-}
+};

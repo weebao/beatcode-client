@@ -24,15 +24,15 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode</title>
+    <title>Solo Ranked</title>
 </svelte:head>
 
 <div
     class="mx-auto mt-16 flex h-full max-w-96 flex-col items-center space-y-4 rounded-lg border border-secondary p-6"
 >
-    <Swords />
+    <Swords class="h-10 w-10 animate-pulse" />
     <h1 class="mb-4 text-center font-icon text-4xl font-medium">Solo Ranked</h1>
-    <div>Matchmaking...</div>
+    <div>Matchmaking</div>
 </div>
 
 <style>
