@@ -43,8 +43,8 @@
 
     // Room WebSocket
     let ws: ReturnType<typeof createWebSocket>;
+    ws = createWebSocket(data.token);
     if (data.user && data.token) {
-        ws = createWebSocket(data.token);
         ws.setUrl(`${data.websocketUrl}/rooms/${data.roomCode}`);
         ws.connect();
     }
