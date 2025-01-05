@@ -33,7 +33,7 @@
 </script>
 
 <svelte:head>
-	<title>Log in</title>
+    <title>Log in</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">

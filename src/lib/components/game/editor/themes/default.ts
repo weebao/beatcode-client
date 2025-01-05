@@ -154,13 +154,7 @@ const Highlight = HighlightStyle.define([
     },
     { tag: [t.number], color: numbersAndUnits },
     {
-        tag: [
-            t.operator,
-            t.url,
-            t.escape,
-            t.link,
-            t.special(t.string)
-        ],
+        tag: [t.operator, t.url, t.escape, t.link, t.special(t.string)],
         color: operators
     },
     { tag: [t.operatorKeyword], color: operatorKeyword },

@@ -3,7 +3,7 @@ import { sequence } from "@sveltejs/kit/hooks";
 import { getMe } from "$lib/server/auth";
 import { getCurrentGame } from "$lib/server/game";
 import { log } from "$lib/utils";
-import { invalidateAll } from '$app/navigation';
+import { invalidateAll } from "$app/navigation";
 
 const preloadFont: Handle = async ({ event, resolve }) => {
     return await resolve(event, {

@@ -122,14 +122,14 @@
                     checkAbilityPurchase(data);
                     gameState = data;
                     break;
-                    case "problem":
-                        localStorage.removeItem("cachedCode");
-                        currentProblem = data;
+                case "problem":
+                    localStorage.removeItem("cachedCode");
+                    currentProblem = data;
                     submissionResults = undefined;
                     break;
-                    case "submission_result":
-                        submissionResults = data;
-                        isSubmitting = false;
+                case "submission_result":
+                    submissionResults = data;
+                    isSubmitting = false;
                     if (submissionResults?.runtime_analysis) {
                         showRuntimeAnalysis = true;
                     }
@@ -193,7 +193,7 @@
 </script>
 
 <svelte:head>
-	<title>Game</title>
+    <title>Game</title>
 </svelte:head>
 
 <div
@@ -212,39 +212,38 @@
         </div>
         <div class="flex space-x-0.5">
             <Tooltip.Provider delayDuration={150}>
-
                 <Button
-                variant="secondary"
-                size="sm"
-                class="rounded-r-none bg-neutral"
-                disabled={isSubmitting}
-                onclick={submitCode}
-                >
-                {#if isSubmitting}
-                    <Loader class="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
-                {:else}
-                    <Play class="mr-2 h-4 w-4" />
-                    Submit Code
-                {/if}
-            </Button>
-            <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
-                <Tooltip.Trigger>
-                    <Button
                     variant="secondary"
-                        size="sm"
-                        class="rounded-l-none bg-neutral px-2.5"
-                        onclick={forfeit}
-                    >
-                    <LogOut />
-                </Button>
-                </Tooltip.Trigger>
-                <Tooltip.Content
-                    class="border border-secondary bg-background-dark text-sm text-foreground"
-                    >Leave game (Forfeit)</Tooltip.Content
+                    size="sm"
+                    class="rounded-r-none bg-neutral"
+                    disabled={isSubmitting}
+                    onclick={submitCode}
                 >
-            </Tooltip.Root>
-    </Tooltip.Provider>
+                    {#if isSubmitting}
+                        <Loader class="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                    {:else}
+                        <Play class="mr-2 h-4 w-4" />
+                        Submit Code
+                    {/if}
+                </Button>
+                <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
+                    <Tooltip.Trigger>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            class="rounded-l-none bg-neutral px-2.5"
+                            onclick={forfeit}
+                        >
+                            <LogOut />
+                        </Button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content
+                        class="border border-secondary bg-background-dark text-sm text-foreground"
+                        >Leave game (Forfeit)</Tooltip.Content
+                    >
+                </Tooltip.Root>
+            </Tooltip.Provider>
         </div>
         <div class="flex w-full">
             <div class="w-full">
@@ -327,8 +326,16 @@
                                 {/each}
                             </div>
                             <div class="flex space-x-4 pr-4 font-medium">
-                                <div>MP: <span class="text-blue-400">{gameState?.mana_points ?? 0}</span></div>
-                                <div>SP: <span class="text-amber-400">{gameState?.skill_points ?? 0}</span></div>
+                                <div>
+                                    MP: <span class="text-blue-400"
+                                        >{gameState?.mana_points ?? 0}</span
+                                    >
+                                </div>
+                                <div>
+                                    SP: <span class="text-amber-400"
+                                        >{gameState?.skill_points ?? 0}</span
+                                    >
+                                </div>
                             </div>
                         </div>
                         {#if selected === 0}
@@ -348,10 +355,10 @@
 <Dialog.Root open={winner !== null}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <div class="my-4 flex flex-col items-center">
-            <div class="text-9xl mb-8">
+            <div class="mb-8 text-9xl">
                 {isWinner ? "🎉" : "😢"}
             </div>
-            <div class="font-icon text-5xl font-bold mb-10">
+            <div class="mb-10 font-icon text-5xl font-bold">
                 {isWinner ? "You won!" : "You lost..."}
             </div>
             <Button href="/home">Go home</Button>
@@ -361,17 +368,17 @@
 <Dialog.Root bind:open={showRuntimeAnalysis}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         {#if submissionResults?.runtime_analysis}
-             <div class="flex flex-col justify-center text-center">
-                 <div class="my-4 font-icon text-4xl font-bold">
-                     {submissionResults.runtime_analysis}
-                 </div>
-                 <div>Time Complexity</div>
-             </div>
+            <div class="flex flex-col justify-center text-center">
+                <div class="my-4 font-icon text-4xl font-bold">
+                    {submissionResults.runtime_analysis}
+                </div>
+                <div>Time Complexity</div>
+            </div>
         {:else}
-             <div class="flex flex-col items-center">
-                <div class="text-9xl mb-8">🎉</div>
+            <div class="flex flex-col items-center">
+                <div class="mb-8 text-9xl">🎉</div>
                 <span class="text-xl">Congrats! You solved the problem!</span>
-             </div>
+            </div>
         {/if}
         <Dialog.Footer>
             <Dialog.Close>

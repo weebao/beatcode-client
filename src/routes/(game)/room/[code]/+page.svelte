@@ -143,9 +143,9 @@
 
 <svelte:head>
     {#if roomState?.host_display_name}
-         <title>{roomState.host_display_name}'s Room</title>
-     {:else}
-         <title>Custom Room</title>
+        <title>{roomState.host_display_name}'s Room</title>
+    {:else}
+        <title>Custom Room</title>
     {/if}
 </svelte:head>
 

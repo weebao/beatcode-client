@@ -21,7 +21,11 @@
     {/if}
     <div class="mb-4 flex space-x-2">
         {#if content?.difficulty}
-            <div class="rounded-md bg-neutral px-2 pb-px text-sm {DifficultiesStyle[content.difficulty]}">
+            <div
+                class="rounded-md bg-neutral px-2 pb-px text-sm {DifficultiesStyle[
+                    content.difficulty
+                ]}"
+            >
                 {capitalize(content.difficulty)}
             </div>
         {/if}
