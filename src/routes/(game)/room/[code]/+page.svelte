@@ -43,7 +43,7 @@
 
     // Room WebSocket
     let ws: ReturnType<typeof createWebSocket>;
-    ws = createWebSocket(data.token);
+    ws = createWebSocket(data?.token ?? "");
     if (data.user && data.token) {
         ws.setUrl(`${data.websocketUrl}/rooms/${data.roomCode}`);
         ws.connect();
@@ -140,6 +140,14 @@
         ws.close();
     });
 </script>
+
+<svelte:head>
+    {#if roomState?.host_display_name}
+         <title>{roomState.host_display_name}'s Room</title>
+     {:else}
+         <title>Custom Room</title>
+    {/if}
+</svelte:head>
 
 <div class="mx-auto mt-16 flex flex-col items-center">
     <h1 class="mb-2 text-5xl font-bold">

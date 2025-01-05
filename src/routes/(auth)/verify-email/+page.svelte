@@ -11,6 +11,10 @@
     let { data }: Props = $props();
 </script>
 
+<svelte:head>
+	<title>Verify email</title>
+</svelte:head>
+
 <div class="flex h-navscreen justify-center bg-background">
     <Card.Root class="mt-12 h-fit max-w-[600px] px-4">
         <Card.Header>

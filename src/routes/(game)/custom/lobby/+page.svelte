@@ -38,7 +38,7 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode</title>
+    <title>Lobby</title>
 </svelte:head>
 
 <div class="mx-auto mt-16 flex max-w-[1280px] flex-col space-y-4 px-8">

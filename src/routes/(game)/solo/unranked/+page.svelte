@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import { Swords } from "lucide-svelte";
+    import { Shell } from "lucide-svelte";
     import { createWebSocket } from "$lib/websocket.svelte";
     import { goto } from "$app/navigation";
 
@@ -24,15 +24,15 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode</title>
+    <title>Solo Unranked</title>
 </svelte:head>
 
 <div
     class="mx-auto mt-16 flex h-full max-w-96 flex-col items-center space-y-4 rounded-lg border border-secondary p-6"
 >
-    <Swords />
+    <Shell class="h-10 w-10 animate-pulse" />
     <h1 class="mb-4 text-center font-icon text-4xl font-medium">Solo Unranked</h1>
-    <div>Matchmaking...</div>
+    <div>Matchmaking</div>
 </div>
 
 <style>

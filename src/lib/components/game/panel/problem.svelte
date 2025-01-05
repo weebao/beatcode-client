@@ -32,6 +32,7 @@
                         <a
                             href={content.source}
                             class="flex items-center rounded-md bg-neutral px-2 pb-px text-sm transition-all duration-150 hover:bg-secondary"
+                            target="_blank"
                         >
                             <SquareArrowOutUpRight class="mr-1 h-3 w-3" />
                             <span>Source</span>

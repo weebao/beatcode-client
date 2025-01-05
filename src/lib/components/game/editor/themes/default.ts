@@ -16,7 +16,8 @@ const foreground = "#BDC3D1",
     functions = "#dcdcaa",
     typesAndClasses = "#4ec9b0",
     tagNames = "#569cd6",
-    operators = "#569cd6",
+    operators = "#d4d4d4",
+    operatorKeyword = "#569cd6",
     regexes = "#d16969",
     strings = "#ce9178",
     names = "#BDC3D1",
@@ -155,15 +156,14 @@ const Highlight = HighlightStyle.define([
     {
         tag: [
             t.operator,
-            t.operatorKeyword,
             t.url,
             t.escape,
-            t.regexp,
             t.link,
             t.special(t.string)
         ],
         color: operators
     },
+    { tag: [t.operatorKeyword], color: operatorKeyword },
     {
         tag: [t.regexp],
         color: regexes

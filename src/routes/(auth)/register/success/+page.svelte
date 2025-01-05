@@ -11,6 +11,10 @@
     let email = data.email ?? "name@example.com";
 </script>
 
+<svelte:head>
+	<title>Registered successfully</title>
+</svelte:head>
+
 <div class="flex h-navscreen justify-center bg-background">
     <Card.Root class="mt-12 h-fit max-w-[600px] px-4">
         <Card.Header>
