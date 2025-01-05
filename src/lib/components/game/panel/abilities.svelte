@@ -30,7 +30,7 @@
                         {item.name}
                     </div>
                     <p class="text-muted/75">{item.desc}</p>
-                    <p class="text-sm font-semibold">5 MP</p>
+                    <p class="text-sm font-semibold text-blue-400">5 MP</p>
                 </div>
                 <Tooltip.Provider delayDuration={50}>
                     {#if gameState?.abilities.includes(item.name)}

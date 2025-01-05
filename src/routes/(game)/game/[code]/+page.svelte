@@ -310,9 +310,9 @@
                                     </button>
                                 {/each}
                             </div>
-                            <div class="space-x-4 pr-4 font-medium">
-                                <span>MP: {gameState?.mana_points ?? 0}</span>
-                                <span>SP: {gameState?.skill_points ?? 0}</span>
+                            <div class="flex space-x-4 pr-4 font-medium">
+                                <div>MP: <span class="text-blue-400">{gameState?.mana_points ?? 0}</span></div>
+                                <div>SP: <span class="text-amber-400">{gameState?.skill_points ?? 0}</span></div>
                             </div>
                         </div>
                         {#if selected === 0}
