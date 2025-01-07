@@ -143,9 +143,11 @@
 
 <svelte:head>
     {#if roomState?.host_display_name}
-        <title>{roomState.host_display_name}'s Room</title>
+        <title>{roomState.host_display_name}'s Room - BeatCode</title>
+        <meta name="og:title" content="{roomState.host_display_name}'s Room - BeatCode" />
     {:else}
-        <title>Custom Room</title>
+        <title>Custom Room - BeatCode</title>
+        <meta name="og:title" content="Custom Room - BeatCode" />
     {/if}
 </svelte:head>
 

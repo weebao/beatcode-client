@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-    <title>Solo Unranked</title>
+    <title>Solo Unranked - BeatCode</title>
 </svelte:head>
 
 <div

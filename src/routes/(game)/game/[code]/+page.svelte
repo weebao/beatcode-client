@@ -193,7 +193,7 @@
 </script>
 
 <svelte:head>
-    <title>Game</title>
+    <title>Game - BeatCode</title>
 </svelte:head>
 
 <div

@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-    <title>Signing out</title>
+    <title>Signing out - BeatCode</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">

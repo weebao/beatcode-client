@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-    <title>Verify email</title>
+    <title>Verify email - BeatCode</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">

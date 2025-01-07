@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-    <title>Register</title>
+    <title>Register - BeatCode</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">

@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-    <title>Registered successfully</title>
+    <title>Registered successfully - BeatCode</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">
