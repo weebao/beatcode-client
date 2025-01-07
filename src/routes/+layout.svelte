@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode - Live LeetCode battle with abilities</title>
+    <title>BeatCode</title>
     <meta
         name="description"
         content="A live LeetCode battle game where you can use abilities to sabotage your oponents. Invite your friends and beat them with your code!"
@@ -26,7 +26,7 @@
     />
     <meta name="author" content="BeatCode" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:title" content="BeatCode - Live LeetCode battle with abilities" />
+    <meta property="og:title" content="BeatCode" />
     <meta
         property="og:description"
         content="A live LeetCode battle game where you can use abilities to sabotage your oponents. Invite your friends and beat them with your code!"

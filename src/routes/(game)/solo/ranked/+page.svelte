@@ -18,7 +18,7 @@
 
     $effect(() => {
         if (ws.message && ws.message.type === "match_found") {
-            goto(`/game/${ws.message.data.game_id}`);
+            goto(`/`);
         }
     });
 </script>
