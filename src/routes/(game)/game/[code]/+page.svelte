@@ -123,7 +123,10 @@
                     gameState = data;
                     break;
                 case "problem":
-                    localStorage.removeItem("cachedCode");
+                    if (!localStorage.getItem("cachedProblemTitle") || localStorage.getItem("cachedProblemTitle") !== data.title) {
+                        localStorage.removeItem("cachedCode");
+                    }
+                    localStorage.setItem("cachedProblemTitle", data.title);
                     currentProblem = data;
                     submissionResults = undefined;
                     break;
@@ -144,9 +147,11 @@
                     break;
                 case "error":
                     toast.error(data.message);
+                    isSubmitting = false;
                     break;
                 case "match_end":
                     winner = data.winner;
+                    localStorage.removeItem("cachedProblemTitle")
                     localStorage.removeItem("cachedCode");
                     break;
                 default:

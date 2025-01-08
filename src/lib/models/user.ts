@@ -11,3 +11,9 @@ export interface User extends HttpJSONPayload {
     updated_at: number;
     room?: string;
 }
+
+export const ProfileSchema = z.object({
+    username: z.string().min(1, "Username is required"),
+    display_name: z.string().max(50, "Display name must be at most 50 characters"),
+    email: z.string().email("Please enter a valid email address")
+});

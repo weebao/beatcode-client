@@ -63,7 +63,7 @@
                 case "game_started":
                     // goto(`/game/${data.game_id}`);
                     // gameLink = `/game/${data.game_id}`;
-                    gameLinkBtn.setAttribute("href", `/game/${data.game_id}`);
+                    // gameLinkBtn.setAttribute("href", `/game/${data.game_id}`);
                     gameLinkBtn.click();
                     break;
                 case "room_state":
@@ -237,7 +237,7 @@
     {/if}
     <a
         bind:this={gameLinkBtn}
-        href={gameLink}
+        href="/"
         target="_blank"
         data-sveltekit-reload
         aria-label="Game Link"

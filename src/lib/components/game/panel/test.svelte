@@ -10,6 +10,8 @@
     let { sampleTestCases, results }: Props = $props();
     let selected = $state<number>(results?.test_results?.findIndex((test) => !test.passed) ?? 0);
     let isSelectedPassed = $derived<boolean>(results?.test_results?.[selected].passed ?? false);
+    let selectedOutput = $derived<string | undefined | null>(results?.test_results?.[selected].output);
+    let selectedError = $derived<string | undefined | null>(results?.test_results?.[selected].error);
 </script>
 
 <div class="w-full overflow-y-auto bg-background p-4">
@@ -54,15 +56,19 @@
                     <!-- Output -->
                     <div>
                         <h4 class="mb-2 text-xs font-medium text-muted/75">Output</h4>
-                        {#if results?.test_results?.[selected]?.output}
+                        {#if selectedOutput && selectedOutput !== ""}
                             <div class="rounded-sm bg-neutral p-3 font-mono">
-                                {results?.test_results?.[selected]?.output}
+                                {selectedOutput}
                             </div>
-                        {:else}
+                        {:else if selectedError && selectedError !== ""}
                             <div
                                 class="rounded-sm bg-destructive/10 p-3 font-mono text-destructive"
                             >
                                 {results?.test_results?.[selected]?.error}
+                            </div>
+                        {:else}
+                            <div class="rounded-sm bg-neutral p-3 font-mono">
+                                Empty (Please check your code)
                             </div>
                         {/if}
                     </div>
