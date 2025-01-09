@@ -41,10 +41,6 @@ export const signOut = async (locals: App.Locals, cookies: Cookies) => {
     locals.user = undefined;
 };
 
-export const getMe = async (cookies: Cookies) => {
-    return api.get("/users/me", true, cookies);
-};
-
 export const verifyEmail = async (token: string) => {
     const response = await api.get(`/users/verify-email/${token}`);
     return response;

@@ -123,7 +123,10 @@
                     gameState = data;
                     break;
                 case "problem":
-                    if (!localStorage.getItem("cachedProblemTitle") || localStorage.getItem("cachedProblemTitle") !== data.title) {
+                    if (
+                        !localStorage.getItem("cachedProblemTitle") ||
+                        localStorage.getItem("cachedProblemTitle") !== data.title
+                    ) {
                         localStorage.removeItem("cachedCode");
                     }
                     localStorage.setItem("cachedProblemTitle", data.title);
@@ -151,7 +154,7 @@
                     break;
                 case "match_end":
                     winner = data.winner;
-                    localStorage.removeItem("cachedProblemTitle")
+                    localStorage.removeItem("cachedProblemTitle");
                     localStorage.removeItem("cachedCode");
                     break;
                 default:

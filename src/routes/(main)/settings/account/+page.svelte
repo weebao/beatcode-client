@@ -7,6 +7,7 @@
     import { Button } from "$components/ui/button";
     import * as Form from "$components/ui/form";
     import { toast } from "svelte-sonner";
+    import { Loader2 } from "lucide-svelte";
 
     interface Props {
         data: PageData;
@@ -35,7 +36,13 @@
             <Form.Field {form} name="username">
                 <Form.Control>
                     {#snippet children({ props })}
-                        <Input {...props} bind:value={$formData.username} type="text" placeholder="Username" required />
+                        <Input
+                            {...props}
+                            bind:value={$formData.username}
+                            type="text"
+                            placeholder="Username"
+                            required
+                        />
                     {/snippet}
                 </Form.Control>
                 <Form.FieldErrors />
@@ -44,7 +51,13 @@
             <Form.Field {form} name="display_name">
                 <Form.Control>
                     {#snippet children({ props })}
-                        <Input {...props} bind:value={$formData.display_name} type="text" placeholder="Display Name" required />
+                        <Input
+                            {...props}
+                            bind:value={$formData.display_name}
+                            type="text"
+                            placeholder="Display Name"
+                            required
+                        />
                     {/snippet}
                 </Form.Control>
                 <Form.FieldErrors />
@@ -53,7 +66,13 @@
             <Form.Field {form} name="email">
                 <Form.Control>
                     {#snippet children({ props })}
-                        <Input {...props} bind:value={$formData.email} type="email" placeholder="Email" required />
+                        <Input
+                            {...props}
+                            bind:value={$formData.email}
+                            type="email"
+                            placeholder="Email"
+                            required
+                        />
                     {/snippet}
                 </Form.Control>
                 <Form.FieldErrors />

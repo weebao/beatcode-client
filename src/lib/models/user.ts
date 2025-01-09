@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { HttpJSONPayload } from "./request";
 
 export interface User extends HttpJSONPayload {

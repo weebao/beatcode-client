@@ -10,8 +10,12 @@
     let { sampleTestCases, results }: Props = $props();
     let selected = $state<number>(results?.test_results?.findIndex((test) => !test.passed) ?? 0);
     let isSelectedPassed = $derived<boolean>(results?.test_results?.[selected].passed ?? false);
-    let selectedOutput = $derived<string | undefined | null>(results?.test_results?.[selected].output);
-    let selectedError = $derived<string | undefined | null>(results?.test_results?.[selected].error);
+    let selectedOutput = $derived<string | undefined | null>(
+        results?.test_results?.[selected].output
+    );
+    let selectedError = $derived<string | undefined | null>(
+        results?.test_results?.[selected].error
+    );
 </script>
 
 <div class="w-full overflow-y-auto bg-background p-4">
