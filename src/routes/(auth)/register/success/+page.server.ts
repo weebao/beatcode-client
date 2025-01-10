@@ -10,6 +10,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     if (!tempEmail) {
         redirect(302, "/register");
     }
+    cookies.delete("temp-email", { path: "/" });
 
     return {
         email: tempEmail

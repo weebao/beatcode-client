@@ -12,29 +12,32 @@
 </script>
 
 <svelte:head>
-    <title>Verify email - BeatCode</title>
+    <title>Password reset - BeatCode</title>
 </svelte:head>
 
 <div class="flex h-navscreen justify-center bg-background">
-    <Card.Root class="mt-12 h-fit max-w-[600px] px-8">
+    <Card.Root class="mt-12 h-fit max-w-[600px] px-4">
         <Card.Header>
             <div class="flex w-full flex-col items-center">
                 <Logo class="h-24 w-24" />
                 {#if data.status === "success"}
-                    <h1 class="text-bold font-icon text-3xl font-bold">Success</h1>
+                    <h1 class="text-bold font-icon text-3xl font-bold">Password reset</h1>
                 {:else}
-                    <h1 class="text-bold font-icon text-3xl font-bold">Verification Failed</h1>
+                    <h1 class="text-bold font-icon text-3xl font-bold">Something went wrong</h1>
                 {/if}
             </div>
         </Card.Header>
         <Card.Content class="pt-2 text-center">
             {#if data.status === "success"}
-                <p>Your email has been successfully verified.</p>
-                <Button class="mt-4" href="/login">Log in</Button>
+                <div class="mb-4">
+                    <p>We have sent an email to <a
+                        href="https://mail.google.com/mail/u/0/#inbox"
+                        class="font-icon font-semibold text-primary hover:underline">{data.user?.email}</a
+                    >. Please check your inbox for the password reset link.</p>
+                </div>
             {:else}
-                <p>An error occurred during email verification.</p>
+                <p>An error occurred during password reset.</p>
                 <p>{data.message}</p>
-                <p>Please make sure you used the correct link or the token might have expired.</p>
             {/if}
         </Card.Content>
     </Card.Root>

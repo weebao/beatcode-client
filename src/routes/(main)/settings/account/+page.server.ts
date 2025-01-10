@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, isHttpError, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -7,18 +7,18 @@ import { updateMe } from "$lib/server/user";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
-        throw redirect(302, "/login");
+        redirect(302, "/login");
     }
 
-    return { 
-        form: await superValidate(zod(ProfileSchema))
+    return {
+        form: await superValidate(locals.user, zod(ProfileSchema))
     };
 };
 
 export const actions: Actions = {
     updateProfile: async ({ request, cookies }) => {
         const form = await superValidate(request, zod(ProfileSchema));
-
+        
         if (!form.valid) {
             return fail(400, { form });
         }
@@ -28,10 +28,10 @@ export const actions: Actions = {
             if (data.status >= 400) {
                 return fail(data.status, { form, error: data.error });
             }
-            return redirect(303, "/settings/account");
         } catch (e: unknown) {
-            if (e instanceof Error) {
-                console.error(e);
+            if (isHttpError(e)) {
+                console.error(e.body);
+                return fail(e.status, { form, message: "Something went wrong in the server" });
             }
             return fail(500, { form, message: "An unexpected error occurred" });
         }
