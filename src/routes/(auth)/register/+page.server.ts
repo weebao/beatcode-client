@@ -19,7 +19,6 @@ export const actions = {
     default: async ({ request, cookies }) => {
         // console.log("[Server Action] Starting registration process");
         const form = await superValidate(request, zod(RegisterSchema));
-        console.log(form);
         if (!form.valid) {
             return fail(400, { form, message: "Invalid input" });
         }
@@ -28,7 +27,7 @@ export const actions = {
         // console.log("[Server Action] Sending request to API");
 
         try {
-            const response = await register(form.data, cookies);
+            const response = await register(form.data);
             console.log(response);
             if (response.status === 400) {
                 const message: string = response.error.detail;

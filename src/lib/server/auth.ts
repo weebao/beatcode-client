@@ -1,7 +1,7 @@
 import { error, type Cookies } from "@sveltejs/kit";
 import * as api from "./api";
 import { setTokenCookie } from "./utils";
-import type { LoginData, RegisterData } from "$lib/models/auth";
+import type { LoginData, RegisterData, ResetPasswordData } from "$lib/models/auth";
 
 export const login = async (data: LoginData, cookies: Cookies) => {
     const { username, password } = data;
@@ -41,14 +41,26 @@ export const signOut = async (locals: App.Locals, cookies: Cookies) => {
     locals.user = undefined;
 };
 
-export const getMe = async (cookies: Cookies) => {
-    return api.get("/users/me", true, cookies);
-};
-
 export const verifyEmail = async (token: string) => {
     const response = await api.get(`/users/verify-email/${token}`);
     return response;
 };
+
+export const forgotPassword = async (email: string) => {
+    const response = await api.post("/users/forgot-password", { email });
+    return response;
+};
+
+export const resetPassword = async (data: ResetPasswordData) => {
+    const response = await api.post("/users/reset-password", {
+        token: data.token,
+        new_password: data.password
+    });
+    if (response.error) {
+        return response;
+    }
+    return { status: 200 };
+}
 
 export const refreshAccessToken = async (cookies: Cookies) => {
     const refreshToken = cookies.get("refresh_token");

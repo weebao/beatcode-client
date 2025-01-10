@@ -1,6 +1,6 @@
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
-import { getMe } from "$lib/server/auth";
+import { getMe } from "$lib/server/user";
 import { getCurrentGame } from "$lib/server/game";
 import { log } from "$lib/utils";
 import { invalidateAll } from "$app/navigation";

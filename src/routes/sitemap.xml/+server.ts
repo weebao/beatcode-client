@@ -30,6 +30,9 @@ export async function GET() {
 				<loc>https://beatcode.dev/sign-out</loc>
 			</url>
 			<url>
+				<loc>https://beatcode.dev/settings</loc>
+			</url>
+			<url>
 				<loc>https://beatcode.dev/custom</loc>
 			</url>
 			<url>

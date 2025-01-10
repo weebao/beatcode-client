@@ -25,7 +25,6 @@
 
     let { data }: Props = $props();
     let roomState = $state<RoomState>();
-    let gameLink = $state<string>("");
     let gameLinkBtn: HTMLElement;
 
     let isHost = $derived(roomState?.host_name === data.user?.username);
@@ -61,9 +60,6 @@
             let { type, data } = ws.message;
             switch (type) {
                 case "game_started":
-                    // goto(`/game/${data.game_id}`);
-                    // gameLink = `/game/${data.game_id}`;
-                    gameLinkBtn.setAttribute("href", `/game/${data.game_id}`);
                     gameLinkBtn.click();
                     break;
                 case "room_state":
@@ -235,12 +231,7 @@
     {:else}
         <Button size="lg" class="mt-4 text-lg" onclick={toggleReady}>Ready</Button>
     {/if}
-    <a
-        bind:this={gameLinkBtn}
-        href={gameLink}
-        target="_blank"
-        data-sveltekit-reload
-        aria-label="Game Link"
+    <a bind:this={gameLinkBtn} href="/" target="_blank" data-sveltekit-reload aria-label="Game Link"
     ></a>
 </div>
 

@@ -32,6 +32,12 @@ export interface RegisterData extends HttpJSONPayload {
     confirm_password: string;
 }
 
+export interface ResetPasswordData extends HttpJSONPayload {
+    token: string;
+    password: string;
+    confirm_password: string;
+}
+
 export const LoginSchema = z.object({
     username: z.string().min(1, "Email or Username is required"),
     password: z.string().min(1, "Password is required")
@@ -56,3 +62,12 @@ export const RegisterSchema = z
         message: "Passwords do not match",
         path: ["confirm_password"]
     });
+
+export const ResetPasswordSchema = z.object({
+    token: z.string(),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirm_password: z.string()
+}).refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"]
+});
