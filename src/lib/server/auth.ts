@@ -60,7 +60,7 @@ export const resetPassword = async (data: ResetPasswordData) => {
         return response;
     }
     return { status: 200 };
-}
+};
 
 export const refreshAccessToken = async (cookies: Cookies) => {
     const refreshToken = cookies.get("refresh_token");

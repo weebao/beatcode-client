@@ -2,7 +2,6 @@
     import type { PageData } from "./$types";
     import * as Card from "$components/ui/card";
     import Logo from "$assets/icons/logo.svelte";
-    import { Button } from "$components/ui/button";
 
     interface Props {
         data: PageData;
@@ -30,10 +29,13 @@
         <Card.Content class="pt-2 text-center">
             {#if data.status === "success"}
                 <div class="mb-4">
-                    <p>We have sent an email to <a
-                        href="https://mail.google.com/mail/u/0/#inbox"
-                        class="font-icon font-semibold text-primary hover:underline">{data.user?.email}</a
-                    >. Please check your inbox for the password reset link.</p>
+                    <p>
+                        We have sent an email to <a
+                            href="https://mail.google.com/mail/u/0/#inbox"
+                            class="font-icon font-semibold text-primary hover:underline"
+                            >{data.user?.email}</a
+                        >. Please check your inbox for the password reset link.
+                    </p>
                 </div>
             {:else}
                 <p>An error occurred during password reset.</p>
