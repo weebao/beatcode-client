@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
     updateProfile: async ({ request, cookies }) => {
         const form = await superValidate(request, zod(ProfileSchema));
-        
+
         if (!form.valid) {
             return fail(400, { form });
         }

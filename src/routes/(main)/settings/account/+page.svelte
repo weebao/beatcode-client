@@ -10,7 +10,6 @@
     import { toast } from "svelte-sonner";
     import { Loader2 } from "lucide-svelte";
 
-
     interface Props {
         data: PageData;
     }
@@ -87,16 +86,12 @@
 
             <div class="space-y-2">
                 <Label for="password">Password</Label>
-                <Input
-                    type="password"
-                    placeholder="••••••••"
-                    disabled
-                    disableEye
-                    required
-                />
-                <a href="/forgot-password" class="text-sm text-secondary hover:underline">Reset password</a>
+                <Input type="password" placeholder="••••••••" disabled disableEye required />
+                <a href="/forgot-password" class="text-sm text-secondary hover:underline"
+                    >Reset password</a
+                >
             </div>
-            
+
             <Button type="submit" disabled={$submitting}>
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />

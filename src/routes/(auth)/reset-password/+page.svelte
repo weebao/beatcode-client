@@ -3,7 +3,7 @@
     import { type Infer, superForm } from "sveltekit-superforms";
 
     import Logo from "$assets/icons/logo.svelte";
-    
+
     import * as Card from "$components/ui/card";
     import { Button } from "$components/ui/button";
     import { Input } from "$components/ui/input";
@@ -19,7 +19,7 @@
     }
 
     let { data }: Props = $props();
-    
+
     const form = superForm<Infer<typeof ResetPasswordSchema>>(data.form, {
         onResult: async ({ result }) => {
             if (result.type === "success" || result.type === "redirect") {
@@ -50,7 +50,7 @@
                     <div class="flex flex-col">
                         <Form.Field {form} name="password">
                             <Form.Control>
-                                {#snippet children({ props })} 
+                                {#snippet children({ props })}
                                     <Input
                                         {...props}
                                         bind:value={$formData.password}
@@ -66,7 +66,7 @@
                     <div class="flex flex-col">
                         <Form.Field {form} name="confirm_password">
                             <Form.Control>
-                                {#snippet children({ props })} 
+                                {#snippet children({ props })}
                                     <Input
                                         {...props}
                                         bind:value={$formData.confirm_password}
@@ -80,7 +80,7 @@
                         </Form.Field>
                     </div>
                 </div>
-                <Button class="w-full mt-4" type="submit" disabled={$submitting}>
+                <Button class="mt-4 w-full" type="submit" disabled={$submitting}>
                     {#if $submitting}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                     {/if}

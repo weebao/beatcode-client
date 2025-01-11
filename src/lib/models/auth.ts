@@ -63,11 +63,13 @@ export const RegisterSchema = z
         path: ["confirm_password"]
     });
 
-export const ResetPasswordSchema = z.object({
-    token: z.string(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirm_password: z.string()
-}).refine((data) => data.password === data.confirm_password, {
-    message: "Passwords do not match",
-    path: ["confirm_password"]
-});
+export const ResetPasswordSchema = z
+    .object({
+        token: z.string(),
+        password: z.string().min(8, "Password must be at least 8 characters"),
+        confirm_password: z.string()
+    })
+    .refine((data) => data.password === data.confirm_password, {
+        message: "Passwords do not match",
+        path: ["confirm_password"]
+    });

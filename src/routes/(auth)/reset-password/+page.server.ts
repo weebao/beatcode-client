@@ -12,14 +12,10 @@ export const load: PageServerLoad = async ({ url }) => {
     }
 
     return {
-        form: await superValidate(
-            { token }, 
-            zod(ResetPasswordSchema),
-            {
-                errors: false
-            }
-        )
-    }
+        form: await superValidate({ token }, zod(ResetPasswordSchema), {
+            errors: false
+        })
+    };
 };
 
 export const actions = {
