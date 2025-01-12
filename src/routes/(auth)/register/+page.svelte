@@ -6,11 +6,13 @@
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
     import { Button } from "$components/ui/button";
+    import { Separator } from "$components/ui/separator";
 
     import { announce } from "$lib/utils";
     import type { RegisterSchema } from "$models/auth";
 
     import { Loader2 } from "lucide-svelte";
+    import Google from "$assets/icons/google.svelte";
     import LogoVertical from "$assets/images/logo-vertical.svelte";
 
     interface Props {
@@ -137,7 +139,16 @@
                     {/if}
                     Create Account
                 </Button>
-                <p class="mt-2 text-center text-sm text-muted-foreground">
+                <Separator text="OR" class="my-4 w-full" />
+                <Button
+                    class="flex w-full items-center gap-4 pr-4 text-secondary"
+                    href="/login/google"
+                    variant="outline"
+                >
+                    <Google />
+                    Sign in with Google
+                </Button>
+                <p class="mt-4 text-center text-sm text-muted-foreground">
                     Already have an account?
                     <a href="/login" class="text-primary hover:underline">Sign in</a>
                 </p>
