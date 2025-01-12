@@ -46,7 +46,6 @@ export const actions = {
         } catch (e: unknown) {
             if (isRedirect(e)) throw e;
             if (isHttpError(e)) {
-                console.error(e.body);
                 return fail(e.status, { form, message: "Something went wrong in the server" });
             }
             return fail(500, { form, message: "An unexpected error occurred" });

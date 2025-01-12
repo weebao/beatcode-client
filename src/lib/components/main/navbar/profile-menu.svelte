@@ -23,7 +23,7 @@
         >
             <div class="flex">
                 <Avatar.Root class="mr-4 size-12">
-                    <Avatar.Image src={AvatarImg} />
+                    <Avatar.Image src={user?.avatar_url ?? AvatarImg} />
                     <Avatar.Fallback>CN</Avatar.Fallback>
                 </Avatar.Root>
                 <div class="flex flex-col">

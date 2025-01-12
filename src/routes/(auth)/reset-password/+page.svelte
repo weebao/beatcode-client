@@ -35,7 +35,7 @@
     <title>Password reset - BeatCode</title>
 </svelte:head>
 
-<div class="flex h-navscreen justify-center bg-background">
+<div class="flex justify-center bg-background">
     <Card.Root class="mt-12 h-fit px-2">
         <Card.Header>
             <div class="flex w-full flex-col items-center px-8">

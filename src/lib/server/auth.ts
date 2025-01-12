@@ -1,7 +1,7 @@
 import { error, type Cookies } from "@sveltejs/kit";
 import * as api from "./api";
 import { setTokenCookie } from "./utils";
-import type { LoginData, RegisterData, ResetPasswordData } from "$lib/models/auth";
+import type { LoginData, RegisterData, RegisterWithGoogleData, ResetPasswordData } from "$lib/models/auth";
 
 export const login = async (data: LoginData, cookies: Cookies) => {
     const { username, password } = data;
@@ -27,6 +27,25 @@ export const loginAsGuest = async (cookies: Cookies) => {
     return { status: 200 };
 };
 
+export const getGoogleUrl = async () => {
+    const response = await api.get("/users/google/redirect");
+    return response;
+};
+
+export const loginWithGoogle = async (params: URLSearchParams, cookies: Cookies) => {
+    const response = await api.post(`/users/google/login?${params.toString()}`);
+    if (response.error) {
+        return response;
+    }
+    const { access_token, refresh_token } = response;
+    if (!access_token && !refresh_token) {
+        return { status: 201, data: response };
+    }
+    setTokenCookie(cookies, access_token, "access_token");
+    setTokenCookie(cookies, refresh_token, "refresh_token");
+    return { status: 200 };
+}
+
 export const register = async (data: RegisterData) => {
     const response = await api.post("/users/register", data);
     if (response.error) {
@@ -34,6 +53,17 @@ export const register = async (data: RegisterData) => {
     }
     return { status: 200 };
 };
+
+export const registerWithGoogle = async (data: RegisterWithGoogleData, cookies: Cookies) => {
+    const response = await api.post("/users/google/register", data);
+    if (response.error) {
+        return response;
+    }
+    const { access_token, refresh_token } = response;
+    setTokenCookie(cookies, access_token, "access_token");
+    setTokenCookie(cookies, refresh_token, "refresh_token");
+    return { status: 200 };
+}
 
 export const signOut = async (locals: App.Locals, cookies: Cookies) => {
     cookies.delete("access_token", { path: "/" });

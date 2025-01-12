@@ -30,7 +30,6 @@ export const actions: Actions = {
             }
         } catch (e: unknown) {
             if (isHttpError(e)) {
-                console.error(e.body);
                 return fail(e.status, { form, message: "Something went wrong in the server" });
             }
             return fail(500, { form, message: "An unexpected error occurred" });

@@ -210,7 +210,7 @@
     <div class="flex items-center justify-between gap-4 px-4 py-2 text-white">
         <div class="flex w-full">
             <Avatar.Root class="mr-2">
-                <Avatar.Image src={AvatarImg} alt="User" />
+                <Avatar.Image src={data.user?.avatar_url ?? AvatarImg} alt="User" />
                 <Avatar.Fallback>You</Avatar.Fallback>
             </Avatar.Root>
             <div class="w-full">
@@ -267,7 +267,7 @@
                 />
             </div>
             <Avatar.Root class="ml-2">
-                <Avatar.Image src={AvatarImg} alt="Opponent" />
+                <Avatar.Image src={gameState?.opponent_avatar_url ?? AvatarImg} alt="Opponent" />
                 <Avatar.Fallback>Them</Avatar.Fallback>
             </Avatar.Root>
         </div>

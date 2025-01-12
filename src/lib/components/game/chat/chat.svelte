@@ -16,7 +16,7 @@
 
     let { username, history, onSend }: Props = $props();
 
-    let isOpen = $state<boolean>(false);
+    let isOpen = $state<boolean>(true);
     let inputValue = $state<string>("");
     let alertNewMessage = $state<boolean>(false);
 

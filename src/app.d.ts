@@ -7,6 +7,7 @@ declare namespace App {
             username: string;
             email: string;
             display_name: string;
+            avatar_url?: string;
             rating: number;
             is_verified?: boolean;
             is_guest?: boolean;

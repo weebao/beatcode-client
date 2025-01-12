@@ -33,7 +33,7 @@
     <title>Register - BeatCode</title>
 </svelte:head>
 
-<div class="flex h-navscreen justify-center bg-background">
+<div class="flex justify-center bg-background">
     <Card.Root class="mt-12 h-fit w-[350px]">
         <Card.Header>
             <div class="my-3 flex w-full justify-center">

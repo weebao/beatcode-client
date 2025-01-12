@@ -47,7 +47,7 @@
 
 <Navbar user={data?.user} />
 <Toaster />
-<main class="min-h-navscreen px-4 pt-[1px]">
+<main class="{isInGame ? "min-h-navscreen" : "min-h-fullscreen"} px-4 pt-[1px]">
     {@render children?.()}
 </main>
 {#if !isInGame}
