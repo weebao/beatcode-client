@@ -81,7 +81,6 @@
                     }
                     break;
                 case "error":
-                    console.log(data);
                     toast.error(data.error_msg);
                     break;
                 default:

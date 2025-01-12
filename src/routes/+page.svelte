@@ -57,7 +57,7 @@
             Head-to-head coding battle with magic
         </h1>
         <div
-            class="relative flex flex-col gap-2 text-center h-32 text-5xl font-semibold text-neutral-100 md:text-6xl"
+            class="relative flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"
         >
             <span class="header-1 w-full"></span>
             <span class="flex w-full justify-center">

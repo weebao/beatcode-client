@@ -1,7 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import type { PageData } from "./$types";
-    import { goto } from "$app/navigation";
     import * as Card from "$components/ui/card";
     import Logo from "$assets/icons/logo.svelte";
     import { log } from "$lib/utils";

@@ -14,16 +14,18 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
             return { status: "error", message: response.error.detail };
         }
         if (response.status === 201) {
-            console.log(response.data);
             const defaults = {
                 username: response.data.name.toLowerCase().replace(/ /g, "_"),
                 display_name: response.data.name,
                 email: response.data.email,
                 google_id: response.data.google_id,
                 avatar_url: response.data.avatar_url
-            }
-            console.log(defaults)
-            return { status: "success", info: response.data, form: await superValidate(defaults, zod(RegisterWithGoogleSchema)) };
+            };
+            return {
+                status: "success",
+                info: response.data,
+                form: await superValidate(defaults, zod(RegisterWithGoogleSchema))
+            };
         }
         redirect(302, "/");
     } catch (e: unknown) {

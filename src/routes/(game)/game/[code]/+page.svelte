@@ -163,6 +163,12 @@
         }
     });
 
+    $effect(() => {
+        if (ws.reason?.toLowerCase().includes("reconnected")) {
+            window.close();
+        }
+    });
+
     // Actions
     const buyAbility = (ability: string) => {
         log(ability);

@@ -27,7 +27,6 @@ export const actions = {
 
         try {
             const response = await login(form.data, cookies);
-            console.log(response);
             if (response.status >= 400) {
                 form.errors.password = [response.error.detail];
                 return fail(response.status, { form, message: response.error.detail });

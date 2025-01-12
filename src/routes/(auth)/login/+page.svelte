@@ -97,7 +97,11 @@
                     Sign In
                 </Button>
                 <Separator text="OR" class="my-4 w-full" />
-                <Button class="w-full flex items-center gap-4 pr-4 text-secondary" href="/login/google" variant="outline">
+                <Button
+                    class="flex w-full items-center gap-4 pr-4 text-secondary"
+                    href="/login/google"
+                    variant="outline"
+                >
                     <Google />
                     Sign in with Google
                 </Button>

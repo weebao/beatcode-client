@@ -1,7 +1,12 @@
 import { error, type Cookies } from "@sveltejs/kit";
 import * as api from "./api";
 import { setTokenCookie } from "./utils";
-import type { LoginData, RegisterData, RegisterWithGoogleData, ResetPasswordData } from "$lib/models/auth";
+import type {
+    LoginData,
+    RegisterData,
+    RegisterWithGoogleData,
+    ResetPasswordData
+} from "$lib/models/auth";
 
 export const login = async (data: LoginData, cookies: Cookies) => {
     const { username, password } = data;
@@ -44,7 +49,7 @@ export const loginWithGoogle = async (params: URLSearchParams, cookies: Cookies)
     setTokenCookie(cookies, access_token, "access_token");
     setTokenCookie(cookies, refresh_token, "refresh_token");
     return { status: 200 };
-}
+};
 
 export const register = async (data: RegisterData) => {
     const response = await api.post("/users/register", data);
@@ -63,7 +68,7 @@ export const registerWithGoogle = async (data: RegisterWithGoogleData, cookies: 
     setTokenCookie(cookies, access_token, "access_token");
     setTokenCookie(cookies, refresh_token, "refresh_token");
     return { status: 200 };
-}
+};
 
 export const signOut = async (locals: App.Locals, cookies: Cookies) => {
     cookies.delete("access_token", { path: "/" });

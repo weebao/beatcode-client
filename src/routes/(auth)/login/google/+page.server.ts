@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         if (response.status >= 400) {
             throw new Error(response.error.detail);
         }
-        return { status: "success", url: response.url }
+        return { status: "success", url: response.url };
     } catch (e: unknown) {
         if (e instanceof Error) {
             return { status: "error", message: e.message };

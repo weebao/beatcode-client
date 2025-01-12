@@ -28,7 +28,6 @@ export const actions = {
 
         try {
             const response = await register(form.data);
-            console.log(response);
             if (response.status === 400) {
                 const message: string = response.error.detail;
                 if (message.toLowerCase().includes("username")) {

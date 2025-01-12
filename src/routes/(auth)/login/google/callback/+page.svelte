@@ -12,7 +12,7 @@
 
     import Logo from "$assets/icons/logo.svelte";
     import { Loader2 } from "lucide-svelte";
-    
+
     import { log, announce } from "$lib/utils";
     import { onMount } from "svelte";
     import { fromStore } from "svelte/store";
@@ -27,13 +27,12 @@
     let isSubmitting = $state<boolean>(false);
 
     onMount(() => {
-        console.log(data.status, data.form);
         if (data.status === "success" && data.form) {
             registerForm = superForm<Infer<typeof RegisterWithGoogleSchema>>(data.form, {
                 onResult: async ({ result }) => {
                     if (result.type === "redirect") {
                         announce(result, "Account created successfully");
-                    }   
+                    }
                 }
             });
         }
@@ -50,8 +49,8 @@
             <div class="flex w-full flex-col items-center">
                 <Logo class="h-12 w-full" />
                 {#if data.info}
-                    <div class="mt-4 text-center space-y-1">
-                        <h1 class="font-icon font-semibold text-3xl">
+                    <div class="mt-4 space-y-1 text-center">
+                        <h1 class="font-icon text-3xl font-semibold">
                             Welcome, {data.info.name}!
                         </h1>
                         <h3>Glad to have you here! Please complete your profile below.</h3>
@@ -62,8 +61,10 @@
         <Card.Content class="text-center">
             {#if registerForm}
                 {@const { enhance } = registerForm}
-                {@const registerFormData = fromStore<RegisterWithGoogleData>(registerForm.form).current}
-                <form method="POST" use:enhance onsubmit={() => isSubmitting = true}>
+                {@const registerFormData = fromStore<RegisterWithGoogleData>(
+                    registerForm.form
+                ).current}
+                <form method="POST" use:enhance onsubmit={() => (isSubmitting = true)}>
                     <div class="space-y-4">
                         <Form.Field form={registerForm} name="username">
                             <Form.Control>
@@ -106,7 +107,11 @@
                         </Form.Field>
 
                         <input type="hidden" name="google_id" value={registerFormData.google_id} />
-                        <input type="hidden" name="avatar_url" value={registerFormData.avatar_url} />
+                        <input
+                            type="hidden"
+                            name="avatar_url"
+                            value={registerFormData.avatar_url}
+                        />
 
                         <Button type="submit" disabled={isSubmitting}>
                             {#if isSubmitting}
