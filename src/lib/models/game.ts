@@ -28,15 +28,19 @@ export interface ProblemDetails {
     boilerplate: string; // code
 }
 
+export interface TestResult {
+    expected: string;
+    output: string;
+    passed: boolean;
+    error: string | null;
+    input_data?: string;
+}
+
 export interface SubmissionResults {
     success: boolean;
     message: string | null;
-    test_results: {
-        expected: string;
-        output: string;
-        passed: boolean;
-        error: string | null;
-    }[];
+    sample_results: TestResult[],
+    test_results: TestResult[];
     runtime_analysis?: string;
     summary: {
         total_tests: number;

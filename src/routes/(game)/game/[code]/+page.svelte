@@ -40,12 +40,14 @@
     let gameState = $state<GameState>();
     let currentProblem = $state<ProblemDetails>();
     let isSubmitting = $state(false);
+    let submissionTimeout = $state<ReturnType<typeof setTimeout>>();
     let submissionResults = $state<SubmissionResults>();
+    let isProblemSolved = $state<boolean>(false);
+    let runtimeAnalysis = $state<string>();
     let winner = $state<string | null>(null);
     let isWinner = $derived(winner === data.user?.username);
 
     let lightMode = $state<boolean>(false);
-    let showRuntimeAnalysis = $state(false);
 
     let chatHistory = $state<ChatMessage[]>([]);
 
@@ -136,8 +138,24 @@
                 case "submission_result":
                     submissionResults = data;
                     isSubmitting = false;
-                    if (submissionResults?.runtime_analysis) {
-                        showRuntimeAnalysis = true;
+                    if (submissionResults?.problem_solved) {
+                        isProblemSolved = true;
+                        runtimeAnalysis = submissionResults?.runtime_analysis;
+                    }
+                    if (!submissionResults?.success) {
+                        editorData.processError(submissionResults?.message ?? "");
+                    } else if (
+                        submissionResults?.sample_results?.some(result => !result.passed)
+                    ) {
+                        editorData.processError(
+                            submissionResults?.sample_results?.find(result => !result.passed)?.error ?? ""
+                        );
+                    } else if (
+                        submissionResults?.test_results?.some(result => !result.passed)
+                    ) {
+                        editorData.processError(
+                            submissionResults?.test_results?.find(result => !result.passed)?.error ?? ""
+                        );
                     }
                     break;
                 case "chat":
@@ -149,11 +167,13 @@
                     }
                     break;
                 case "error":
+                    console.log("RKJFDKLJFDKLFJDSLKFJSDLKFJDSLKFJDSKLJFDSKLJFDSKLFJDSKLF",data.message);
                     toast.error(data.message);
                     isSubmitting = false;
                     break;
                 case "match_end":
                     winner = data.winner;
+                    isSubmitting = false;
                     localStorage.removeItem("cachedProblemTitle");
                     localStorage.removeItem("cachedCode");
                     break;
@@ -166,6 +186,13 @@
     $effect(() => {
         if (ws.reason?.toLowerCase().includes("reconnected")) {
             window.close();
+        }
+    });
+
+    $effect(() => {
+        if (!isSubmitting && submissionTimeout) {
+            clearTimeout(submissionTimeout);
+            submissionTimeout = undefined;
         }
     });
 
@@ -187,10 +214,15 @@
     };
 
     const submitCode = () => {
+        if (isSubmitting) return;
         const code = editorData.getCode();
-        log(code);
+        log("[SUBMIT]", code);
         isSubmitting = true;
+        editorData.resetError();
         ws.send("submit", { code });
+        submissionTimeout = setTimeout(() => {
+            toast.error("Seems like it's taking too long. You can try reloading the page");
+        }, 30000);
     };
 
     const sendMessage = (message: string) => {
@@ -198,6 +230,10 @@
     };
 
     const forfeit = () => {
+        if (!ws || ws.status === "CLOSED") {
+            goto("/");
+            return;
+        }
         ws.send("forfeit");
     };
 
@@ -226,21 +262,30 @@
         </div>
         <div class="flex space-x-0.5">
             <Tooltip.Provider delayDuration={150}>
-                <Button
-                    variant="secondary"
-                    size="sm"
-                    class="rounded-r-none bg-neutral"
-                    disabled={isSubmitting}
-                    onclick={submitCode}
-                >
-                    {#if isSubmitting}
-                        <Loader class="mr-2 h-4 w-4 animate-spin" />
-                        Submitting...
-                    {:else}
-                        <Play class="mr-2 h-4 w-4" />
-                        Submit Code
-                    {/if}
-                </Button>
+                <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
+                    <Tooltip.Trigger>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            class="rounded-r-none bg-neutral"
+                            disabled={isSubmitting}
+                            onclick={submitCode}
+                        >
+                            {#if isSubmitting}
+                                <Loader class="mr-2 h-4 w-4 animate-spin" />
+                                Submitting...
+                            {:else}
+                                <Play class="mr-2 h-4 w-4" />
+                                Submit Code
+                            {/if}
+                        </Button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content
+                        class="border border-secondary bg-background-dark text-sm text-foreground"
+                    >
+                        You can only see the input for 3 first test cases
+                    </Tooltip.Content>
+                </Tooltip.Root>
                 <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
                     <Tooltip.Trigger>
                         <Button
@@ -355,7 +400,6 @@
                         {#if selected === 0}
                             <Test
                                 results={submissionResults}
-                                sampleTestCases={currentProblem?.sample_test_cases}
                             />
                         {:else}
                             <Abilities {gameState} {buyAbility} />
@@ -379,24 +423,21 @@
         </div>
     </Dialog.Content>
 </Dialog.Root>
-<Dialog.Root bind:open={showRuntimeAnalysis}>
+<Dialog.Root bind:open={isProblemSolved}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
-        {#if submissionResults?.runtime_analysis}
-            <div class="flex flex-col justify-center text-center">
-                <div class="my-4 font-icon text-4xl font-bold">
-                    {submissionResults.runtime_analysis}
+        <div class="flex flex-col items-center text-center">
+            {#if runtimeAnalysis}
+                <div class="my-8 font-icon text-9xl font-semibold">
+                    {runtimeAnalysis}
                 </div>
-                <div>Time Complexity</div>
-            </div>
-        {:else}
-            <div class="flex flex-col items-center">
+            {:else}
                 <div class="mb-8 text-9xl">🎉</div>
-                <span class="text-xl">Congrats! You solved the problem!</span>
-            </div>
-        {/if}
+            {/if}
+            <span class="text-xl">Congrats! You solved the problem!</span>
+        </div>
         <Dialog.Footer>
             <Dialog.Close>
-                <Button>Continue</Button>
+                <Button class="mx-auto">Continue</Button>
             </Dialog.Close>
         </Dialog.Footer>
     </Dialog.Content>

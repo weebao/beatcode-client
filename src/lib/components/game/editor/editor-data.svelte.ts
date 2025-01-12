@@ -2,6 +2,7 @@ import { basicSetup, EditorView } from "codemirror";
 import { EditorState, Prec } from "@codemirror/state";
 import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
+import { lintGutter, setDiagnostics, type Diagnostic } from "@codemirror/lint";
 import { indentUnit, type LanguageSupport } from "@codemirror/language";
 import { python } from "@codemirror/lang-python";
 import { keymap } from "@codemirror/view";
@@ -22,6 +23,7 @@ export class EditorData {
         this.#lang,
         indentUnit.of(" ".repeat(this.#tabSize)),
         indentationMarkers(),
+        lintGutter(),
         keymap.of([{ key: "Tab", run: acceptCompletion }, indentWithTab]),
         EditorView.lineWrapping,
         EditorView.theme({
@@ -98,6 +100,62 @@ export class EditorData {
             extensions: this.#exts
         });
         this.#view.setState(this.#state);
+    }
+
+    processError(error: string) {
+        if (!this.#view) return;
+        
+        // Extract line number from the error message
+        const offset = 5;
+        const match = error.match(/line\s+(\d+)/);
+        if (!match) return;
+    
+        let lineNum = +match[1] - offset;
+        const docLines = this.#view.state.doc.lines;
+        if (lineNum < 1) lineNum = 1;
+        if (lineNum > docLines) lineNum = docLines;
+    
+        let lineInfo = this.#view.state.doc.line(lineNum);
+        if (!lineInfo) return;
+        let from = lineInfo.from;
+        let to = lineInfo.to;
+
+        if (error.toLowerCase().includes("traceback")) {
+            const lineMatches = [...error.matchAll(/line\s+(\d+)/g)];
+            // console.log(lineMatches);
+            if (lineMatches.length > 0) {
+                const lastMatch = lineMatches[lineMatches.length - 1];
+                lineNum = +lastMatch[1] - offset;
+                if (lineNum < 1) lineNum = 1;
+                if (lineNum > docLines) lineNum = docLines;
+                lineInfo = this.#view.state.doc.line(lineNum);
+
+                from = lineInfo.from;
+                to = lineInfo.to;
+            }
+        }
+    
+        // Create the diagnostic
+        const diagnostics: Diagnostic[] = [
+            {
+                from,
+                to,
+                severity: "error",
+                message: error
+            }
+        ];
+    
+        // Apply the diagnostics using setDiagnostics
+        this.#view.dispatch(
+            setDiagnostics(this.#view.state, diagnostics)
+        );
+    }
+
+    resetError() {
+        if (!this.#view) return;
+        this.#view.dispatch(
+            setDiagnostics(this.#view.state, [])
+        );
     }
 
     triggerAbility(ability: string) {

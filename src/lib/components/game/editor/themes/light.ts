@@ -64,7 +64,7 @@ const Theme = EditorView.theme(
             backgroundColor: editorThemeColors.highlightBackground
         }
     },
-    { dark: true }
+    { dark: false }
 );
 
 const Highlight = HighlightStyle.define([
