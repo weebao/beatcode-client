@@ -13,7 +13,7 @@
     import Logo from "$assets/icons/logo.svelte";
     import { Loader2 } from "lucide-svelte";
 
-    import { log, announce } from "$lib/utils";
+    import { announce } from "$lib/utils";
     import { onMount } from "svelte";
     import { fromStore } from "svelte/store";
 
