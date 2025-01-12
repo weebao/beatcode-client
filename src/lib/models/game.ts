@@ -2,6 +2,7 @@ export interface GameState {
     match_id: string;
     opponent_name: string;
     opponent_display_name: string;
+    opponent_avatar_url: string;
     current_problem_index: number;
     problems_solved: number;
     opponent_problems_solved: number;

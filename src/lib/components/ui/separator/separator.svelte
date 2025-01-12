@@ -4,7 +4,7 @@
     interface Props {
         ref?: HTMLElement | null;
         class?: string;
-        variant?: "primary" | "secondary";
+        variant?: string;
         orientation?: "horizontal" | "vertical";
         text?: string;
     }

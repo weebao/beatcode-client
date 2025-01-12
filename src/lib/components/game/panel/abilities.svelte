@@ -29,7 +29,7 @@
                     >
                         {item.name}
                     </div>
-                    <p class="text-muted/75">{item.desc}</p>
+                    <p class="text-foreground">{item.desc}</p>
                     <p class="text-sm font-semibold text-blue-400">5 MP</p>
                 </div>
                 <Tooltip.Provider delayDuration={50}>

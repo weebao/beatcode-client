@@ -10,7 +10,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export function announce(result: ActionResult, successMsg: string, customErrorMsg?: string) {
     const findErrorMsg = (data: Record<string, any> | undefined) => {
-        console.log(data);
         if (!data) {
             return "An unknown error occurred";
         }

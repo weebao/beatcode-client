@@ -17,11 +17,13 @@ const config: Config = {
         extend: {
             height: {
                 nav: "var(--navbar-height)",
-                navscreen: "calc(100dvh - var(--navbar-height) - 1px)"
+                navscreen: "calc(100dvh - var(--navbar-height) - 1px)",
+                fullscreen: "calc(100vh - var(--navbar-height) - var(--footer-height) - 1px)"
             },
             minHeight: {
                 nav: "var(--navbar-height)",
-                navscreen: "calc(100vh - var(--navbar-height) - 1px)"
+                navscreen: "calc(100vh - var(--navbar-height) - 1px)",
+                fullscreen: "calc(100vh - var(--navbar-height) - var(--footer-height) - 1px)"
             },
             colors: {
                 border: "hsl(var(--border) / <alpha-value>)",

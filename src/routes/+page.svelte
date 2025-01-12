@@ -54,10 +54,10 @@
 <section class="flex flex-col items-center overflow-hidden">
     <div class="mb-8 mt-24 flex flex-col items-center">
         <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
-            Head-to-head code battle with magic
+            Head-to-head coding battle with magic
         </h1>
         <div
-            class="relative flex flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"
+            class="relative flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"
         >
             <span class="header-1 w-full"></span>
             <span class="flex w-full justify-center">

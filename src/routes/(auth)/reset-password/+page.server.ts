@@ -26,7 +26,6 @@ export const actions = {
         }
 
         try {
-            console.log(form.data);
             const response = await resetPassword(form.data);
             if (response.status === 400) {
                 const message: string = response.error.detail;

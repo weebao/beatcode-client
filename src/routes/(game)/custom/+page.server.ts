@@ -28,7 +28,6 @@ export const actions = {
 
         try {
             const data = await createRoom(true, createRoomForm.data, cookies);
-            console.log(data);
             if (data.status >= 400) {
                 return fail(data.status, { createRoomForm, error: data.error });
             }
@@ -36,7 +35,6 @@ export const actions = {
         } catch (e: unknown) {
             if (isRedirect(e)) throw e;
             if (isHttpError(e)) {
-                console.error(e.body);
                 return fail(e.status, {
                     createRoomForm,
                     message: "Something went wrong in the server"
