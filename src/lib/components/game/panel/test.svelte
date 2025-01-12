@@ -1,21 +1,34 @@
 <script lang="ts">
-    import type { SubmissionResults } from "$lib/models/game";
+    import type { SubmissionResults, TestResult } from "$lib/models/game";
     import { cn } from "$lib/utils";
 
     interface Props {
-        sampleTestCases?: string[];
         results?: SubmissionResults;
     }
 
-    let { sampleTestCases, results }: Props = $props();
-    let selected = $state<number>(results?.test_results?.findIndex((test) => !test.passed) ?? 0);
-    let isSelectedPassed = $derived<boolean>(results?.test_results?.[selected].passed ?? false);
+    let { results }: Props = $props();
+    let testCases = $state<TestResult[]>([]);
+    let selected = $state<number>(0);
+    let isSelectedPassed = $derived<boolean>(testCases[selected]?.passed ?? false);
     let selectedOutput = $derived<string | undefined | null>(
-        results?.test_results?.[selected].output
+        testCases[selected]?.output
     );
     let selectedError = $derived<string | undefined | null>(
-        results?.test_results?.[selected].error
+        testCases[selected]?.error
     );
+    let selectedExpected = $derived<string | undefined | null>(
+        testCases[selected]?.expected
+    );
+
+    $effect(() => {
+        if (results?.sample_results && results?.test_results) {
+            testCases = [...results.sample_results, ...results.test_results];
+        }
+    });
+
+    $effect(() => {
+        selected = testCases.findIndex((test) => !test.passed) ?? 0;
+    });
 </script>
 
 <div class="w-full overflow-y-auto bg-background p-4">
@@ -29,7 +42,7 @@
                     >{isSelectedPassed ? "Correct Answer" : "Wrong Answer"}</span
                 >
                 <div class="flex flex-wrap gap-x-2 gap-y-4">
-                    {#each results.test_results as details, i}
+                    {#each testCases as details, i}
                         <button
                             class={cn(
                                 "flex cursor-pointer items-center rounded-lg px-4 py-1 font-medium text-foreground/50 hover:bg-accent/10 hover:text-foreground",
@@ -49,17 +62,17 @@
                 </div>
                 <div class="space-y-4">
                     <!-- Input -->
-                    {#if sampleTestCases && selected < sampleTestCases.length}
+                    {#if testCases[selected]?.input_data}
                         <div>
-                            <h4 class="mb-2 text-xs font-medium text-muted/75">Input</h4>
+                            <h4 class="mb-2 text-xs font-medium text-secondary/75">Input</h4>
                             <div class="rounded-sm bg-neutral p-3 font-mono">
-                                {sampleTestCases[selected]}
+                                {testCases[selected].input_data}
                             </div>
                         </div>
                     {/if}
                     <!-- Output -->
                     <div>
-                        <h4 class="mb-2 text-xs font-medium text-muted/75">Output</h4>
+                        <h4 class="mb-2 text-xs font-medium text-secondary/75">Output</h4>
                         {#if selectedOutput && selectedOutput !== ""}
                             <div class="rounded-sm bg-neutral p-3 font-mono">
                                 {selectedOutput}
@@ -68,7 +81,7 @@
                             <div
                                 class="rounded-sm bg-destructive/10 p-3 font-mono text-destructive"
                             >
-                                {results?.test_results?.[selected]?.error}
+                                {selectedError}
                             </div>
                         {:else}
                             <div class="rounded-sm bg-neutral p-3 font-mono">
@@ -78,12 +91,14 @@
                     </div>
 
                     <!-- Expected -->
-                    <div>
-                        <h4 class="mb-2 text-xs font-medium text-muted/75">Expected</h4>
-                        <div class="rounded-sm bg-neutral p-3 font-mono">
-                            {results?.test_results?.[selected]?.expected}
-                        </div>
-                    </div>
+                     {#if selectedExpected}
+                         <div>
+                             <h4 class="mb-2 text-xs font-medium text-secondary/75">Expected</h4>
+                             <div class="rounded-sm bg-neutral p-3 font-mono">
+                                 {selectedExpected}
+                             </div>
+                         </div>
+                     {/if}
                 </div>
             </div>
         {:else}

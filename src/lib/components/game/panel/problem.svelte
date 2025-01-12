@@ -15,7 +15,7 @@
 
 <div class="h-full overflow-y-auto bg-background px-4 py-5">
     {#if content?.title}
-        <h2 class="mb-2 text-2xl font-bold">{content.title}</h2>
+        <h2 class="mb-2 text-2xl font-semibold">{content.title}</h2>
     {:else}
         <Skeleton class="mb-2 h-8 w-[250px]" />
     {/if}

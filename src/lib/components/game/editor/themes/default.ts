@@ -67,10 +67,6 @@ const Theme = EditorView.theme(
             borderRadius: "5px"
         },
 
-        // "&.cm-editor.cm-focused": {
-        //     outline: "5px solid #808080"
-        // },
-
         "&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket": {
             backgroundColor: "#bad0f847"
         },
@@ -108,6 +104,9 @@ const Theme = EditorView.theme(
                 backgroundColor: highlightBackground,
                 color: foreground
             }
+        },
+        ".cm-diagnosticText": {
+            fontSize: "0.9em"
         }
     },
     { dark: true }
