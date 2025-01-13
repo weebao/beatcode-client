@@ -60,6 +60,9 @@
             switch (type) {
                 case "game_started":
                     window.open("/", "_blank");
+                    if (!isHost && roomState) {
+                        roomState.guest_ready = false;
+                    }
                     break;
                 case "room_state":
                     roomState = data;

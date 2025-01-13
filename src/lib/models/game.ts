@@ -39,7 +39,7 @@ export interface TestResult {
 export interface SubmissionResults {
     success: boolean;
     message: string | null;
-    sample_results: TestResult[],
+    sample_results: TestResult[];
     test_results: TestResult[];
     runtime_analysis?: string;
     summary: {

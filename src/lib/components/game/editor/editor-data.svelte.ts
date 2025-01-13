@@ -104,17 +104,17 @@ export class EditorData {
 
     processError(error: string) {
         if (!this.#view) return;
-        
+
         // Extract line number from the error message
         const offset = 5;
         const match = error.match(/line\s+(\d+)/);
         if (!match) return;
-    
+
         let lineNum = +match[1] - offset;
         const docLines = this.#view.state.doc.lines;
         if (lineNum < 1) lineNum = 1;
         if (lineNum > docLines) lineNum = docLines;
-    
+
         let lineInfo = this.#view.state.doc.line(lineNum);
         if (!lineInfo) return;
         let from = lineInfo.from;
@@ -134,7 +134,7 @@ export class EditorData {
                 to = lineInfo.to;
             }
         }
-    
+
         // Create the diagnostic
         const diagnostics: Diagnostic[] = [
             {
@@ -144,18 +144,14 @@ export class EditorData {
                 message: error
             }
         ];
-    
+
         // Apply the diagnostics using setDiagnostics
-        this.#view.dispatch(
-            setDiagnostics(this.#view.state, diagnostics)
-        );
+        this.#view.dispatch(setDiagnostics(this.#view.state, diagnostics));
     }
 
     resetError() {
         if (!this.#view) return;
-        this.#view.dispatch(
-            setDiagnostics(this.#view.state, [])
-        );
+        this.#view.dispatch(setDiagnostics(this.#view.state, []));
     }
 
     triggerAbility(ability: string) {

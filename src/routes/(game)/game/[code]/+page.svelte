@@ -145,16 +145,16 @@
                     if (!submissionResults?.success) {
                         editorData.processError(submissionResults?.message ?? "");
                     } else if (
-                        submissionResults?.sample_results?.some(result => !result.passed)
+                        submissionResults?.sample_results?.some((result) => !result.passed)
                     ) {
                         editorData.processError(
-                            submissionResults?.sample_results?.find(result => !result.passed)?.error ?? ""
+                            submissionResults?.sample_results?.find((result) => !result.passed)
+                                ?.error ?? ""
                         );
-                    } else if (
-                        submissionResults?.test_results?.some(result => !result.passed)
-                    ) {
+                    } else if (submissionResults?.test_results?.some((result) => !result.passed)) {
                         editorData.processError(
-                            submissionResults?.test_results?.find(result => !result.passed)?.error ?? ""
+                            submissionResults?.test_results?.find((result) => !result.passed)
+                                ?.error ?? ""
                         );
                     }
                     break;
@@ -167,7 +167,10 @@
                     }
                     break;
                 case "error":
-                    console.log("RKJFDKLJFDKLFJDSLKFJSDLKFJDSLKFJDSKLJFDSKLJFDSKLFJDSKLF",data.message);
+                    console.log(
+                        "RKJFDKLJFDKLFJDSLKFJSDLKFJDSLKFJDSKLJFDSKLJFDSKLFJDSKLF",
+                        data.message
+                    );
                     toast.error(data.message);
                     isSubmitting = false;
                     break;
@@ -398,9 +401,7 @@
                             </div>
                         </div>
                         {#if selected === 0}
-                            <Test
-                                results={submissionResults}
-                            />
+                            <Test results={submissionResults} />
                         {:else}
                             <Abilities {gameState} {buyAbility} />
                         {/if}
@@ -419,7 +420,7 @@
             <div class="mb-10 font-icon text-5xl font-bold">
                 {isWinner ? "You won!" : "You lost..."}
             </div>
-            <Button href="/home">Go home</Button>
+            <Button href="/home" onclick={() => window.close()}>Go home</Button>
         </div>
     </Dialog.Content>
 </Dialog.Root>

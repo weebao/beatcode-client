@@ -24,7 +24,11 @@
             <div class="flex">
                 <Avatar.Root class="mr-4 size-12">
                     <Avatar.Image src={user?.avatar_url ?? AvatarImg} />
-                    <Avatar.Fallback>{user?.display_name.split(" ").reduce((a, v) => a + v[0].toUpperCase(), "")}</Avatar.Fallback>
+                    <Avatar.Fallback
+                        >{user?.display_name
+                            .split(" ")
+                            .reduce((a, v) => a + v[0].toUpperCase(), "")}</Avatar.Fallback
+                    >
                 </Avatar.Root>
                 <div class="flex flex-col">
                     <p class="mb-1 text-left font-medium">{user.display_name}</p>
