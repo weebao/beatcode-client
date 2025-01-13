@@ -10,15 +10,9 @@
     let testCases = $state<TestResult[]>([]);
     let selected = $state<number>(0);
     let isSelectedPassed = $derived<boolean>(testCases[selected]?.passed ?? false);
-    let selectedOutput = $derived<string | undefined | null>(
-        testCases[selected]?.output
-    );
-    let selectedError = $derived<string | undefined | null>(
-        testCases[selected]?.error
-    );
-    let selectedExpected = $derived<string | undefined | null>(
-        testCases[selected]?.expected
-    );
+    let selectedOutput = $derived<string | undefined | null>(testCases[selected]?.output);
+    let selectedError = $derived<string | undefined | null>(testCases[selected]?.error);
+    let selectedExpected = $derived<string | undefined | null>(testCases[selected]?.expected);
 
     $effect(() => {
         if (results?.sample_results && results?.test_results) {
@@ -91,14 +85,14 @@
                     </div>
 
                     <!-- Expected -->
-                     {#if selectedExpected}
-                         <div>
-                             <h4 class="mb-2 text-xs font-medium text-secondary/75">Expected</h4>
-                             <div class="rounded-sm bg-neutral p-3 font-mono">
-                                 {selectedExpected}
-                             </div>
-                         </div>
-                     {/if}
+                    {#if selectedExpected}
+                        <div>
+                            <h4 class="mb-2 text-xs font-medium text-secondary/75">Expected</h4>
+                            <div class="rounded-sm bg-neutral p-3 font-mono">
+                                {selectedExpected}
+                            </div>
+                        </div>
+                    {/if}
                 </div>
             </div>
         {:else}
