@@ -30,7 +30,7 @@
                         {item.name}
                     </div>
                     <p class="text-foreground">{item.desc}</p>
-                    <p class="text-sm font-semibold text-blue-400">5 MP</p>
+                    <p class="text-sm font-semibold text-blue-400">{item.mp ?? "?"} MP</p>
                 </div>
                 <Tooltip.Provider delayDuration={50}>
                     {#if gameState?.abilities.includes(item.name)}
@@ -45,7 +45,7 @@
                         </Tooltip.Root>
                     {:else}
                         <Button variant="accent" onclick={() => buyAbility(item.name)}
-                            >Buy: 10 SP</Button
+                            >Buy: {item.sp ?? "?"} SP</Button
                         >
                     {/if}
                 </Tooltip.Provider>
