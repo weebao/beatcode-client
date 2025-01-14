@@ -328,7 +328,7 @@
     </div>
 
     <Resizable.PaneGroup direction="horizontal" class="flex-1 px-2 pb-2">
-        <Resizable.Pane defaultSize={50}>
+        <Resizable.Pane defaultSize={50} minSize={25}>
             <div
                 class="flex h-full flex-col overflow-hidden rounded-lg border-[1px] border-secondary bg-background"
             >
@@ -344,9 +344,9 @@
             </div>
         </Resizable.Pane>
         <Resizable.Handle class="mx-0.5 w-[2px] bg-transparent hover:bg-blue-500" />
-        <Resizable.Pane defaultSize={50}>
+        <Resizable.Pane defaultSize={50} minSize={25}>
             <Resizable.PaneGroup direction="vertical">
-                <Resizable.Pane defaultSize={75}>
+                <Resizable.Pane defaultSize={75} minSize={25}>
                     <div
                         class="flex h-full flex-col overflow-hidden rounded-lg border-[1px] border-secondary bg-background"
                     >
@@ -366,17 +366,17 @@
                     </div>
                 </Resizable.Pane>
                 <Resizable.Handle class="my-0.5 !h-[2px] bg-transparent hover:bg-blue-500" />
-                <Resizable.Pane defaultSize={25} class="bg-background">
+                <Resizable.Pane defaultSize={25} minSize={25} class="bg-background">
                     <div
                         class="flex h-full flex-col overflow-hidden rounded-lg border-[1px] border-secondary bg-background"
                     >
                         <div
                             class="flex items-center justify-between bg-neutral p-1 text-neutral-foreground"
                         >
-                            <div class="flex gap-1">
+                            <div class="flex gap-1 items-center">
                                 {#each tabs as tab, i}
                                     <button
-                                        class="flex cursor-pointer rounded-sm p-1 pr-2 hover:bg-secondary/50 {selected ==
+                                        class="flex items-center cursor-pointer rounded-sm p-1 pr-2 hover:bg-secondary/50 {selected ==
                                         i
                                             ? 'bg-secondary/50'
                                             : 'text-foreground/50'}"

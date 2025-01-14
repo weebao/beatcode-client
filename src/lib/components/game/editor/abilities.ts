@@ -1,5 +1,5 @@
 import { EditorView } from "codemirror";
-import { StateEffect } from "@codemirror/state";
+import { Compartment, StateEffect } from "@codemirror/state";
 import type { LanguageSupport } from "@codemirror/language";
 import { DefaultTheme, LightTheme } from "./themes";
 
@@ -22,8 +22,7 @@ export const handleDeletio = (view: EditorView) => {
     });
 };
 
-export const handleSyntaxio = (view: EditorView, lang: LanguageSupport, exts: any[]) => {
-    // Turn off syntax highlighting for 30 seconds
+export const handleSyntaxio = (view: EditorView, lang: LanguageSupport, exts: any[], time = 30000) => {
     const originalExts = exts;
     exts = exts.filter((ext) => ext !== lang);
     view.dispatch({
@@ -34,11 +33,10 @@ export const handleSyntaxio = (view: EditorView, lang: LanguageSupport, exts: an
         view?.dispatch({
             effects: StateEffect.reconfigure.of(exts)
         });
-    }, 30000);
+    }, time);
 };
 
-export const handleLightio = (view: EditorView, exts: any[]) => {
-    // Turn editor to light mode for 30 seconds
+export const handleLightio = (view: EditorView, exts: any[], time = 30000) => {
     exts = exts.filter((ext) => ext !== DefaultTheme);
     exts.push(LightTheme);
     view.dispatch({
@@ -50,5 +48,25 @@ export const handleLightio = (view: EditorView, exts: any[]) => {
         view.dispatch({
             effects: StateEffect.reconfigure.of(exts)
         });
-    }, 30000);
+    }, time);
 };
+
+export const handleSizeChange = (view: EditorView, fontSize: Compartment, sizeMul: number, time = 30000) => {
+    const baseSize = 13;
+    view.dispatch({
+        effects: fontSize.reconfigure(
+            EditorView.editorAttributes.of({
+                style: "font-size: " + (baseSize * sizeMul) + "px"
+            })
+        )
+    });
+    setTimeout(() => {
+        view.dispatch({
+            effects: fontSize.reconfigure(
+                EditorView.editorAttributes.of({
+                    style: "font-size: " + baseSize + "px"
+                })
+            )
+        });
+    }, time);
+}

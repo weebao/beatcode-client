@@ -22,22 +22,44 @@ export const Abilities = [
     {
         name: "healio",
         desc: "Heal your HP by 20",
-        class: "bg-green-300 text-green-950 rounded-[1px] px-px font-bold"
+        class: "bg-green-300 text-green-950 rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 20,
     },
     {
         name: "deletio",
         desc: "Delete a random line of your opponent's code",
-        class: "bg-rose text-rose-foreground rounded-[1px] px-px font-bold"
+        class: "bg-rose text-rose-foreground rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 5
     },
     {
         name: "syntaxio",
         desc: "Turn off your opponent's syntax highlighting for 30 seconds",
-        class: "bg-slate-900 text-green-400 rounded-[1px] px-px font-bold"
+        class: "bg-slate-900 text-green-400 rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 5,
     },
     {
         name: "lightio",
         desc: "Turn your opponent's editor to light mode for 30 seconds",
-        class: "bg-neutral-100 text-amber-600 rounded-[1px] px-px font-bold"
+        class: "bg-neutral-100 text-amber-600 rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 5,
+    },
+    {
+        name: "hugio",
+        desc: "Make your opponent's code 2 times bigger for 30 seconds",
+        class: "bg-pale-gold text-navy-blue rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 5,
+    },
+    {
+        name: "smallio",
+        desc: "Make your opponent's code 2 times smaller for 30 seconds",
+        class: "bg-navy-blue text-pale-gold rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 5,
     }
 ];
 

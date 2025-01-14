@@ -70,6 +70,12 @@ const config: Config = {
                     DEFAULT: "hsl(var(--rose) / <alpha-value>)",
                     foreground: "hsl(var(--rose-foreground) / <alpha-value>)"
                 },
+                "pale-gold": {
+                    DEFAULT: "#F4E99F"
+                },
+                "navy-blue": {
+                    DEFAULT: "#305B93"
+                },
                 sidebar: {
                     DEFAULT: "hsl(var(--sidebar-background))",
                     foreground: "hsl(var(--sidebar-foreground))",

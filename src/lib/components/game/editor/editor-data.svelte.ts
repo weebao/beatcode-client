@@ -1,5 +1,5 @@
 import { basicSetup, EditorView } from "codemirror";
-import { EditorState, Prec } from "@codemirror/state";
+import { Compartment, EditorState, Prec } from "@codemirror/state";
 import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
 import { lintGutter, setDiagnostics, type Diagnostic } from "@codemirror/lint";
@@ -9,8 +9,10 @@ import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 import { DefaultTheme } from "./themes";
-import { handleDeletio, handleSyntaxio, handleLightio } from "./abilities";
+import { handleDeletio, handleSyntaxio, handleLightio, handleSizeChange } from "./abilities";
 import { Abilities, AbilitiesHighlighters } from "$assets/config/game";
+
+const fontSize = new Compartment();
 
 export class EditorData {
     #view: EditorView | null = null;
@@ -24,9 +26,13 @@ export class EditorData {
         indentUnit.of(" ".repeat(this.#tabSize)),
         indentationMarkers(),
         lintGutter(),
+        fontSize.of([]),
         keymap.of([{ key: "Tab", run: acceptCompletion }, indentWithTab]),
         EditorView.lineWrapping,
         EditorView.theme({
+            "&": {
+                transition: "font-size 300ms ease-in-out"
+            },
             "&.cm-focused": {
                 outline: "none"
             }
@@ -165,6 +171,12 @@ export class EditorData {
                 break;
             case "lightio":
                 handleLightio(this.#view, this.#exts);
+                break;
+            case "hugio":
+                handleSizeChange(this.#view, fontSize, 2);
+                break;
+            case "smallio":
+                handleSizeChange(this.#view, fontSize, 0.5);
                 break;
         }
     }
