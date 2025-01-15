@@ -3,7 +3,6 @@ import { sequence } from "@sveltejs/kit/hooks";
 import { getMe } from "$lib/server/user";
 import { getCurrentGame } from "$lib/server/game";
 import { log } from "$lib/utils";
-import { invalidateAll } from "$app/navigation";
 
 const preloadFont: Handle = async ({ event, resolve }) => {
     return await resolve(event, {
@@ -23,7 +22,7 @@ const protectedRoutes: string[] = [
 // custom redirect from joy of code `https://github.com/JoysOfCode/sveltekit-auth-cookies/blob/migration/src/hooks.ts`
 function redirect(location: string, body?: string) {
     return new Response(body, {
-        status: 303,
+        status: 302,
         headers: { location }
     });
 }
@@ -38,11 +37,8 @@ const checkAuth: Handle = async ({ event, resolve }) => {
         if (!event.locals.user) {
             const user = await getMe(event.cookies);
             log("[Fetch user's latest info]:", user);
-            if (!user && event.locals.user) {
-                invalidateAll();
-                if (isProtected) {
-                    return redirect("/login", "User is unauthorized");
-                }
+            if (!user && isProtected) {
+                return redirect("/login", "User is unauthorized");
             }
             event.locals.user = user;
         }

@@ -5,6 +5,6 @@ export const setTokenCookie = (cookies: Cookies, token: string, key: string) => 
         httpOnly: true,
         path: "/",
         secure: true,
-        sameSite: "strict"
+        sameSite: "lax"
     });
 };

@@ -428,7 +428,7 @@
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <div class="flex flex-col items-center text-center">
             {#if runtimeAnalysis}
-                <div class="my-8 font-icon text-9xl font-semibold">
+                <div class="my-8 font-icon text-6xl font-semibold">
                     {runtimeAnalysis}
                 </div>
             {:else}
