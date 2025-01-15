@@ -37,7 +37,7 @@ export interface RegisterWithGoogleData extends HttpJSONPayload {
     display_name: string;
     email: string;
     google_id: string;
-    avatar_url: string;
+    avatar_url?: string;
 }
 
 export interface ResetPasswordData extends HttpJSONPayload {

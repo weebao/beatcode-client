@@ -32,7 +32,7 @@
         </Card.Header>
         <Card.Content class="text-center">
             {#if data.status === "success"}
-                <p class="mb-2 text-2xl font-semibold">Redirecting you to Google...</p>
+                <p class="mb-2 text-2xl font-semibold">Checking you in with Google...</p>
             {:else}
                 <p class="text-2xl font-semibold">Something went wrong.</p>
             {/if}

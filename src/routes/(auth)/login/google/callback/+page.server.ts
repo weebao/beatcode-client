@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
                 form: await superValidate(defaults, zod(RegisterWithGoogleSchema))
             };
         }
-        redirect(302, "/");
+        redirect(302, "/home");
     } catch (e: unknown) {
         if (isRedirect(e)) throw e;
         if (isHttpError(e)) {
