@@ -1,14 +1,10 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { goto, invalidateAll } from "$app/navigation";
     import * as Card from "$components/ui/card";
     import LogoVertical from "$assets/images/logo-vertical.svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     $effect(() => {
         if (data.status === "success") {

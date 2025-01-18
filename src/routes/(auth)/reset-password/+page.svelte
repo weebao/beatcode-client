@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { type Infer, superForm } from "sveltekit-superforms";
 
     import Logo from "$assets/icons/logo.svelte";
@@ -14,11 +14,7 @@
 
     import { Loader2 } from "lucide-svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     const form = superForm<Infer<typeof ResetPasswordSchema>>(data.form, {
         onResult: async ({ result }) => {

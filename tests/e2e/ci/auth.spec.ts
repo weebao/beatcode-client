@@ -11,10 +11,12 @@ test("(register) password must be at least 8 characters", async ({ page }) => {
     // Click "Sign in" and wait for the URL to change
     await page.getByRole("link", { name: "Sign in" }).click();
     await page.waitForURL("http://localhost:4173/login");
+    await page.waitForTimeout(150); // animation
 
     // Click "Sign up" and wait for the URL to change
     await page.getByRole("link", { name: "Sign up" }).click();
     await page.waitForURL("http://localhost:4173/register");
+    await page.waitForTimeout(150); // animation
 
     // Ensure the page is fully loaded
     await page.waitForLoadState("domcontentloaded");
@@ -44,10 +46,12 @@ test("(register) password and confirm password must match", async ({ page }) => 
     // Click "Sign in" and wait for navigation
     await page.getByRole("link", { name: "Sign in" }).click();
     await page.waitForURL("http://localhost:4173/login");
+    await page.waitForTimeout(150); // animation
 
     // Click "Sign up" and wait for navigation
     await page.getByRole("link", { name: "Sign up" }).click();
     await page.waitForURL("http://localhost:4173/register");
+    await page.waitForTimeout(150); // animation
 
     // Ensure the registration page is fully loaded
     await page.waitForLoadState("domcontentloaded");

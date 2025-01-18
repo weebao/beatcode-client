@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
 
     import { type Infer, superForm } from "sveltekit-superforms";
     import { type RegisterWithGoogleData, RegisterWithGoogleSchema } from "$models/auth";
@@ -17,11 +17,7 @@
     import { onMount } from "svelte";
     import { fromStore } from "svelte/store";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     let registerForm = $state<any>();
     let isSubmitting = $state<boolean>(false);

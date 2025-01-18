@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import { toast } from "svelte-sonner";
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { goto } from "$app/navigation";
     import { createWebSocket } from "$lib/websocket.svelte";
     import type { GameState, ProblemDetails, SubmissionResults } from "$models/game";
@@ -31,11 +31,8 @@
         LogOut,
         Sparkles
     } from "lucide-svelte";
-    interface Props {
-        data: PageData;
-    }
 
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
     let selected = $state<number>(0);
     let gameState = $state<GameState>();
     let currentProblem = $state<ProblemDetails>();
@@ -249,9 +246,7 @@
     <title>Game - BeatCode</title>
 </svelte:head>
 
-<div
-    class="absolute left-0 top-0 flex h-screen w-screen flex-col overflow-hidden bg-background-dark"
->
+<div class="fixed left-0 top-0 flex h-screen w-screen flex-col overflow-hidden bg-background-dark">
     <div class="flex items-center justify-between gap-4 px-4 py-2 text-white">
         <div class="flex w-full">
             <Avatar.Root class="mr-2">
@@ -373,10 +368,10 @@
                         <div
                             class="flex items-center justify-between bg-neutral p-1 text-neutral-foreground"
                         >
-                            <div class="flex gap-1 items-center">
+                            <div class="flex items-center gap-1">
                                 {#each tabs as tab, i}
                                     <button
-                                        class="flex items-center cursor-pointer rounded-sm p-1 pr-2 hover:bg-secondary/50 {selected ==
+                                        class="flex cursor-pointer items-center rounded-sm p-1 pr-2 hover:bg-secondary/50 {selected ==
                                         i
                                             ? 'bg-secondary/50'
                                             : 'text-foreground/50'}"

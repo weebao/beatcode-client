@@ -1,14 +1,10 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { Swords } from "lucide-svelte";
     import { createWebSocket } from "$lib/websocket.svelte";
     import { goto } from "$app/navigation";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     const ws = createWebSocket(data?.token ?? "");
     if (data.user) {

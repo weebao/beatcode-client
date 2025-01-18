@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "../$types";
+    import type { PageProps } from "../$types";
     import { type Infer, superForm } from "sveltekit-superforms";
     import { ProfileSchema } from "$models/user";
 
@@ -10,11 +10,7 @@
     import { toast } from "svelte-sonner";
     import { Loader2 } from "lucide-svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     const form = superForm<Infer<typeof ProfileSchema>>(data.form, {
         onResult: async ({ result }) => {

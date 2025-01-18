@@ -1,12 +1,9 @@
 <script lang="ts">
+    import type { LayoutProps } from "./$types";
     import { Separator } from "$components/ui/separator";
     import { Sidebar } from "$components/main/sidebar";
 
-    interface Props {
-        children?: import("svelte").Snippet;
-    }
-
-    let { children }: Props = $props();
+    let { children }: LayoutProps = $props();
 
     const sidebarNavItems = [
         {

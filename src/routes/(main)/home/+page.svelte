@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
 
     import { Abilities, Ratings } from "$assets/config/game";
     import * as Card from "$components/ui/card";
@@ -12,11 +12,7 @@
     import { onMount } from "svelte";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
     let user = data.user;
     let mounted = $state(false);
 
