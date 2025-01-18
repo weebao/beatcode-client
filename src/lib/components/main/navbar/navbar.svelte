@@ -5,15 +5,22 @@
     import ProfileMenu from "./profile-menu.svelte";
     import { Button } from "$components/ui/button";
 
+    import { cn } from "$lib/utils";
+
     interface Props {
         user?: User;
+        class?: string;
     }
 
-    const { user }: Props = $props();
+    const { user, class: className }: Props = $props();
 </script>
 
 <nav
-    class="flex h-nav w-full flex-col items-center justify-center self-stretch overflow-hidden px-8 max-md:max-w-full"
+    class={cn(
+        className,
+
+        "flex h-nav w-full flex-col items-center justify-center self-stretch overflow-hidden px-8 max-md:max-w-full"
+    )}
 >
     <div
         class="flex min-h-[80px] w-full max-w-[1280px] flex-wrap items-center justify-between gap-10"

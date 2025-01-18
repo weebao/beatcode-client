@@ -1,13 +1,9 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import * as Card from "$components/ui/card";
     import Logo from "$assets/icons/logo.svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 </script>
 
 <svelte:head>

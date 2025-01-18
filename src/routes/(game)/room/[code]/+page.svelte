@@ -2,7 +2,7 @@
     import { onDestroy } from "svelte";
     import { toast } from "svelte-sonner";
     import { type Infer, superForm } from "sveltekit-superforms";
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { goto } from "$app/navigation";
 
     import { createWebSocket } from "$lib/websocket.svelte";
@@ -19,11 +19,7 @@
     import { Copy, LogOut, Link, Settings } from "lucide-svelte";
     import { Chat } from "$components/game/chat";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
     let roomState = $state<RoomState>();
 
     let isHost = $derived(roomState?.host_name === data.user?.username);

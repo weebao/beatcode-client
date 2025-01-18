@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
     import { type Infer, superForm } from "sveltekit-superforms";
     import { goto } from "$app/navigation";
 
@@ -17,11 +17,7 @@
     import Google from "$assets/icons/google.svelte";
     import LogoVertical from "$assets/images/logo-vertical.svelte";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data }: PageProps = $props();
 
     const form = superForm<Infer<typeof LoginSchema>>(data.form, {
         onResult: async ({ result }) => {

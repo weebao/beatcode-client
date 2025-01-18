@@ -1,17 +1,11 @@
 <script lang="ts">
     import "../app.postcss";
-    import type { PageData } from "./$types";
-    import { page } from "$app/stores";
+    import type { LayoutProps } from "./$types";
+    import { fade } from "svelte/transition";
     import { Navbar } from "$components/main/navbar";
     import { Toaster } from "$components/ui/sonner";
 
-    interface Props {
-        children?: import("svelte").Snippet;
-        data: PageData;
-    }
-
-    let { children, data }: Props = $props();
-    let isInGame = $derived($page.url.pathname.includes("/game"));
+    let { children, data }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -47,15 +41,17 @@
 
 <Navbar user={data?.user} />
 <Toaster />
-<main class="{isInGame ? 'min-h-navscreen' : 'min-h-fullscreen'} px-4 pt-[1px]">
-    {@render children?.()}
-</main>
-{#if !isInGame}
-    <footer class="my-4 text-center text-sm">
-        Made with ❤️ by the <a
-            href="https://github.com/beatcode-official"
-            target="_blank"
-            class="font-icon font-semibold text-primary hover:underline">BeatCode</a
-        > team
-    </footer>
-{/if}
+{#key data.pathname}
+    <div class="absolute w-full" transition:fade={{ duration: 150 }}>
+        <main class="relative min-h-fullscreen px-4 pt-[1px]">
+            {@render children?.()}
+        </main>
+        <footer class="my-4 text-center text-sm">
+            Made with ❤️ by the <a
+                href="https://github.com/beatcode-official"
+                target="_blank"
+                class="font-icon font-semibold text-primary hover:underline">BeatCode</a
+            > team
+        </footer>
+    </div>
+{/key}
