@@ -8,3 +8,10 @@ export const setTokenCookie = (cookies: Cookies, token: string, key: string) => 
         sameSite: "lax"
     });
 };
+
+export const setCookie = (cookies: Cookies, key: string, value: string) => {
+    cookies.set(key, value, {
+        path: "/",
+        secure: true
+    });
+};

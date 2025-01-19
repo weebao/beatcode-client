@@ -56,7 +56,7 @@
             switch (type) {
                 case "game_started":
                     window.open("/", "_blank");
-                    if (!isHost && roomState) {
+                    if (roomState) {
                         roomState.guest_ready = false;
                     }
                     break;
@@ -80,7 +80,7 @@
                     }
                     break;
                 case "error":
-                    toast.error(data.error_msg);
+                    toast.error(data.message);
                     break;
                 default:
                     break;

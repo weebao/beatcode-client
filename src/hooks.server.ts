@@ -34,13 +34,16 @@ const checkAuth: Handle = async ({ event, resolve }) => {
         return redirect("/login", "User is unauthorized");
     }
     try {
-        if (!event.locals.user) {
+        const userCookie = event.cookies.get("user");
+        if (!userCookie) {
             const user = await getMe(event.cookies);
             log("[Fetch user's latest info]:", user);
             if (!user && isProtected) {
                 return redirect("/login", "User is unauthorized");
             }
             event.locals.user = user;
+        } else {
+            event.locals.user = JSON.parse(userCookie);
         }
     } catch {
         if (isProtected) {
@@ -50,7 +53,7 @@ const checkAuth: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-const gameExceptRoutes = ["/sign-out"];
+const gameExceptRoutes = ["/login", "/register", "/sign-out"];
 
 const checkIfInGame: Handle = async ({ event, resolve }) => {
     if (
@@ -62,7 +65,14 @@ const checkIfInGame: Handle = async ({ event, resolve }) => {
         try {
             const data = await getCurrentGame(event.cookies);
             log("[Check if user is in game]:", data);
-            if (data) {
+            if (data?.error) {
+                if (data.status === 401) {
+                    return redirect("/login", "User is unauthorized");
+                } else {
+                    return redirect("/home", "User is not currently in game");
+                }
+            }
+            if (data?.match_id) {
                 return redirect(`/game/${data.match_id}`, "User is currently in game");
             }
         } catch (e) {
