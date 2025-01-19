@@ -104,7 +104,11 @@
             <div
                 class="mb-4 flex flex-col items-center justify-center rounded-lg border border-secondary bg-background/75 p-6 backdrop-blur-md"
             >
-                <div class="mb-4 h-24 w-24 rounded-lg bg-secondary"></div>
+                <div class="mb-4 h-24 w-24 rounded-lg overflow-hidden border border-slate-500 bg-secondary">
+                    {#if rating}
+                        <rating.badge class="h-24 w-24" />
+                    {/if}
+                </div>
                 <div
                     class={cn(
                         "rounded-md px-4 pb-1 pt-2 font-icon font-bold italic",
