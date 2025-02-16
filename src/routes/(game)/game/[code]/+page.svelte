@@ -138,16 +138,6 @@
         }
     };
 
-    const setLocalStorage = (data: ProblemDetails) => {
-        if (
-            !localStorage.getItem("cachedProblemTitle") ||
-            localStorage.getItem("cachedProblemTitle") !== data.title
-        ) {
-            resetLocalStorage();
-        }
-        localStorage.setItem("cachedProblemTitle", data.title);
-    };
-
     $effect(() => {
         if (ws.status === "CLOSED") {
             toast.error(ws.reason ?? "Failed to connect to game");
