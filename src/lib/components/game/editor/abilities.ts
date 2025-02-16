@@ -1,6 +1,5 @@
 import { EditorView } from "codemirror";
-import { Compartment, StateEffect } from "@codemirror/state";
-import type { LanguageSupport } from "@codemirror/language";
+import { Compartment, StateEffect, type Extension } from "@codemirror/state";
 import { DefaultTheme, LightTheme } from "./themes";
 
 export const handleDeletio = (view: EditorView) => {
@@ -24,7 +23,7 @@ export const handleDeletio = (view: EditorView) => {
 
 export const handleSyntaxio = (
     view: EditorView,
-    lang: LanguageSupport,
+    lang: Extension,
     exts: any[],
     time = 30000
 ) => {

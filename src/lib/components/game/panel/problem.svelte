@@ -50,10 +50,11 @@
             </Tooltip.Provider>
         {/if}
     </div>
-    <div>
+    <div class="prose prose-invert prose-code:font-normal prose-code:text-foreground/70 !h-[2px] prose-p:mb-4 prose-pre:bg-neutral prose-pre:text-base prose-pre:my-0 prose-code:before:content-none prose-code:after:content-none prose-ul:mt-0">
         {#if content?.description}
             <!-- eslint-disable svelte/no-at-html-tags -->
             {@html content.description}
+            <div class="py-8"></div>
         {:else}
             <div class="mb-8 space-y-2">
                 <Skeleton class="h-4 w-full" />
