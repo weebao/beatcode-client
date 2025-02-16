@@ -31,9 +31,7 @@
         Loader,
         LogOut,
         Sparkles,
-
         WifiIcon
-
     } from "lucide-svelte";
     import { LanguageConfig } from "$assets/config/game";
 
@@ -52,8 +50,8 @@
 
     let winner = $state<string | null>(null);
     let isWinner = $derived(winner === data.user?.username);
-    
-    let currentLang = $state<Languages>(localStorage.getItem("lang") as Languages || "python");
+
+    let currentLang = $state<Languages>((localStorage.getItem("lang") as Languages) || "python");
     let lightMode = $state<boolean>(false);
 
     let chatHistory = $state<ChatMessage[]>([]);
@@ -70,12 +68,12 @@
     $effect(() => {
         if (currentProblem) {
             if (
-            !localStorage.getItem("cachedProblemTitle") ||
-            localStorage.getItem("cachedProblemTitle") !== currentProblem.title
-        ) {
-            resetLocalStorage();
-        }
-        localStorage.setItem("cachedProblemTitle", currentProblem.title);
+                !localStorage.getItem("cachedProblemTitle") ||
+                localStorage.getItem("cachedProblemTitle") !== currentProblem.title
+            ) {
+                resetLocalStorage();
+            }
+            localStorage.setItem("cachedProblemTitle", currentProblem.title);
             for (const lang in LanguageConfig) {
                 if (localStorage.getItem(`${lang}CachedCode`)) {
                     continue;
@@ -132,7 +130,7 @@
     const ws = createWebSocket(data?.token ?? "");
     ws.setUrl(`${data.websocketUrl}/game/play/${data.gameId}`);
     ws.connect();
-    
+
     const resetLocalStorage = () => {
         localStorage.removeItem("cachedProblemTitle");
         for (const lang in LanguageConfig) {
@@ -148,7 +146,6 @@
             resetLocalStorage();
         }
         localStorage.setItem("cachedProblemTitle", data.title);
-
     };
 
     $effect(() => {
@@ -341,10 +338,9 @@
                     </Tooltip.Trigger>
                     <Tooltip.Content
                         class="border border-secondary bg-background-dark text-sm text-foreground"
-                        >
-                        Leave game (Forfeit)
-                        </Tooltip.Content
                     >
+                        Leave game (Forfeit)
+                    </Tooltip.Content>
                 </Tooltip.Root>
             </Tooltip.Provider>
         </div>
@@ -397,9 +393,11 @@
                                 <span class="font-semibold">Code</span>
                             </div>
                         </div>
-                        <div class="p-1 border-b-[1px] border-secondary/50">
+                        <div class="border-b-[1px] border-secondary/50 p-1">
                             <Select.Root type="single" name="language" bind:value={currentLang}>
-                                <Select.Trigger class="border-0 focus:ring-0 w-fit h-fit px-2 py-1 rounded-sm hover:bg-secondary/25">
+                                <Select.Trigger
+                                    class="h-fit w-fit rounded-sm border-0 px-2 py-1 hover:bg-secondary/25 focus:ring-0"
+                                >
                                     <span class="mr-1">
                                         {LanguageConfig[currentLang].name}
                                     </span>
@@ -411,7 +409,7 @@
                                         </Select.Item>
                                     {/each}
                                 </Select.Content>
-                              </Select.Root>
+                            </Select.Root>
                         </div>
                         <div
                             class="h-full w-full overflow-auto px-4 py-2 {lightMode
@@ -472,9 +470,7 @@
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <div class="my-4 flex flex-col items-center">
             <WifiIcon class="mb-8 h-16 w-16 animate-pulse" />
-            <div class="mb-10 font-icon text-2xl font-bold">
-                Waiting for opponent
-            </div>
+            <div class="mb-10 font-icon text-2xl font-bold">Waiting for opponent</div>
         </div>
     </Dialog.Content>
 </Dialog.Root>

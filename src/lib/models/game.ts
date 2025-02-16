@@ -26,9 +26,9 @@ export interface ProblemDetails {
     sample_test_cases: string[];
     sample_test_results: string[];
     boilerplate: {
-        python: string,
-        java: string,
-        cpp: string
+        python: string;
+        java: string;
+        cpp: string;
     }; // starter code
 }
 

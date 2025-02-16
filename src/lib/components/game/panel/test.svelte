@@ -70,11 +70,10 @@
                         <div>
                             <h4 class="mb-2 text-xs font-medium text-secondary/75">Input</h4>
                             <div class="space-y-2">
-
                                 {#each parseArguments(testCases[selected].input_data ?? "--arg1=") as input}
-                                     <div class="rounded-sm bg-neutral p-3 font-mono">
-                                         {input}
-                                     </div>
+                                    <div class="rounded-sm bg-neutral p-3 font-mono">
+                                        {input}
+                                    </div>
                                 {/each}
                             </div>
                         </div>

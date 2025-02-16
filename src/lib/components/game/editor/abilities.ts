@@ -21,12 +21,7 @@ export const handleDeletio = (view: EditorView) => {
     });
 };
 
-export const handleSyntaxio = (
-    view: EditorView,
-    lang: Extension,
-    exts: any[],
-    time = 30000
-) => {
+export const handleSyntaxio = (view: EditorView, lang: Extension, exts: any[], time = 30000) => {
     const originalExts = exts;
     exts = exts.filter((ext) => ext !== lang);
     view.dispatch({

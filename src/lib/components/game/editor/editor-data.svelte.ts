@@ -86,7 +86,7 @@ export class EditorData {
 
     #setup() {
         if (!this.#view) throw new Error("Editor view not linked");
-        this.lang = localStorage.getItem("lang") as Languages || "python";
+        this.lang = (localStorage.getItem("lang") as Languages) || "python";
         this.#view.setState(this.#state);
         this.setLang(this.lang);
     }
