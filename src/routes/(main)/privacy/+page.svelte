@@ -35,18 +35,17 @@
                 picture.
             </li>
             <li>
-                <strong class="font-semibold">User-Provided Data:</strong> When you register, create
-                a profile, or send messages through our platform, you may voluntarily provide personal
-                information (e.g., display name, coding preferences).
+                <strong class="font-semibold">User-Provided Data:</strong> When you register and create
+                a profile, you may voluntarily provide personal information (e.g., display name, email,
+                etc.).
             </li>
             <li>
                 <strong class="font-semibold">Cookies:</strong> We use cookies to manage user sessions,
                 remember preferences, and enable certain features.
             </li>
             <li>
-                <strong class="font-semibold">Analytics:</strong> We use Google Analytics or similar
-                tools to gather anonymized visitor data (e.g., page views, time on site). This helps
-                us improve site performance.
+                <strong class="font-semibold">Analytics:</strong> We use Google Analytics to gather anonymized
+                visitor data (e.g., page views, time on site). This helps us improve site performance.
             </li>
         </ul>
     </section>
