@@ -27,6 +27,7 @@
     $effect(() => {
         if (results?.sample_results && results?.test_results) {
             testCases = [...results.sample_results, ...results.test_results];
+            $inspect(testCases);
         }
     });
 
@@ -66,11 +67,11 @@
                 </div>
                 <div class="space-y-4">
                     <!-- Input -->
-                    {#if testCases[selected]?.input_data}
+                    {#if testCases[selected]?.input}
                         <div>
                             <h4 class="mb-2 text-xs font-medium text-secondary/75">Input</h4>
                             <div class="space-y-2">
-                                {#each parseArguments(testCases[selected].input_data ?? "--arg1=") as input}
+                                {#each parseArguments(testCases[selected].input ?? "--arg1=") as input}
                                     <div class="rounded-sm bg-neutral p-3 font-mono">
                                         {input}
                                     </div>

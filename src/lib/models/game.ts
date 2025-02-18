@@ -37,7 +37,7 @@ export interface TestResult {
     output: string;
     passed: boolean;
     error: string | null;
-    input_data?: string;
+    input?: string;
 }
 
 export interface SubmissionResults {

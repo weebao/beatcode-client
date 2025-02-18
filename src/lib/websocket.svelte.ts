@@ -45,7 +45,6 @@ export function createWebSocket(token: string, socketUrl?: string) {
                 reason = e.reason;
             }
             log(`[WS] Connection closed: ${e.code} ${e.reason}`);
-            log(retries);
             if (retries > 0) {
                 retries--;
                 status = "CONNECTING";

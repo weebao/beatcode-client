@@ -43,7 +43,9 @@
     let currentProblem = $state<ProblemDetails>();
     let isProblemSolved = $state<boolean>(false);
 
-    let isSubmitting = $state(false);
+    let isSubmitting = $state<boolean>(false);
+    let submissionStart = $state<number>();
+    let submissionTime = $state<number>();
     let submissionTimeout = $state<ReturnType<typeof setTimeout>>();
     let submissionResults = $state<SubmissionResults>();
     let runtimeAnalysis = $state<string>();
@@ -138,6 +140,14 @@
         }
     };
 
+    const displaySubmissionTime = (submissionTime: number) => {
+        if (submissionTime < 1000) {
+            return `${submissionTime.toFixed(2)} ms`;
+        } else {
+            return `${(submissionTime / 1000).toFixed(2)} s`;
+        }
+    };
+
     $effect(() => {
         if (ws.status === "CLOSED") {
             toast.error(ws.reason ?? "Failed to connect to game");
@@ -169,8 +179,9 @@
                     submissionResults = undefined;
                     break;
                 case "submission_result":
-                    submissionResults = data;
                     isSubmitting = false;
+                    submissionTime = performance.now() - (submissionStart ?? 0);
+                    submissionResults = data;
                     if (submissionResults?.problem_solved) {
                         isProblemSolved = true;
                         runtimeAnalysis = submissionResults?.runtime_analysis;
@@ -249,6 +260,7 @@
         const code = editorData.getCode();
         log("[SUBMIT]", code);
         isSubmitting = true;
+        submissionStart = performance.now();
         editorData.resetError();
         ws.send("submit", { code, lang: currentLang });
         submissionTimeout = setTimeout(() => {
@@ -312,7 +324,7 @@
                     <Tooltip.Content
                         class="border border-secondary bg-background-dark text-sm text-foreground"
                     >
-                        You can only see the input for 3 first test cases
+                        You can only see the input for a few first test cases
                     </Tooltip.Content>
                 </Tooltip.Root>
                 <Tooltip.Root disableCloseOnTriggerClick ignoreNonKeyboardFocus>
@@ -383,7 +395,9 @@
                                 <span class="font-semibold">Code</span>
                             </div>
                         </div>
-                        <div class="border-b-[1px] border-secondary/50 p-1">
+                        <div
+                            class="flex items-center space-x-2 border-b-[1px] border-secondary/50 p-1"
+                        >
                             <Select.Root type="single" name="language" bind:value={currentLang}>
                                 <Select.Trigger
                                     class="h-fit w-fit rounded-sm border-0 px-2 py-1 hover:bg-secondary/25 focus:ring-0"
@@ -392,14 +406,23 @@
                                         {LanguageConfig[currentLang].name}
                                     </span>
                                 </Select.Trigger>
-                                <Select.Content class="left-6">
+                                <Select.Content align="start">
                                     {#each Object.entries(LanguageConfig) as [key, value]}
                                         <Select.Item value={key} class="cursor-pointer">
                                             {value.name}
+                                            {key === "python" ? "(Recommended)" : ""}
                                         </Select.Item>
                                     {/each}
                                 </Select.Content>
                             </Select.Root>
+                            {#if submissionTime}
+                                <div class="ml-auto flex items-center gap-1">
+                                    <span class="text-sm text-neutral-foreground/50">
+                                        Last submission took:
+                                        {displaySubmissionTime(submissionTime)}
+                                    </span>
+                                </div>
+                            {/if}
                         </div>
                         <div
                             class="h-full w-full overflow-auto px-4 py-2 {lightMode
