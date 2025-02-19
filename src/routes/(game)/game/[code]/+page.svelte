@@ -34,7 +34,6 @@
         WifiIcon
     } from "lucide-svelte";
     import { LanguageConfig } from "$assets/config/game";
-    import { Result } from "postcss";
 
     let { data }: PageProps = $props();
     let selected = $state<number>(0);
@@ -189,18 +188,23 @@
                         runtimeAnalysis = submissionResults?.runtime_analysis;
                     }
                     if (!submissionResults?.success) {
-                        editorData.processError(submissionResults?.message ?? "", submissionResults?.line_offset ?? 7);
+                        editorData.processError(
+                            submissionResults?.message ?? "",
+                            submissionResults?.line_offset ?? 7
+                        );
                     } else if (
                         submissionResults?.sample_results?.some((result) => !result.passed)
                     ) {
                         editorData.processError(
                             submissionResults?.sample_results?.find((result) => !result.passed)
-                                ?.error ?? "", submissionResults?.line_offset ?? 7
+                                ?.error ?? "",
+                            submissionResults?.line_offset ?? 7
                         );
                     } else if (submissionResults?.test_results?.some((result) => !result.passed)) {
                         editorData.processError(
                             submissionResults?.test_results?.find((result) => !result.passed)
-                                ?.error ?? "", submissionResults?.line_offset ?? 7
+                                ?.error ?? "",
+                            submissionResults?.line_offset ?? 7
                         );
                     }
                     break;

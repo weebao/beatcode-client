@@ -65,7 +65,7 @@ export const createWebSocket = (token: string, socketUrl?: string) => {
             log("[WS] Message received:", newMessage.type, newMessage.data);
             message = newMessage;
         };
-    }
+    };
 
     const send = (type: string, data?: any) => {
         log("[WS] Sending message:", type, data);
@@ -104,4 +104,4 @@ export const createWebSocket = (token: string, socketUrl?: string) => {
         setUrl,
         resetMessage
     };
-}
+};

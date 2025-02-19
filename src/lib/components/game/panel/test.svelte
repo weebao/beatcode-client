@@ -86,7 +86,7 @@
                     {#if selectedLogs && selectedLogs.trim() !== ""}
                         <div>
                             <h4 class="mb-2 text-xs font-medium text-secondary/75">Logs</h4>
-                            <div class="rounded-sm bg-neutral p-3 whitespace-pre-wrap font-mono">
+                            <div class="whitespace-pre-wrap rounded-sm bg-neutral p-3 font-mono">
                                 {selectedLogs}
                             </div>
                         </div>
@@ -100,7 +100,9 @@
                                 {selectedOutput}
                             </div>
                         {:else if selectedError && selectedError !== ""}
-                            <div class="rounded-sm bg-destructive/10 p-3 font-mono whitespace-pre-wrap text-destructive">
+                            <div
+                                class="whitespace-pre-wrap rounded-sm bg-destructive/10 p-3 font-mono text-destructive"
+                            >
                                 {selectedError}
                             </div>
                         {:else}
@@ -124,7 +126,9 @@
         {:else}
             <div class="space-y-4">
                 <span class="text-xl font-medium text-destructive">Runtime Error</span>
-                <div class="rounded-lg bg-destructive/10 p-3 font-mono whitespace-pre-wrap text-destructive">
+                <div
+                    class="whitespace-pre-wrap rounded-lg bg-destructive/10 p-3 font-mono text-destructive"
+                >
                     <span>{results?.message ?? "No output"}</span>
                 </div>
             </div>
