@@ -120,15 +120,27 @@ export class EditorData {
         this.#lang = lang;
     }
 
-    processError(error: string) {
+    processError(error: string, lineOffset: number) {
         if (!this.#view) return;
 
-        // Extract line number from the error message
-        const offset = 5;
-        const match = error.match(/line\s+(\d+)/);
-        if (!match) return;
+        const matchError = (error: string): number | null => {
+            let match: RegExpMatchArray | null;
+            if (this.#lang === "python") {
+                match = error.match(/line\s+(\d+)/);
+            } else if (this.#lang === "java") {
+                match = error.match(/\.java:(\d+):/);
+            } else if (this.#lang === "cpp") {
+                match = error.match(/(\d+)\s*\|/);
+            } else {
+                match = error.match(/line\s+(\d+)/);
+            }
+            return match ? +match[1] : null;
+        };
 
-        let lineNum = +match[1] - offset;
+        let lineNum = matchError(error);
+        if (!lineNum) return;
+
+        lineNum -= lineOffset;
         const docLines = this.#view.state.doc.lines;
         if (lineNum < 1) lineNum = 1;
         if (lineNum > docLines) lineNum = docLines;
@@ -143,7 +155,7 @@ export class EditorData {
             // console.log(lineMatches);
             if (lineMatches.length > 0) {
                 const lastMatch = lineMatches[lineMatches.length - 1];
-                lineNum = +lastMatch[1] - offset;
+                lineNum = +lastMatch[1] - lineOffset;
                 if (lineNum < 1) lineNum = 1;
                 if (lineNum > docLines) lineNum = docLines;
                 lineInfo = this.#view.state.doc.line(lineNum);

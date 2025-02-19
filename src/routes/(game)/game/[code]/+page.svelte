@@ -34,6 +34,7 @@
         WifiIcon
     } from "lucide-svelte";
     import { LanguageConfig } from "$assets/config/game";
+    import { Result } from "postcss";
 
     let { data }: PageProps = $props();
     let selected = $state<number>(0);
@@ -157,7 +158,7 @@
 
     $effect(() => {
         if (ws.message) {
-            let { type, data } = ws.message;
+            const { type, data } = ws.message;
             switch (type) {
                 case "ability_used":
                     toast.info(`✨ ${data.player} used ${data.ability}!!`);
@@ -179,6 +180,7 @@
                     submissionResults = undefined;
                     break;
                 case "submission_result":
+                    ws.resetMessage(); // prevent spam submitting
                     isSubmitting = false;
                     submissionTime = performance.now() - (submissionStart ?? 0);
                     submissionResults = data;
@@ -187,18 +189,18 @@
                         runtimeAnalysis = submissionResults?.runtime_analysis;
                     }
                     if (!submissionResults?.success) {
-                        editorData.processError(submissionResults?.message ?? "");
+                        editorData.processError(submissionResults?.message ?? "", submissionResults?.line_offset ?? 7);
                     } else if (
                         submissionResults?.sample_results?.some((result) => !result.passed)
                     ) {
                         editorData.processError(
                             submissionResults?.sample_results?.find((result) => !result.passed)
-                                ?.error ?? ""
+                                ?.error ?? "", submissionResults?.line_offset ?? 7
                         );
                     } else if (submissionResults?.test_results?.some((result) => !result.passed)) {
                         editorData.processError(
                             submissionResults?.test_results?.find((result) => !result.passed)
-                                ?.error ?? ""
+                                ?.error ?? "", submissionResults?.line_offset ?? 7
                         );
                     }
                     break;
@@ -227,7 +229,7 @@
 
     $effect(() => {
         if (ws.reason?.toLowerCase().includes("reconnected")) {
-            window.close();
+            toast.warning(ws.reason);
         }
     });
 

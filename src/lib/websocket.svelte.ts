@@ -9,7 +9,7 @@ export interface WebSocketMessage {
     rooms?: RoomInfo[]; // For some reasons...
 }
 
-export function createWebSocket(token: string, socketUrl?: string) {
+export const createWebSocket = (token: string, socketUrl?: string) => {
     let url = $state<string | undefined>(socketUrl);
     let message = $state<WebSocketMessage | null>(null);
     let status = $state<"CONNECTING" | "OPEN" | "CLOSING" | "CLOSED" | "NONE">("NONE");
@@ -17,14 +17,14 @@ export function createWebSocket(token: string, socketUrl?: string) {
     let retries = $state<number>(RETRIES);
     let reason = $state<string | null>(null);
 
-    function setUrl(socketUrl: string) {
+    const setUrl = (socketUrl: string) => {
         if (url !== socketUrl) {
             retries = RETRIES;
             url = socketUrl;
         }
-    }
+    };
 
-    function connect() {
+    const connect = () => {
         if (!url) {
             log("[WS] No URL set");
             return;
@@ -67,22 +67,26 @@ export function createWebSocket(token: string, socketUrl?: string) {
         };
     }
 
-    function send(type: string, data?: any) {
+    const send = (type: string, data?: any) => {
         log("[WS] Sending message:", type, data);
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ type, data }));
         } else {
             log("[WS] WebSocket is not open. Ready state:", socket?.readyState);
         }
-    }
+    };
 
-    function close() {
+    const close = () => {
         if (socket) {
             log("[WS] Manually close connection");
             retries = 0;
             socket.close();
         }
-    }
+    };
+
+    const resetMessage = () => {
+        message = null;
+    };
 
     return {
         get message() {
@@ -97,6 +101,7 @@ export function createWebSocket(token: string, socketUrl?: string) {
         send,
         close,
         connect,
-        setUrl
+        setUrl,
+        resetMessage
     };
 }
