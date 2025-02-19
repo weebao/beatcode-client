@@ -1,5 +1,5 @@
 import { EditorView } from "codemirror";
-import { Compartment, StateEffect, type Extension } from "@codemirror/state";
+import { Compartment, StateEffect } from "@codemirror/state";
 import { DefaultTheme, LightTheme } from "./themes";
 
 export const handleDeletio = (view: EditorView) => {
@@ -19,20 +19,6 @@ export const handleDeletio = (view: EditorView) => {
     view.dispatch({
         changes: { from: linePos.from, to: linePos.to }
     });
-};
-
-export const handleSyntaxio = (view: EditorView, lang: Extension, exts: any[], time = 30000) => {
-    const originalExts = exts;
-    exts = exts.filter((ext) => ext !== lang);
-    view.dispatch({
-        effects: StateEffect.reconfigure.of(exts)
-    });
-    setTimeout(() => {
-        exts = originalExts;
-        view?.dispatch({
-            effects: StateEffect.reconfigure.of(exts)
-        });
-    }, time);
 };
 
 export const handleLightio = (view: EditorView, exts: any[], time = 30000) => {

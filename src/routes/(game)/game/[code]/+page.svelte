@@ -496,7 +496,7 @@
             <div class="mb-10 font-icon text-5xl font-bold">
                 {isWinner ? "You won!" : "You lost..."}
             </div>
-            <Button href="/home" onclick={() => window.close()}>Go home</Button>
+            <Button href="/home" onclick={() => goto("/home")}>Go home</Button>
         </div>
     </Dialog.Content>
 </Dialog.Root>

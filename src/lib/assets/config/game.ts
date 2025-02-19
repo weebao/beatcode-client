@@ -118,14 +118,14 @@ export const DifficultiesStyle = {
 export const LanguageConfig = {
     python: {
         name: "Python",
-        support: python()
+        support: python
     },
     java: {
         name: "Java",
-        support: java()
+        support: java
     },
     cpp: {
         name: "C++",
-        support: cpp()
+        support: cpp
     }
 };

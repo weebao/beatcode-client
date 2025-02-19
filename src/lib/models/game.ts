@@ -38,11 +38,13 @@ export interface TestResult {
     passed: boolean;
     error: string | null;
     input?: string;
+    logs?: string;
 }
 
 export interface SubmissionResults {
     success: boolean;
     message: string | null;
+    line_offset: number;
     sample_results: TestResult[];
     test_results: TestResult[];
     runtime_analysis?: string;

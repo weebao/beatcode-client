@@ -1,5 +1,5 @@
 import { basicSetup, EditorView } from "codemirror";
-import { Compartment, EditorState, Prec, type Extension } from "@codemirror/state";
+import { Compartment, EditorState, StateEffect, Prec, type Extension } from "@codemirror/state";
 import { acceptCompletion } from "@codemirror/autocomplete";
 import { indentWithTab } from "@codemirror/commands";
 import { lintGutter, setDiagnostics, type Diagnostic } from "@codemirror/lint";
@@ -8,7 +8,7 @@ import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 import { DefaultTheme } from "./themes";
-import { handleDeletio, handleSyntaxio, handleLightio, handleSizeChange } from "./abilities";
+import { handleDeletio, handleLightio, handleSizeChange } from "./abilities";
 import { Abilities, AbilitiesHighlighters, LanguageConfig } from "$assets/config/game";
 import type { Languages } from "$lib/models/game";
 
@@ -17,8 +17,8 @@ const language = new Compartment();
 
 export class EditorData {
     #view: EditorView | null = null;
-    lang: Languages = "python";
-    #langExt: Extension = language.of(LanguageConfig[this.lang].support);
+    #lang: Languages = "python";
+    #langExt: Extension = language.of(LanguageConfig[this.#lang].support());
     #tabSize: number = 4;
     #useAbility: (ability: string) => void = (ability: string) => ability !== "";
     #exts = [
@@ -45,7 +45,7 @@ export class EditorData {
         }),
         EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-                localStorage.setItem(`${this.lang}CachedCode`, update.state.doc.toString());
+                localStorage.setItem(`${this.#lang}CachedCode`, update.state.doc.toString());
             }
         }),
         ...AbilitiesHighlighters,
@@ -86,9 +86,9 @@ export class EditorData {
 
     #setup() {
         if (!this.#view) throw new Error("Editor view not linked");
-        this.lang = (localStorage.getItem("lang") as Languages) || "python";
+        this.#lang = (localStorage.getItem("lang") as Languages) || "python";
         this.#view.setState(this.#state);
-        this.setLang(this.lang);
+        this.setLang(this.#lang);
     }
 
     link(view: EditorView, useAbility: (ability: string) => void) {
@@ -104,20 +104,20 @@ export class EditorData {
 
     setCode(code: string) {
         if (!this.#view) throw new Error("Editor view not linked");
-        const cachedCode = localStorage.getItem(`${this.lang}CachedCode`) || "";
+        const cachedCode = localStorage.getItem(`${this.#lang}CachedCode`) || "";
         this.#state = EditorState.create({
             doc: cachedCode.trim() !== "" ? cachedCode : code,
             extensions: this.#exts
         });
         this.#view.setState(this.#state);
+        this.#view.dispatch({
+            effects: language.reconfigure(LanguageConfig[this.#lang].support())
+        });
     }
 
     setLang(lang: Languages) {
         if (!this.#view) throw new Error("Editor view not linked");
-        this.lang = lang;
-        this.#view.dispatch({
-            effects: language.reconfigure(LanguageConfig[lang].support)
-        });
+        this.#lang = lang;
     }
 
     processError(error: string) {
@@ -178,9 +178,24 @@ export class EditorData {
             case "deletio":
                 handleDeletio(this.#view);
                 break;
-            case "syntaxio":
-                handleSyntaxio(this.#view, this.#langExt, this.#exts);
+            case "syntaxio": {
+                const originalExts = this.#exts;
+                this.#exts = this.#exts.filter((ext) => ext !== this.#langExt);
+                this.#view.dispatch({
+                    effects: StateEffect.reconfigure.of(this.#exts)
+                });
+                setTimeout(() => {
+                    if (!this.#view) throw new Error("Editor view not linked");
+                    this.#exts = originalExts;
+                    this.#view.dispatch({
+                        effects: StateEffect.reconfigure.of(originalExts)
+                    });
+                    this.#view.dispatch({
+                        effects: language.reconfigure(LanguageConfig[this.#lang].support())
+                    });
+                }, 30000);
                 break;
+            }
             case "lightio":
                 handleLightio(this.#view, this.#exts);
                 break;
