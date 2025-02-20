@@ -488,7 +488,7 @@
 <Dialog.Root open={!isGameStarted}>
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <div class="my-4 flex flex-col items-center">
-            <WifiIcon class="mb-8 h-16 w-16 animate-pulse" />
+            <WifiIcon class="mb-8 h-20 w-20 animate-pulse" />
             <div class="mb-10 font-icon text-2xl font-bold">Waiting for opponent</div>
         </div>
     </Dialog.Content>
