@@ -7,7 +7,6 @@
 
     import { SparkleIcon } from "lucide-svelte";
 
-    import HeroImg from "$assets/images/landing/hero.png?enhanced";
     import User1 from "$assets/images/landing/user1.png?enhanced";
     import User2 from "$assets/images/landing/user2.png?enhanced";
     import { Button } from "$components/ui/button";
