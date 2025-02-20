@@ -9,7 +9,7 @@ test("(register) password must be at least 8 characters", async ({ page }) => {
     await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
     // Click "Sign in" and wait for the URL to change
-    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.getByRole("link", { name: "Sign in" }).first().click();
     await page.waitForURL("http://localhost:4173/login");
     await page.waitForTimeout(300); // animation
 
