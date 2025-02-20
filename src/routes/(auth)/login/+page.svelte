@@ -4,10 +4,13 @@
     import { goto } from "$app/navigation";
 
     import * as Card from "$components/ui/card";
+    import * as Dialog from "$components/ui/dialog";
     import * as Form from "$components/ui/form";
     import { Input } from "$components/ui/input";
     import { Button } from "$components/ui/button";
     import { Separator } from "$components/ui/separator";
+
+    import DrawingCloud from "$components/misc/drawing-cloud.svelte";
 
     import { announce } from "$lib/utils";
     import type { LoginSchema } from "$models/auth";
@@ -18,6 +21,7 @@
     import LogoVertical from "$assets/images/logo-vertical.svelte";
 
     let { data }: PageProps = $props();
+    let isLoggingIn = $state<boolean>(false);
 
     const form = superForm<Infer<typeof LoginSchema>>(data.form, {
         onResult: async ({ result }) => {
@@ -42,7 +46,7 @@
                 <LogoVertical />
             </div>
         </Card.Header>
-        <form method="POST" use:enhance>
+        <form method="POST" use:enhance action="?/account">
             <Card.Content>
                 <div class="grid w-full items-center space-y-2">
                     <div class="flex flex-col">
@@ -101,13 +105,32 @@
                     <Google />
                     Sign in with Google
                 </Button>
-                <p class="mt-4 text-center text-sm text-muted-foreground">
-                    Don't have an account yet? <a
-                        href="/register"
-                        class="text-primary hover:underline">Sign up</a
+                <div class="flex flex-col space-y-2">
+                    <p class="mt-4 text-center text-sm text-muted-foreground">
+                        Don't have an account yet?
+                        <a href="/register" class="text-primary hover:underline"> Sign up </a>
+                    </p>
+                    <button
+                        type="submit"
+                        class="text-center text-sm text-muted-foreground hover:underline"
+                        formaction="?/guest"
+                        formnovalidate
+                        onclick={() => {
+                            isLoggingIn = true;
+                        }}
                     >
-                </p>
+                        Sign in as guest
+                    </button>
+                </div>
             </Card.Footer>
         </form>
     </Card.Root>
 </div>
+<Dialog.Root open={isLoggingIn}>
+    <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
+        <div class="my-4 flex flex-col items-center space-y-4">
+            <DrawingCloud />
+            <div class="text-2xl">Signing in as guest...</div>
+        </div>
+    </Dialog.Content>
+</Dialog.Root>

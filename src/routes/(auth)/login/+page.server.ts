@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { fail, isHttpError, isRedirect, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { login } from "$lib/server/auth";
+import { login, loginAsGuest } from "$lib/server/auth";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions = {
-    default: async ({ request, cookies }) => {
+    account: async ({ request, cookies }) => {
         const form = await superValidate(request, zod(LoginSchema));
         const url = new URL(request.url);
         const roomId = url.searchParams.get("joining");
@@ -42,6 +42,23 @@ export const actions = {
                 return fail(e.status, { form, message: "Something went wrong in the server" });
             }
             return fail(500, { form, message: "An unexpected error occurred" });
+        }
+    },
+    guest: async ({ cookies }) => {
+        console.log("nig");
+        try {
+            const response = await loginAsGuest(cookies);
+            if (response.status >= 400) {
+                return fail(response.status, { message: response.error.detail });
+            }
+            redirect(302, "/home");
+        } catch (e: unknown) {
+            if (isRedirect(e)) throw e;
+            if (isHttpError(e)) {
+                console.error(e.body);
+                return fail(e.status, { message: "Something went wrong in the server" });
+            }
+            return fail(500, { message: "An unexpected error occurred" });
         }
     }
 } satisfies Actions;

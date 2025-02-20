@@ -7,8 +7,11 @@
 
     import { SparkleIcon } from "lucide-svelte";
 
-    import HeroImg from "$assets/images/hero.png?enhanced";
+    import HeroImg from "$assets/images/landing/hero.png?enhanced";
+    import User1 from "$assets/images/landing/user1.png?enhanced";
+    import User2 from "$assets/images/landing/user2.png?enhanced";
     import { Button } from "$components/ui/button";
+    import GradientBlob from "$components/misc/gradient-blob.svelte";
     import { cn } from "$lib/utils.js";
 
     let isNotMounted = true;
@@ -51,7 +54,7 @@
     });
 </script>
 
-<section class="flex flex-col items-center overflow-hidden">
+<section class="relative mb-12 flex flex-col items-center overflow-hidden">
     <div class="mb-8 mt-24 flex flex-col items-center">
         <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
             Head-to-head coding battle with magic
@@ -78,9 +81,30 @@
         </div>
     </div>
     <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
-    <enhanced:img
-        src={HeroImg}
-        alt="Hero"
-        class="mx-auto w-2/3 max-w-[1280px] flex-1 object-contain"
-    />
+    <div class="relative mb-8 mt-24 flex w-1/2 min-w-[500px] max-w-[1000px] justify-center">
+        <div class="-translate-x-12 rounded-sm border-2 border-neutral shadow-xl">
+            <enhanced:img src={User1} alt="Gameplay" class="rounded-sm object-contain" />
+        </div>
+        <div
+            class="absolute -right-8 -top-12 -z-10 h-full w-full rounded-sm border-2 border-neutral shadow-xl"
+        >
+            <enhanced:img src={User2} alt="Gameplay" class="rounded-sm object-contain" />
+        </div>
+    </div>
+    <GradientBlob class="l-0 absolute top-1/2 -z-20 h-1/2 w-3/4 -translate-y-1/2 opacity-50" />
+</section>
+
+<section class="mb-12 flex flex-col items-center overflow-hidden">
+    <div class="mb-6 flex flex-col items-center">
+        <h2 class="font-icon text-4xl">How to play?</h2>
+    </div>
+    <iframe
+        src="https://www.youtube.com/embed/O7C7Tl8N2rY?si=ZAHdwBFe4OrhlUMm"
+        class="aspect-video min-h-[400px]"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+    ></iframe>
 </section>
