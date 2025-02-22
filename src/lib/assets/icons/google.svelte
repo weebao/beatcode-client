@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { SVGAttributes } from "svelte/elements";
 
-	// @ts-nocheck
+	// eslint-disable-next-line no-unused-vars
     type $$Props = SVGAttributes<SVGElement>;
 </script>
 

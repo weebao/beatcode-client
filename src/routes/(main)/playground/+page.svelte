@@ -7,7 +7,6 @@
     import * as Tooltip from "$components/ui/tooltip";
     import { Editor, EditorData } from "$components/game/editor";
 
-    import type { Languages } from "$models/game";
     import { toast } from "svelte-sonner";
 
     // Create editor data instances
