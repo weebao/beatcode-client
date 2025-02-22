@@ -121,7 +121,7 @@
         <h2 class="mb-2 font-icon text-4xl">Features</h2>
         <p class="text-secondary">Hover for details. No fancy images sorry :)</p>
     </div>
-    <div class="w-full space-y-2">
+    <div class="w-full space-y-2 mb-4">
         <TextSlideButton
             text1="Real-time Battles"
             text2="Fight random people or create a custom room with your friends!"
@@ -138,8 +138,8 @@
             text1="Special Abilities"
             text2="8 ways to make your opponent crash out. Try it out below"
         />
-        <Button href="/playground" class="w-full">Try out abilities in the playground</Button>
     </div>
+    <Button href="/playground" class="w-full">Try out abilities in the playground</Button>
 </section>
 
 <ScrollUpButton screenWidth={1280} />

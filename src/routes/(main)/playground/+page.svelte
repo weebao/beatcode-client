@@ -54,7 +54,7 @@
 <div class="flex flex-col items-center bg-background p-4 text-foreground md:mt-20">
     <div class="mb-6 text-center">
         <h1 class="mb-3 font-icon text-3xl font-bold">Ability Playground</h1>
-        <div>Enter any ability in the editor and hit <code>Enter</code> to see the magic :)</div>
+        <div>Type any ability in the editor and hit <code>Enter</code> to see the magic :D</div>
     </div>
 
     <div class="flex max-h-96 w-full max-w-6xl items-stretch gap-4">

@@ -29,16 +29,25 @@
                 <LogoHorizontal />
             </a>
         </div>
-        {#if !user}
+        <div class="flex space-x-2">
             <Button
                 class="my-auto self-stretch text-sm leading-7 text-secondary"
                 variant="link"
-                href="/login"
+                href="/playground"
             >
-                Sign in
+                Playground
             </Button>
-        {:else}
-            <ProfileMenu {user} />
-        {/if}
+            {#if !user}
+                <Button
+                    class="my-auto self-stretch text-sm leading-7 text-secondary"
+                    variant="link"
+                    href="/login"
+                >
+                    Sign in
+                </Button>
+            {:else}
+                <ProfileMenu {user} />
+            {/if}
+        </div>
     </div>
 </nav>
