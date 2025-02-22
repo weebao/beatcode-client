@@ -5,11 +5,11 @@
 
     import { Button } from "$components/ui/button";
     import * as Tooltip from "$components/ui/tooltip";
-    import { Editor, EditorData } from '$components/game/editor';
+    import { Editor, EditorData } from "$components/game/editor";
 
-    import type { Languages } from '$models/game';
+    import type { Languages } from "$models/game";
     import { toast } from "svelte-sonner";
-    
+
     // Create editor data instances
     const leftEditorData = new EditorData();
     const rightEditorData = new EditorData();
@@ -24,7 +24,7 @@
                 return [i, hash[num]]
         # Empty list if no pair found
         return []`;
-    
+
     let isLightMode = $state<boolean>(false);
 
     function useAbility(ability: string) {
@@ -52,21 +52,21 @@
     });
 </script>
 
-<div class="md:mt-20 flex flex-col items-center p-4 bg-background text-foreground">
-    <div class="text-center mb-6">
-        <h1 class="text-3xl font-icon font-bold mb-3">Ability Playground</h1>
+<div class="flex flex-col items-center bg-background p-4 text-foreground md:mt-20">
+    <div class="mb-6 text-center">
+        <h1 class="mb-3 font-icon text-3xl font-bold">Ability Playground</h1>
         <div>Enter any ability in the editor and hit <code>Enter</code> to see the magic :)</div>
     </div>
-    
-    <div class="flex items-stretch w-full max-w-6xl max-h-96 gap-4">
-        <div class="w-1/5 p-4 bg-background rounded-lg border border-secondary">
-            <h2 class="text-xl font-semibold mb-4 text-center">Abilities</h2>
+
+    <div class="flex max-h-96 w-full max-w-6xl items-stretch gap-4">
+        <div class="w-1/5 rounded-lg border border-secondary bg-background p-4">
+            <h2 class="mb-4 text-center text-xl font-semibold">Abilities</h2>
             <Tooltip.Provider delayDuration={150}>
                 <div class="space-y-3">
                     {#each Abilities as ability}
                         <Tooltip.Root>
                             <Tooltip.Trigger
-                                class="w-full px-2 py-1 text-center rounded-md font-mono font-bold {ability.class} cursor-default"
+                                class="w-full rounded-md px-2 py-1 text-center font-mono font-bold {ability.class} cursor-default"
                             >
                                 {ability.name}
                             </Tooltip.Trigger>
@@ -81,23 +81,19 @@
             </Tooltip.Provider>
         </div>
 
-        <div class="w-1/2 max-h-full border border-secondary rounded-lg overflow-auto">
-            <Editor 
-                data={leftEditorData}
-                {useAbility}
-            />
+        <div class="max-h-full w-1/2 overflow-auto rounded-lg border border-secondary">
+            <Editor data={leftEditorData} {useAbility} />
         </div>
 
-        <div class="w-1/2 max-h-full flex flex-col overflow-auto">
-            <div class="flex-1 {isLightMode ? 'bg-white' : ''} h-full w-full border border-secondary rounded-lg overflow-auto mb-3">
-                <Editor 
-                    data={rightEditorData}
-                    {useAbility}
-                />
+        <div class="flex max-h-full w-1/2 flex-col overflow-auto">
+            <div
+                class="flex-1 {isLightMode
+                    ? 'bg-white'
+                    : ''} mb-3 h-full w-full overflow-auto rounded-lg border border-secondary"
+            >
+                <Editor data={rightEditorData} {useAbility} />
             </div>
-            <Button onclick={resetRightEditor}>
-                Reset
-            </Button>
+            <Button onclick={resetRightEditor}>Reset</Button>
         </div>
     </div>
 </div>

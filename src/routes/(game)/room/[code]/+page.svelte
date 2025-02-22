@@ -125,8 +125,8 @@
 
     $effect(() => {
         if (!roomState) return;
-        updateRoomSettingsForm.form.set(roomState.settings)
-    })
+        updateRoomSettingsForm.form.set(roomState.settings);
+    });
 
     // Utils
     const copy = (text: string) => {

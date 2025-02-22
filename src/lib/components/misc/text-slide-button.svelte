@@ -1,21 +1,21 @@
 <script lang="ts">
-    import { cn } from '$lib/utils';
-    const { text1 = '', text2 = '', class: className = '' } = $props();
+    import { cn } from "$lib/utils";
+    const { text1 = "", text2 = "", class: className = "" } = $props();
 </script>
 
 <div
     class={cn(
         className,
-        "w-full relative border border-secondary rounded-md px-4 py-2 overflow-hidden group h-12"
+        "group relative h-12 w-full overflow-hidden rounded-md border border-secondary px-4 py-2"
     )}
 >
     <div
-        class="absolute inset-0 w-full text-center flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-y-full"
+        class="absolute inset-0 flex w-full transform items-center justify-center text-center transition-transform duration-300 group-hover:-translate-y-full"
     >
         {text1}
     </div>
     <div
-        class="absolute inset-0 w-full text-center flex items-center justify-center transition-transform duration-300 transform translate-y-full group-hover:translate-y-0"
+        class="absolute inset-0 flex w-full translate-y-full transform items-center justify-center text-center transition-transform duration-300 group-hover:translate-y-0"
     >
         {text2}
     </div>

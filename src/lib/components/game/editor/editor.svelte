@@ -14,7 +14,7 @@
 
     $effect(() => {
         editorView = new EditorView({
-            parent: editor,
+            parent: editor
         });
 
         data.link(editorView, useAbility);

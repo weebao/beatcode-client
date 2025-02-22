@@ -12,10 +12,10 @@ export const handleDeletio = (view: EditorView) => {
     if (lineCount === 0) return;
     console.log(lineCount);
 
-    let randomLine = Math.floor(Math.random() * (lineCount)) + 1;
+    let randomLine = Math.floor(Math.random() * lineCount) + 1;
     // If empty reroll line until a non-empty line is found
     while (doc.line(randomLine).text.trim() === "") {
-        randomLine = Math.floor(Math.random() * (lineCount)) + 1;
+        randomLine = Math.floor(Math.random() * lineCount) + 1;
     }
     const linePos = doc.line(randomLine);
     view.dispatch({
@@ -34,7 +34,7 @@ export const handleSyntaxio = (
     const originalExts = [...exts];
     const newExts = exts.filter((ext) => ext !== langExt);
     setExts(newExts);
-    
+
     setTimeout(() => {
         if (!view) throw new Error("Editor view not linked");
         setExts(originalExts);
@@ -45,8 +45,8 @@ export const handleSyntaxio = (
 };
 
 export const handleLightio = (
-    view: EditorView, 
-    exts: any[], 
+    view: EditorView,
+    exts: any[],
     setExts: (exts: any[]) => void,
     time = 30000
 ) => {
@@ -54,7 +54,7 @@ export const handleLightio = (
     const newExts = exts.filter((ext) => ext !== DefaultTheme);
     newExts.push(LightTheme);
     setExts(newExts);
-    
+
     setTimeout(() => {
         const resetExts = originalExts.filter((ext) => ext !== LightTheme);
         resetExts.push(DefaultTheme);

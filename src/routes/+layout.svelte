@@ -50,7 +50,8 @@
             Made with ❤️ by <a
                 href="https://github.com/beatcode-official"
                 target="_blank"
-                class="font-icon underline transition-all duration-150 hover:text-primary">@beatcode-official</a
+                class="font-icon underline transition-all duration-150 hover:text-primary"
+                >@beatcode-official</a
             >
         </footer>
     </div>

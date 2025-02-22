@@ -108,7 +108,7 @@ export class EditorData {
         const cachedCode = localStorage.getItem(`${this.#lang}CachedCode`) || "";
         const cachedTitle = localStorage.getItem("cachedTitle") || "";
         this.#state = EditorState.create({
-            doc: (!force && title === cachedTitle && cachedCode.trim() !== "") ? cachedCode : code,
+            doc: !force && title === cachedTitle && cachedCode.trim() !== "" ? cachedCode : code,
             extensions: this.#exts
         });
         if (title !== cachedTitle) {
@@ -211,20 +211,16 @@ export class EditorData {
                 break;
             case "syntaxio":
                 handleSyntaxio(
-                    this.#view, 
-                    this.#exts, 
-                    this.#langExt, 
-                    language, 
+                    this.#view,
+                    this.#exts,
+                    this.#langExt,
+                    language,
                     this.#lang,
                     this.setExts.bind(this)
                 );
                 break;
             case "lightio":
-                handleLightio(
-                    this.#view, 
-                    this.#exts,
-                    this.setExts.bind(this)
-                );
+                handleLightio(this.#view, this.#exts, this.setExts.bind(this));
                 break;
             case "hugio":
                 handleSizeChange(this.#view, fontSize, 2);
