@@ -221,7 +221,7 @@
             <!-- Distribution Mode -->
             <div class="w-full space-y-2">
                 <h3 class="font-semibold capitalize">
-                    Problem difficulties distribution (out of 1)
+                    Problem difficulties distribution (1-3 each)
                 </h3>
                 <Form.Field {form} name="distribution_mode">
                     <Form.Control>
@@ -236,12 +236,10 @@
                                         class="border border-secondary bg-background-dark text-sm text-foreground"
                                     >
                                         <p>
-                                            <b>auto</b> - problems are randomly distributed following
-                                            the distribution
+                                            <b>auto</b> - distributed randomly with probability
                                         </p>
                                         <p>
-                                            <b>fixed</b> - easy and medium follow distribution, remaining
-                                            go to hard
+                                            <b>fixed</b> - distributed manually with probability
                                         </p>
                                     </Tooltip.Content>
                                 </Tooltip.Root>
@@ -269,10 +267,11 @@
                         <Form.Control>
                             {#snippet children({ props })}
                                 <Form.Label>Easy</Form.Label>
-
                                 <Input
                                     type="number"
                                     step="any"
+                                    min="0"
+                                    max="3"
                                     {...props}
                                     bind:value={$formData.prob_easy}
                                 />

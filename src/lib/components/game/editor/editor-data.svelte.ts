@@ -8,7 +8,7 @@ import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 import { DefaultTheme } from "./themes";
-import { handleDeletio, handleLightio, handleSizeChange } from "./abilities";
+import { handleDeletio, handleSyntaxio, handleLightio, handleSizeChange } from "./abilities";
 import { Abilities, AbilitiesHighlighters, LanguageConfig } from "$assets/config/game";
 import type { Languages } from "$lib/models/game";
 
@@ -21,7 +21,7 @@ export class EditorData {
     #langExt: Extension = language.of(LanguageConfig[this.#lang].support());
     #tabSize: number = 4;
     #useAbility: (ability: string) => void = (ability: string) => ability !== "";
-    #exts = [
+    #defaultExts = [
         basicSetup,
         DefaultTheme,
         this.#langExt,
@@ -82,11 +82,12 @@ export class EditorData {
             ])
         )
     ];
+    #exts = this.#defaultExts;
     #state: EditorState = EditorState.create({ extensions: this.#exts });
 
     #setup() {
         if (!this.#view) throw new Error("Editor view not linked");
-        this.#lang = (localStorage.getItem("lang") as Languages) || "python";
+        this.#lang = "python";
         this.#view.setState(this.#state);
         this.setLang(this.#lang);
     }
@@ -102,13 +103,17 @@ export class EditorData {
         return this.#view.state.doc.toString();
     }
 
-    setCode(code: string) {
+    setCode(code: string, title: string, force?: boolean) {
         if (!this.#view) throw new Error("Editor view not linked");
         const cachedCode = localStorage.getItem(`${this.#lang}CachedCode`) || "";
+        const cachedTitle = localStorage.getItem("cachedTitle") || "";
         this.#state = EditorState.create({
-            doc: cachedCode.trim() !== "" ? cachedCode : code,
+            doc: !force && title === cachedTitle && cachedCode.trim() !== "" ? cachedCode : code,
             extensions: this.#exts
         });
+        if (title !== cachedTitle) {
+            localStorage.setItem("cachedTitle", title);
+        }
         this.#view.setState(this.#state);
         this.#view.dispatch({
             effects: language.reconfigure(LanguageConfig[this.#lang].support())
@@ -118,6 +123,15 @@ export class EditorData {
     setLang(lang: Languages) {
         if (!this.#view) throw new Error("Editor view not linked");
         this.#lang = lang;
+        this.setCode("", localStorage.getItem("cachedTitle") || "");
+    }
+
+    setExts(exts: Extension[]) {
+        if (!this.#view) throw new Error("Editor view not linked");
+        this.#exts = exts;
+        this.#view.dispatch({
+            effects: StateEffect.reconfigure.of(exts)
+        });
     }
 
     processError(error: string, lineOffset: number) {
@@ -179,6 +193,11 @@ export class EditorData {
         this.#view.dispatch(setDiagnostics(this.#view.state, diagnostics));
     }
 
+    resetEditor() {
+        if (!this.#view) return;
+        this.setExts(this.#defaultExts);
+    }
+
     resetError() {
         if (!this.#view) return;
         this.#view.dispatch(setDiagnostics(this.#view.state, []));
@@ -190,26 +209,18 @@ export class EditorData {
             case "deletio":
                 handleDeletio(this.#view);
                 break;
-            case "syntaxio": {
-                const originalExts = this.#exts;
-                this.#exts = this.#exts.filter((ext) => ext !== this.#langExt);
-                this.#view.dispatch({
-                    effects: StateEffect.reconfigure.of(this.#exts)
-                });
-                setTimeout(() => {
-                    if (!this.#view) throw new Error("Editor view not linked");
-                    this.#exts = originalExts;
-                    this.#view.dispatch({
-                        effects: StateEffect.reconfigure.of(originalExts)
-                    });
-                    this.#view.dispatch({
-                        effects: language.reconfigure(LanguageConfig[this.#lang].support())
-                    });
-                }, 30000);
+            case "syntaxio":
+                handleSyntaxio(
+                    this.#view,
+                    this.#exts,
+                    this.#langExt,
+                    language,
+                    this.#lang,
+                    this.setExts.bind(this)
+                );
                 break;
-            }
             case "lightio":
-                handleLightio(this.#view, this.#exts);
+                handleLightio(this.#view, this.#exts, this.setExts.bind(this));
                 break;
             case "hugio":
                 handleSizeChange(this.#view, fontSize, 2);

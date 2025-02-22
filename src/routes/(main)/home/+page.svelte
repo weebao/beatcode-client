@@ -147,6 +147,9 @@
                         </div>
                     </Tooltip.Provider>
                 </Card.Content>
+                <Card.Footer>
+                    <Button href="/playground">Try in playground!</Button>
+                </Card.Footer>
             </Card.Root>
         </div>
     </div>

@@ -47,11 +47,12 @@
             {@render children?.()}
         </main>
         <footer class="my-4 text-center text-sm">
-            Made with ❤️ by the <a
+            Made with ❤️ by <a
                 href="https://github.com/beatcode-official"
                 target="_blank"
-                class="font-icon font-semibold text-primary hover:underline">BeatCode</a
-            > team
+                class="font-icon underline transition-all duration-150 hover:text-primary"
+                >@beatcode-official</a
+            >
         </footer>
     </div>
 {/key}

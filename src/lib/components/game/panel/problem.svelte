@@ -51,7 +51,7 @@
         {/if}
     </div>
     <div
-        class="prose prose-invert !h-[2px] !max-w-full first:mt-0 prose-p:my-2 prose-code:font-normal prose-code:text-foreground/80 prose-code:before:content-none prose-code:after:content-none prose-pre:my-0 prose-pre:bg-neutral prose-pre:text-base prose-ul:mt-0"
+        class="prose prose-invert !h-[2px] !max-w-full marker:text-foreground first:mt-0 prose-p:my-2 prose-code:font-normal prose-code:text-foreground/80 prose-code:before:content-none prose-code:after:content-none prose-pre:my-0 prose-pre:bg-neutral prose-pre:text-base prose-ul:mt-0"
     >
         {#if content?.description}
             <!-- eslint-disable svelte/no-at-html-tags -->

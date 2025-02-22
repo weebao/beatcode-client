@@ -44,7 +44,7 @@ test("(register) password and confirm password must match", async ({ page }) => 
     await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
     // Click "Sign in" and wait for navigation
-    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.getByRole("link", { name: "Sign in" }).first().click();
     await page.waitForURL("http://localhost:4173/login");
     await page.waitForTimeout(300); // animation
 
@@ -151,7 +151,7 @@ test("Login - Valid username/email with incorrect password", async ({ page }) =>
         await page
             .getByPlaceholder("Password")
             .fill("caiditconmemaythangnaodatmatkhaunaydambomevaomom");
-        await page.getByRole("button", { name: "Sign In" }).click();
+        await page.getByRole("button", { name: "Sign In" }).first().click();
 
         // Step 4: Verify that the "Don't have an account yet?" element is visible
         await expect(page.getByRole("link", { name: "Forgot password?" })).toBeVisible();

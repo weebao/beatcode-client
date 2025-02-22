@@ -123,6 +123,11 @@
         }
     );
 
+    $effect(() => {
+        if (!roomState) return;
+        updateRoomSettingsForm.form.set(roomState.settings);
+    });
+
     // Utils
     const copy = (text: string) => {
         navigator.clipboard.writeText(text);
