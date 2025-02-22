@@ -10,7 +10,7 @@ test("(register) happy path", async ({ page }) => {
     await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
     // Navigate to the "Sign in" page
-    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.getByRole("link", { name: "Sign in" }).first().click();
     await page.waitForURL("http://localhost:4173/login");
 
     // Navigate to the "Sign up" page
@@ -40,7 +40,7 @@ test("(login) happy path", async ({ page }) => {
     await page.goto("http://localhost:4173/", { waitUntil: "domcontentloaded" });
 
     // Navigate to the "Sign in" page
-    await page.getByRole("link", { name: "Sign in" }).click();
+    await page.getByRole("link", { name: "Sign in" }).first().click();
     await page.waitForURL("http://localhost:4173/login");
 
     // Fill out the login form
@@ -48,7 +48,7 @@ test("(login) happy path", async ({ page }) => {
     await page.getByPlaceholder("Password").fill("password"); // TODO: @BaoDang: I changed the "passwords" to "password" (by mistake lol so you might not pass this test)
 
     // Submit the login form
-    await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByRole("button", { name: "Sign In" }).first().click();
 
     // Validate navigation to the home page
     await page.waitForURL("http://localhost:4173/home");
@@ -131,7 +131,7 @@ test("Login - Valid username/email with incorrect password", async ({ page }) =>
 
     await page.getByPlaceholder("Username or Email").fill("test");
     await page.getByPlaceholder("Password").fill("wrongpassword");
-    await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByRole("button", { name: "Sign In" }).first().click();
 
     await expect(page.getByText("Incorrect login credentials", { exact: true })).toBeVisible();
 });
@@ -145,7 +145,7 @@ test("Experience - Navigate to Experience page", async ({ page }) => {
     await page.getByPlaceholder("Password").fill("password");
 
     // Click the login button
-    await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByRole("button", { name: "Sign In" }).first().click();
 
     // Wait for the page to navigate to the home/dashboard page
     await page.waitForURL("http://localhost:4173/home", { waitUntil: "domcontentloaded" });
@@ -166,7 +166,7 @@ test("Navigate to Custom Mode after login", async ({ page }) => {
     await page.getByPlaceholder("Password").fill("password");
 
     // Click the login button
-    await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByRole("button", { name: "Sign In" }).first().click();
 
     // Wait for the page to navigate to the home/dashboard page
     await page.waitForURL("http://localhost:4173/home", { waitUntil: "domcontentloaded" });
@@ -191,7 +191,7 @@ test("Full workflow: Login, create room, and attempt to start game", async ({ pa
     await page.locator("#bits-1").click();
 
     // Click the login button
-    await page.getByRole("button", { name: "Sign In" }).click();
+    await page.getByRole("button", { name: "Sign In" }).first().click();
 
     // Wait for navigation to the home/dashboard page
     await page.waitForURL("http://localhost:4173/home", { waitUntil: "domcontentloaded" });

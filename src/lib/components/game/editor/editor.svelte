@@ -14,7 +14,7 @@
 
     $effect(() => {
         editorView = new EditorView({
-            parent: editor
+            parent: editor,
         });
 
         data.link(editorView, useAbility);
@@ -26,7 +26,7 @@
 </script>
 
 {#if browser}
-    <div bind:this={editor} class="h-full w-full"></div>
+    <div bind:this={editor} class="h-full w-full p-2"></div>
 {:else}
     <!-- fallback -->
     <div class="flex h-full w-full items-center justify-center">

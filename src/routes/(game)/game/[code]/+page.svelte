@@ -54,7 +54,7 @@
     let isWinner = $derived(winner === data.user?.username);
 
     let currentLang = $state<Languages>((localStorage.getItem("lang") as Languages) || "python");
-    let lightMode = $state<boolean>(false);
+    let isLightMode = $state<boolean>(false);
 
     let chatHistory = $state<ChatMessage[]>([]);
 
@@ -85,14 +85,13 @@
                     currentProblem.boilerplate[lang as Languages]
                 );
             }
-            editorData.setCode(currentProblem.boilerplate[currentLang]);
+            editorData.setCode(currentProblem.boilerplate[currentLang], currentProblem.title);
         }
     });
 
     $effect(() => {
         editorData.setLang(currentLang);
         localStorage.setItem("lang", currentLang);
-        editorData.setCode(localStorage.getItem(`${currentLang}CachedCode`) ?? "");
     });
 
     const checkHP = (newState: GameState) => {
@@ -121,9 +120,9 @@
         if (user === data.user?.username) return;
         editorData.triggerAbility(ability);
         if (ability === "lightio") {
-            lightMode = true;
+            isLightMode = true;
             setTimeout(() => {
-                lightMode = false;
+                isLightMode = false;
             }, 30000);
         }
     };
@@ -431,7 +430,7 @@
                             {/if}
                         </div>
                         <div
-                            class="h-full w-full overflow-auto px-4 py-2 {lightMode
+                            class="h-full w-full overflow-auto {isLightMode
                                 ? 'bg-white'
                                 : 'bg-background'}"
                         >

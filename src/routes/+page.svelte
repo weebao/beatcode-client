@@ -9,8 +9,12 @@
 
     import User1 from "$assets/images/landing/user1.png?enhanced";
     import User2 from "$assets/images/landing/user2.png?enhanced";
+
     import { Button } from "$components/ui/button";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
+    import TextSlideButton from "$components/misc/text-slide-button.svelte";
+    import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
+
     import { cn } from "$lib/utils.js";
 
     let isNotMounted = true;
@@ -21,7 +25,7 @@
         const tl = gsap.timeline();
         tl.to(".header-1", {
             duration: 1.5,
-            text: "Head-to-head code battle",
+            text: "Head-to-head coding battle",
             ease: "none"
         });
         tl.to(".header-2", {
@@ -53,13 +57,13 @@
     });
 </script>
 
-<section class="relative mb-12 flex flex-col items-center overflow-hidden">
-    <div class="mb-8 mt-24 flex flex-col items-center">
+<section class="relative mb-12 flex flex-col items-center">
+    <div class="mb-8 mt-20 md:mt-24 flex flex-col items-center">
         <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
             Head-to-head coding battle with magic
         </h1>
         <div
-            class="relative flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl"
+            class="relative flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:text-6xl mb-4 md:mb-0"
         >
             <span class="header-1 w-full"></span>
             <span class="flex w-full justify-center">
@@ -80,18 +84,20 @@
         </div>
     </div>
     <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
-    <div class="relative mb-8 mt-24 flex w-1/2 min-w-[500px] max-w-[1000px] justify-center">
+    <div class="relative mt-24 flex w-3/4 lg:w-1/2 max-w-[1000px] justify-center">
         <div class="-translate-x-12 rounded-sm border-2 border-neutral shadow-xl">
             <enhanced:img src={User1} alt="Gameplay" class="rounded-sm object-contain" />
         </div>
         <div
-            class="absolute -right-8 -top-12 -z-10 h-full w-full rounded-sm border-2 border-neutral shadow-xl"
+            class="absolute -right-1 md:-right-8 -top-12 -z-10 h-full w-full rounded-sm border-2 border-neutral shadow-xl"
         >
             <enhanced:img src={User2} alt="Gameplay" class="rounded-sm object-contain" />
         </div>
     </div>
-    <GradientBlob class="l-0 absolute top-1/2 -z-20 h-1/2 w-3/4 -translate-y-1/2 opacity-50" />
+    <GradientBlob class="left-0 absolute top-2/3 -z-20 h-1/2 w-full -translate-y-1/2 opacity-50" />
+    <GradientBlob class="right-0 absolute top-2/3 -z-20 h-1/2 w-1/2 -translate-y-3/4 opacity-50" blobClass="bg-amber-200/80" />
 </section>
+
 
 <section class="mb-12 flex flex-col items-center overflow-hidden">
     <div class="mb-6 flex flex-col items-center">
@@ -107,3 +113,21 @@
         allowfullscreen
     ></iframe>
 </section>
+
+<section class="mb-12 flex flex-col max-w-[500px] mx-auto items-center overflow-hidden">
+    <div class="mb-6 flex flex-col items-center">
+        <h2 class="font-icon text-4xl mb-2">Features</h2>
+        <p class="text-secondary">Hover for details. No fancy images sorry :)</p>
+    </div>
+    <div class="w-full space-y-2">
+        <TextSlideButton text1="Real-time Battles" text2="Fight random people or create a custom room with your friends!" />
+        <TextSlideButton text1="Multiple Languages (Python, Java, C++)" text2="Since some people are allergic to Python" />
+        <TextSlideButton text1="Runtime Analysis" text2="Instantly know the time complexity of your code after it passed" />
+        <TextSlideButton text1="Special Abilities" text2="8 ways to make your opponent crash out. Try it out below" />
+        <Button href="/playground" class="w-full">Try out abilities in the playground</Button>
+    </div>
+</section>
+
+<ScrollUpButton screenWidth={1280} />
+
+<style></style>

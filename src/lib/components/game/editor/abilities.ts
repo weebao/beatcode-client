@@ -1,6 +1,8 @@
 import { EditorView } from "codemirror";
-import { Compartment, StateEffect } from "@codemirror/state";
+import { Compartment } from "@codemirror/state";
+import { LanguageConfig } from "$assets/config/game";
 import { DefaultTheme, LightTheme } from "./themes";
+import type { Languages } from "$lib/models/game";
 
 export const handleDeletio = (view: EditorView) => {
     // Delete a random line of my code
@@ -8,12 +10,12 @@ export const handleDeletio = (view: EditorView) => {
     const lineCount = doc.lines;
 
     if (lineCount === 0) return;
+    console.log(lineCount);
 
-    // Only start from the third line since the first 2 lines are starter code
-    let randomLine = Math.floor(Math.random() * (lineCount - 2)) + 3;
-    // If empty reroll line
+    let randomLine = Math.floor(Math.random() * (lineCount)) + 1;
+    // If empty reroll line until a non-empty line is found
     while (doc.line(randomLine).text.trim() === "") {
-        randomLine = Math.floor(Math.random() * (lineCount - 2)) + 3;
+        randomLine = Math.floor(Math.random() * (lineCount)) + 1;
     }
     const linePos = doc.line(randomLine);
     view.dispatch({
@@ -21,18 +23,42 @@ export const handleDeletio = (view: EditorView) => {
     });
 };
 
-export const handleLightio = (view: EditorView, exts: any[], time = 30000) => {
-    exts = exts.filter((ext) => ext !== DefaultTheme);
-    exts.push(LightTheme);
-    view.dispatch({
-        effects: StateEffect.reconfigure.of(exts)
-    });
+export const handleSyntaxio = (
+    view: EditorView,
+    exts: any[],
+    langExt: any,
+    language: Compartment,
+    currentLang: Languages,
+    setExts: (exts: any[]) => void
+) => {
+    const originalExts = [...exts];
+    const newExts = exts.filter((ext) => ext !== langExt);
+    setExts(newExts);
+    
     setTimeout(() => {
-        exts = exts.filter((ext) => ext !== LightTheme);
-        exts.push(DefaultTheme);
+        if (!view) throw new Error("Editor view not linked");
+        setExts(originalExts);
         view.dispatch({
-            effects: StateEffect.reconfigure.of(exts)
+            effects: language.reconfigure(LanguageConfig[currentLang].support())
         });
+    }, 30000);
+};
+
+export const handleLightio = (
+    view: EditorView, 
+    exts: any[], 
+    setExts: (exts: any[]) => void,
+    time = 30000
+) => {
+    const originalExts = [...exts];
+    const newExts = exts.filter((ext) => ext !== DefaultTheme);
+    newExts.push(LightTheme);
+    setExts(newExts);
+    
+    setTimeout(() => {
+        const resetExts = originalExts.filter((ext) => ext !== LightTheme);
+        resetExts.push(DefaultTheme);
+        setExts(resetExts);
     }, time);
 };
 

@@ -18,7 +18,6 @@
 <nav
     class={cn(
         className,
-
         "flex h-nav w-full flex-col items-center justify-center self-stretch overflow-hidden px-8 max-md:max-w-full"
     )}
 >

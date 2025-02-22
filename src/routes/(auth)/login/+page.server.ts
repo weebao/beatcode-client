@@ -45,7 +45,6 @@ export const actions = {
         }
     },
     guest: async ({ cookies }) => {
-        console.log("nig");
         try {
             const response = await loginAsGuest(cookies);
             if (response.status >= 400) {
