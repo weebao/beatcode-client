@@ -46,6 +46,10 @@
         </div>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content align="end">
+        <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/playground")}
+            >Playground</DropdownMenu.Item
+        >
+        <DropdownMenu.Separator></DropdownMenu.Separator>
         <DropdownMenu.Item class="cursor-pointer" onclick={() => goto("/settings")}
             >Settings</DropdownMenu.Item
         >

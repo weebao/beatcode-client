@@ -89,12 +89,12 @@
         </div>
 
         <GradientBlob
-            class="fixed left-1/2 top-24 -z-10 h-[600px] w-[800px] -translate-x-1/2"
+            class="fixed left-1/2 top-24 -z-10 h-2/3 w-[800px] -translate-x-1/2"
             blobClass="bg-primary"
             complexity={20}
         />
         <GradientBlob
-            class="fixed left-2/3 top-24 -z-[5] h-[400px] w-[400px] -translate-x-1/3"
+            class="fixed left-2/3 top-24 -z-[5] h-1/3 w-[400px] -translate-x-1/3"
             blobClass="bg-yellow-200"
             complexity={20}
         />

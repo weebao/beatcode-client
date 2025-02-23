@@ -8,28 +8,33 @@ import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 import { DefaultTheme } from "./themes";
-import { handleDeletio, handleSyntaxio, handleLightio, handleSizeChange } from "./abilities";
+import { processAbility } from "./abilities";
 import { Abilities, AbilitiesHighlighters, LanguageConfig } from "$assets/config/game";
 import type { Languages } from "$lib/models/game";
 
-const fontSize = new Compartment();
-const language = new Compartment();
+const fontSizeComp = new Compartment();
+const langComp = new Compartment();
+const readonlyComp = new Compartment();
+const classComp = new Compartment();
+const themeComp = new Compartment();
 
 export class EditorData {
     #view: EditorView | null = null;
     #lang: Languages = "python";
-    #langExt: Extension = language.of(LanguageConfig[this.#lang].support());
+    #langExt: Extension = langComp.of(LanguageConfig[this.#lang].support());
     #tabSize: number = 4;
     #useAbility: (ability: string) => void = (ability: string) => ability !== "";
     #defaultExts = [
         basicSetup,
-        DefaultTheme,
         this.#langExt,
         indentUnit.of(" ".repeat(this.#tabSize)),
         indentationMarkers(),
         lintGutter(),
-        fontSize.of([]),
+        fontSizeComp.of([]),
+        readonlyComp.of([]),
+        themeComp.of(DefaultTheme),
         keymap.of([{ key: "Tab", run: acceptCompletion }, indentWithTab]),
+        classComp.of([]),
         EditorView.lineWrapping,
         EditorView.theme({
             "&": {
@@ -84,6 +89,7 @@ export class EditorData {
     ];
     #exts = this.#defaultExts;
     #state: EditorState = EditorState.create({ extensions: this.#exts });
+    setRickroll = (on: boolean) => console.log(`Got rickrolled: ${on}`);
 
     #setup() {
         if (!this.#view) throw new Error("Editor view not linked");
@@ -96,6 +102,14 @@ export class EditorData {
         this.#view = view;
         this.#useAbility = useAbility;
         this.#setup();
+    }
+
+    setExts(exts: Extension[]) {
+        if (!this.#view) throw new Error("Editor view not linked");
+        this.#exts = exts;
+        this.#view.dispatch({
+            effects: StateEffect.reconfigure.of(exts)
+        });
     }
 
     getCode() {
@@ -116,7 +130,7 @@ export class EditorData {
         }
         this.#view.setState(this.#state);
         this.#view.dispatch({
-            effects: language.reconfigure(LanguageConfig[this.#lang].support())
+            effects: langComp.reconfigure(LanguageConfig[this.#lang].support())
         });
     }
 
@@ -124,14 +138,6 @@ export class EditorData {
         if (!this.#view) throw new Error("Editor view not linked");
         this.#lang = lang;
         this.setCode("", localStorage.getItem("cachedTitle") || "");
-    }
-
-    setExts(exts: Extension[]) {
-        if (!this.#view) throw new Error("Editor view not linked");
-        this.#exts = exts;
-        this.#view.dispatch({
-            effects: StateEffect.reconfigure.of(exts)
-        });
     }
 
     processError(error: string, lineOffset: number) {
@@ -166,7 +172,6 @@ export class EditorData {
 
         if (error.toLowerCase().includes("traceback")) {
             const lineMatches = [...error.matchAll(/line\s+(\d+)/g)];
-            // console.log(lineMatches);
             if (lineMatches.length > 0) {
                 const lastMatch = lineMatches[lineMatches.length - 1];
                 lineNum = +lastMatch[1] - lineOffset;
@@ -179,7 +184,6 @@ export class EditorData {
             }
         }
 
-        // Create the diagnostic
         const diagnostics: Diagnostic[] = [
             {
                 from,
@@ -189,7 +193,6 @@ export class EditorData {
             }
         ];
 
-        // Apply the diagnostics using setDiagnostics
         this.#view.dispatch(setDiagnostics(this.#view.state, diagnostics));
     }
 
@@ -203,31 +206,39 @@ export class EditorData {
         this.#view.dispatch(setDiagnostics(this.#view.state, []));
     }
 
+    setClass(classNames: string) {
+        if (!this.#view) return;
+        this.#view.dispatch({
+            effects: classComp.reconfigure(
+                EditorView.editorAttributes.of({
+                    class: classNames
+                })
+            )
+        });
+    }
+
+    setReadonly(isReadonly: boolean) {
+        if (!this.#view) return;
+        this.#view.dispatch({
+            effects: readonlyComp.reconfigure(EditorState.readOnly.of(isReadonly))
+        });
+    }
+
     triggerAbility(ability: string) {
         if (!this.#view) throw new Error("Editor view not linked");
-        switch (ability) {
-            case "deletio":
-                handleDeletio(this.#view);
-                break;
-            case "syntaxio":
-                handleSyntaxio(
-                    this.#view,
-                    this.#exts,
-                    this.#langExt,
-                    language,
-                    this.#lang,
-                    this.setExts.bind(this)
-                );
-                break;
-            case "lightio":
-                handleLightio(this.#view, this.#exts, this.setExts.bind(this));
-                break;
-            case "hugio":
-                handleSizeChange(this.#view, fontSize, 2);
-                break;
-            case "smallio":
-                handleSizeChange(this.#view, fontSize, 0.5);
-                break;
-        }
+        processAbility(
+            ability,
+            this.#view,
+            this.#exts,
+            this.#lang,
+            this.#langExt,
+            langComp,
+            themeComp,
+            fontSizeComp,
+            this.setExts.bind(this),
+            this.setClass.bind(this),
+            this.setReadonly.bind(this),
+            this.setRickroll.bind(this)
+        );
     }
 }

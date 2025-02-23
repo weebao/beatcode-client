@@ -119,12 +119,6 @@
     const processAbilityUsage = (user: string, ability: string) => {
         if (user === data.user?.username) return;
         editorData.triggerAbility(ability);
-        if (ability === "lightio") {
-            isLightMode = true;
-            setTimeout(() => {
-                isLightMode = false;
-            }, 30000);
-        }
     };
 
     // WebSocket connection
@@ -429,11 +423,7 @@
                                 </div>
                             {/if}
                         </div>
-                        <div
-                            class="h-full w-full overflow-auto {isLightMode
-                                ? 'bg-white'
-                                : 'bg-background'}"
-                        >
+                        <div class="h-full w-full overflow-auto">
                             <Editor data={editorData} {useAbility} />
                         </div>
                     </div>
