@@ -33,6 +33,7 @@
     function resetRightEditor() {
         isLightMode = false;
         rightEditorData.resetEditor();
+        rightEditorData.setRickroll(false);
         rightEditorData.setCode(defaultCode, "", true);
     }
 
