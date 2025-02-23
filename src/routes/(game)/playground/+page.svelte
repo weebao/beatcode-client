@@ -9,7 +9,6 @@
 
     import { toast } from "svelte-sonner";
 
-    // Create editor data instances
     const leftEditorData = new EditorData();
     const rightEditorData = new EditorData();
     const defaultCode = `class Solution:
@@ -27,14 +26,8 @@
     let isLightMode = $state<boolean>(false);
 
     function useAbility(ability: string) {
-        if (ability === "lightio") {
-            isLightMode = true;
-            setTimeout(() => {
-                isLightMode = false;
-            }, 30000);
-        }
         rightEditorData.triggerAbility(ability);
-        toast(`Ability used: ✨${ability}✨`);
+        toast(`You used ✨${ability}✨`);
     }
 
     function resetRightEditor() {
@@ -57,7 +50,7 @@
         <div>Type any ability in the editor and hit <code>Enter</code> to see the magic :D</div>
     </div>
 
-    <div class="flex max-h-96 w-full max-w-6xl items-stretch gap-4">
+    <div class="flex w-full max-w-6xl items-stretch gap-4">
         <div class="w-1/5 rounded-lg border border-secondary bg-background p-4">
             <h2 class="mb-4 text-center text-xl font-semibold">Abilities</h2>
             <Tooltip.Provider delayDuration={150}>

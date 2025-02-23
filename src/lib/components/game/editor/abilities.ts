@@ -4,6 +4,52 @@ import { LanguageConfig } from "$assets/config/game";
 import { DefaultTheme, LightTheme } from "./themes";
 import type { Languages } from "$lib/models/game";
 
+export const processAbility = (
+    ability: string,
+    view: EditorView,
+    exts: any[],
+    lang: Languages,
+    langExt: any,
+    langComp: Compartment,
+    themeComp: Compartment,
+    fontSizeComp: Compartment,
+    setExts: (exts: any[]) => void,
+    setClass: (classNames: string) => void,
+    setReadonly: (isReadonly: boolean) => void,
+    setRickroll: (on: boolean) => void
+) => {
+    switch (ability) {
+        case "deletio":
+            handleDeletio(view);
+            break;
+        case "syntaxio":
+            handleSyntaxio(view, exts, langExt, langComp, lang, setExts);
+            break;
+        case "lightio":
+            handleLightio(view, themeComp);
+            break;
+        case "hugio":
+            handleSizeChange(view, fontSizeComp, 2);
+            break;
+        case "smallio":
+            handleSizeChange(view, fontSizeComp, 0.5);
+            break;
+        case "freezio":
+            setReadonly(true);
+            setClass("opacity-50");
+            setTimeout(() => {
+                setReadonly(false);
+                setClass("opacity-100");
+            }, 15000);
+            break;
+        case "rickrollio":
+            setRickroll(true);
+            setTimeout(() => {
+                setRickroll(false);
+            }, 62000);
+    }
+};
+
 export const handleDeletio = (view: EditorView) => {
     // Delete a random line of my code
     const doc = view.state.doc;
@@ -23,13 +69,14 @@ export const handleDeletio = (view: EditorView) => {
     });
 };
 
-export const handleSyntaxio = (
+const handleSyntaxio = (
     view: EditorView,
     exts: any[],
     langExt: any,
-    language: Compartment,
+    langComp: Compartment,
     currentLang: Languages,
-    setExts: (exts: any[]) => void
+    setExts: (exts: any[]) => void,
+    time = 30000
 ) => {
     const originalExts = [...exts];
     const newExts = exts.filter((ext) => ext !== langExt);
@@ -39,30 +86,24 @@ export const handleSyntaxio = (
         if (!view) throw new Error("Editor view not linked");
         setExts(originalExts);
         view.dispatch({
-            effects: language.reconfigure(LanguageConfig[currentLang].support())
+            effects: langComp.reconfigure(LanguageConfig[currentLang].support())
         });
-    }, 30000);
-};
-
-export const handleLightio = (
-    view: EditorView,
-    exts: any[],
-    setExts: (exts: any[]) => void,
-    time = 30000
-) => {
-    const originalExts = [...exts];
-    const newExts = exts.filter((ext) => ext !== DefaultTheme);
-    newExts.push(LightTheme);
-    setExts(newExts);
-
-    setTimeout(() => {
-        const resetExts = originalExts.filter((ext) => ext !== LightTheme);
-        resetExts.push(DefaultTheme);
-        setExts(resetExts);
     }, time);
 };
 
-export const handleSizeChange = (
+const handleLightio = (view: EditorView, themeComp: Compartment, time = 30000) => {
+    view.dispatch({
+        effects: themeComp.reconfigure(LightTheme)
+    });
+
+    setTimeout(() => {
+        view.dispatch({
+            effects: themeComp.reconfigure(DefaultTheme)
+        });
+    }, time);
+};
+
+const handleSizeChange = (
     view: EditorView,
     fontSize: Compartment,
     sizeMul: number,

@@ -30,14 +30,14 @@
             </a>
         </div>
         <div class="flex space-x-2">
-            <Button
-                class="my-auto self-stretch text-sm leading-7 text-secondary"
-                variant="link"
-                href="/playground"
-            >
-                Playground
-            </Button>
             {#if !user}
+                <Button
+                    class="my-auto self-stretch text-sm leading-7 text-secondary"
+                    variant="link"
+                    href="/playground"
+                >
+                    Playground
+                </Button>
                 <Button
                     class="my-auto self-stretch text-sm leading-7 text-secondary"
                     variant="link"

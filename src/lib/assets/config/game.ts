@@ -43,6 +43,13 @@ export const Abilities = [
         mp: 20
     },
     {
+        name: "freezio",
+        desc: "Freeze your opponent's editor. They can't code for 15 seconds",
+        class: "bg-blue-300 text-blue-700 rounded-[1px] px-px font-bold",
+        sp: 10,
+        mp: 10
+    },
+    {
         name: "deletio",
         desc: "Delete a random line of your opponent's code",
         class: "bg-rose text-rose-foreground rounded-[1px] px-px font-bold",
@@ -76,6 +83,13 @@ export const Abilities = [
         class: "bg-navy-blue text-pale-gold rounded-[1px] px-px font-bold",
         sp: 10,
         mp: 5
+    },
+    {
+        name: "rickrollio",
+        desc: 'Force your opponent to watch "Never Gonna Give You Up" for 60 seconds',
+        class: "bg-gradient-to-r from-orange-200 to-blue-200 text-amber-700 rounded-[1px] px-px font-bold",
+        sp: 20,
+        mp: 30
     }
 ];
 
