@@ -51,8 +51,8 @@
         <div>Type any ability in the editor and hit <code>Enter</code> to see the magic :D</div>
     </div>
 
-    <div class="flex w-full max-w-6xl items-stretch gap-4">
-        <div class="w-1/5 rounded-lg border border-secondary bg-background p-4">
+    <div class="flex max-h-[500px] w-full max-w-6xl items-stretch gap-4">
+        <div class="h-full w-1/5 rounded-lg border border-secondary bg-background p-4">
             <h2 class="mb-4 text-center text-xl font-semibold">Abilities</h2>
             <Tooltip.Provider delayDuration={150}>
                 <div class="space-y-3">
