@@ -54,7 +54,6 @@
     let isWinner = $derived(winner === data.user?.username);
 
     let currentLang = $state<Languages>((localStorage.getItem("lang") as Languages) || "python");
-    let isLightMode = $state<boolean>(false);
 
     let chatHistory = $state<ChatMessage[]>([]);
 
