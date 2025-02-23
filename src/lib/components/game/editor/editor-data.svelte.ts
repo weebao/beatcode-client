@@ -6,6 +6,7 @@ import { lintGutter, setDiagnostics, type Diagnostic } from "@codemirror/lint";
 import { indentUnit } from "@codemirror/language";
 import { keymap } from "@codemirror/view";
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
+import { vim } from "@replit/codemirror-vim";
 
 import { DefaultTheme } from "./themes";
 import { processAbility } from "./abilities";
@@ -17,6 +18,7 @@ const langComp = new Compartment();
 const readonlyComp = new Compartment();
 const classComp = new Compartment();
 const themeComp = new Compartment();
+const bindingComp = new Compartment();
 
 export class EditorData {
     #view: EditorView | null = null;
@@ -26,6 +28,7 @@ export class EditorData {
     #useAbility: (ability: string) => void = (ability: string) => ability !== "";
     #defaultExts = [
         basicSetup,
+        bindingComp.of([]),
         this.#langExt,
         indentUnit.of(" ".repeat(this.#tabSize)),
         indentationMarkers(),
@@ -104,14 +107,6 @@ export class EditorData {
         this.#setup();
     }
 
-    setExts(exts: Extension[]) {
-        if (!this.#view) throw new Error("Editor view not linked");
-        this.#exts = exts;
-        this.#view.dispatch({
-            effects: StateEffect.reconfigure.of(exts)
-        });
-    }
-
     getCode() {
         if (!this.#view) throw new Error("Editor view not linked");
         return this.#view.state.doc.toString();
@@ -132,12 +127,6 @@ export class EditorData {
         this.#view.dispatch({
             effects: langComp.reconfigure(LanguageConfig[this.#lang].support())
         });
-    }
-
-    setLang(lang: Languages) {
-        if (!this.#view) throw new Error("Editor view not linked");
-        this.#lang = lang;
-        this.setCode("", localStorage.getItem("cachedTitle") || "");
     }
 
     processError(error: string, lineOffset: number) {
@@ -206,6 +195,20 @@ export class EditorData {
         this.#view.dispatch(setDiagnostics(this.#view.state, []));
     }
 
+    setExts(exts: Extension[]) {
+        if (!this.#view) throw new Error("Editor view not linked");
+        this.#exts = exts;
+        this.#view.dispatch({
+            effects: StateEffect.reconfigure.of(exts)
+        });
+    }
+
+    setLang(lang: Languages) {
+        if (!this.#view) throw new Error("Editor view not linked");
+        this.#lang = lang;
+        this.setCode("", localStorage.getItem("cachedTitle") || "");
+    }
+
     setClass(classNames: string) {
         if (!this.#view) return;
         this.#view.dispatch({
@@ -214,6 +217,13 @@ export class EditorData {
                     class: classNames
                 })
             )
+        });
+    }
+
+    setVim(enabled: boolean) {
+        if (!this.#view) return;
+        this.#view.dispatch({
+            effects: bindingComp.reconfigure(enabled ? vim() : [])
         });
     }
 

@@ -8,6 +8,7 @@
     import type { ChatMessage } from "$models/room";
 
     import AvatarImg from "$assets/images/avatar.jpg";
+    import Vim from "$assets/icons/vim.svelte";
 
     import * as Avatar from "$components/ui/avatar";
     import { Button } from "$components/ui/button";
@@ -16,6 +17,7 @@
     import * as Resizable from "$components/ui/resizable";
     import * as Select from "$components/ui/select";
     import * as Tooltip from "$components/ui/tooltip";
+    import { Toggle } from "$components/ui/toggle";
 
     import { Problem, Test, Abilities } from "$components/game/panel";
     import { Editor, EditorData } from "$components/game/editor";
@@ -394,33 +396,47 @@
                             </div>
                         </div>
                         <div
-                            class="flex items-center space-x-2 border-b-[1px] border-secondary/50 p-1"
+                            class="flex items-center justify-between border-b-[1px] border-secondary/50 p-1"
                         >
-                            <Select.Root type="single" name="language" bind:value={currentLang}>
-                                <Select.Trigger
-                                    class="h-fit w-fit rounded-sm border-0 px-2 py-1 hover:bg-secondary/25 focus:ring-0"
+                            <div class="flex items-center space-x-2">
+                                <Select.Root type="single" name="language" bind:value={currentLang}>
+                                    <Select.Trigger
+                                        class="h-fit w-fit rounded-sm border-0 px-2 py-1 hover:bg-secondary/25 focus:ring-0"
+                                    >
+                                        <span class="mr-1">
+                                            {LanguageConfig[currentLang].name}
+                                        </span>
+                                    </Select.Trigger>
+                                    <Select.Content align="start">
+                                        {#each Object.entries(LanguageConfig) as [key, value]}
+                                            <Select.Item value={key} class="cursor-pointer">
+                                                {value.name}
+                                                {key === "python" ? "(Recommended)" : ""}
+                                            </Select.Item>
+                                        {/each}
+                                    </Select.Content>
+                                </Select.Root>
+                                {#if submissionTime}
+                                    <div class="ml-auto flex items-center gap-1">
+                                        <span class="text-sm text-neutral-foreground/50">
+                                            Last submission took:
+                                            {displaySubmissionTime(submissionTime)}
+                                        </span>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div>
+                                <Toggle
+                                    class="group flex h-full space-x-2 px-2 py-1"
+                                    onPressedChange={(pressed: boolean) =>
+                                        editorData.setVim(pressed)}
                                 >
-                                    <span class="mr-1">
-                                        {LanguageConfig[currentLang].name}
-                                    </span>
-                                </Select.Trigger>
-                                <Select.Content align="start">
-                                    {#each Object.entries(LanguageConfig) as [key, value]}
-                                        <Select.Item value={key} class="cursor-pointer">
-                                            {value.name}
-                                            {key === "python" ? "(Recommended)" : ""}
-                                        </Select.Item>
-                                    {/each}
-                                </Select.Content>
-                            </Select.Root>
-                            {#if submissionTime}
-                                <div class="ml-auto flex items-center gap-1">
-                                    <span class="text-sm text-neutral-foreground/50">
-                                        Last submission took:
-                                        {displaySubmissionTime(submissionTime)}
-                                    </span>
-                                </div>
-                            {/if}
+                                    <Vim
+                                        class="h-2 w-2 saturate-0 group-data-[state=on]:saturate-100"
+                                    />
+                                    Vim Mode
+                                </Toggle>
+                            </div>
                         </div>
                         <div class="h-full w-full overflow-auto">
                             <Editor data={editorData} {useAbility} />

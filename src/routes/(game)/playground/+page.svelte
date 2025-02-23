@@ -8,6 +8,8 @@
     import { Editor, EditorData } from "$components/game/editor";
 
     import { toast } from "svelte-sonner";
+    import { Toggle } from "$components/ui/toggle";
+    import Vim from "$assets/icons/vim.svelte";
 
     const leftEditorData = new EditorData();
     const rightEditorData = new EditorData();
@@ -25,17 +27,22 @@
 
     let isLightMode = $state<boolean>(false);
 
-    function useAbility(ability: string) {
+    const useAbility = (ability: string) => {
         rightEditorData.triggerAbility(ability);
         toast(`You used ✨${ability}✨`);
-    }
+    };
 
-    function resetRightEditor() {
+    const toggleVim = (enabled: boolean) => {
+        leftEditorData.setVim(enabled);
+        rightEditorData.setVim(enabled);
+    };
+
+    const resetRightEditor = () => {
         isLightMode = false;
         rightEditorData.resetEditor();
         rightEditorData.setRickroll(false);
         rightEditorData.setCode(defaultCode, "", true);
-    }
+    };
 
     onMount(() => {
         leftEditorData.setLang("python");
@@ -47,14 +54,19 @@
 
 <div class="flex flex-col items-center bg-background p-4 text-foreground md:mt-20">
     <div class="mb-6 text-center">
-        <h1 class="mb-3 font-icon text-3xl font-bold">Ability Playground</h1>
+        <h1 class="mb-3 font-icon text-4xl font-bold">Playground</h1>
         <div>Type any ability in the editor and hit <code>Enter</code> to see the magic :D</div>
     </div>
+
+    <Toggle class="group mb-3 flex space-x-2 border-2 border-secondary" onPressedChange={toggleVim}>
+        <Vim class="saturate-0 group-data-[state=on]:saturate-100" />
+        Vim Mode
+    </Toggle>
 
     <div class="flex max-h-[500px] w-full max-w-6xl items-stretch gap-4">
         <div class="h-full w-1/5 rounded-lg border border-secondary bg-background p-4">
             <h2 class="mb-4 text-center text-xl font-semibold">Abilities</h2>
-            <Tooltip.Provider delayDuration={150}>
+            <Tooltip.Provider delayDuration={50}>
                 <div class="space-y-3">
                     {#each Abilities as ability}
                         <Tooltip.Root>
