@@ -9,14 +9,13 @@
     import User2 from "$assets/images/landing/user2.png?enhanced";
     import { AbiltiesImg, LangsImg, RanksImg, RuntimeImg } from "$assets/images/landing";
     import Vim from "$assets/icons/vim.svelte";
+    import { Gamepad2, Sparkle } from "lucide-svelte";
 
     import { Button } from "$components/ui/button";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
     import { cn } from "$lib/utils.js";
-
-    import { Gamepad2, Languages, Sparkles, Sparkle, Timer, Terminal } from "lucide-svelte";
 
     let isNotMounted = $state<boolean>(true);
     const features = [
