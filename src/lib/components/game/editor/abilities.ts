@@ -44,8 +44,10 @@ export const processAbility = (
             break;
         case "rickrollio":
             setRickroll(true);
+            setClass("opacity-50");
             setTimeout(() => {
                 setRickroll(false);
+                setClass("opacity-100");
             }, 62000);
     }
 };
