@@ -5,19 +5,51 @@
 
     gsap.registerPlugin(TextPlugin);
 
-    import { SparkleIcon } from "lucide-svelte";
-
     import User1 from "$assets/images/landing/user1.png?enhanced";
     import User2 from "$assets/images/landing/user2.png?enhanced";
+    import { AbiltiesImg, LangsImg, RanksImg, RuntimeImg } from "$assets/images/landing";
+    import Vim from "$assets/icons/vim.svelte";
+    import { Gamepad2, Sparkle } from "lucide-svelte";
 
     import { Button } from "$components/ui/button";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
-    import TextSlideButton from "$components/misc/text-slide-button.svelte";
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
     import { cn } from "$lib/utils.js";
 
-    let isNotMounted = true;
+    let isNotMounted = $state<boolean>(true);
+    const features = [
+        {
+            icon: RanksImg,
+            title: "Ranked Mode",
+            description: "Level up by testing your LeetCode skills against others"
+        },
+        {
+            icon: Gamepad2,
+            title: "Custom Room",
+            description: "Challenge your friends and practice together"
+        },
+        {
+            icon: LangsImg,
+            title: "Multiple Languages",
+            description: "Code in your favorite language"
+        },
+        {
+            icon: RuntimeImg,
+            title: "Runtime Analysis",
+            description: "Improve by learning the time complexity of your code"
+        },
+        {
+            icon: AbiltiesImg,
+            title: "Special Abilities",
+            description: "8 ways to make your opponent crash out. Try it out below"
+        },
+        {
+            icon: Vim,
+            title: "Vim Bindings",
+            description: "I'm sure many people will appreciate this :)"
+        }
+    ];
 
     onMount(() => {
         isNotMounted = false;
@@ -73,7 +105,7 @@
                     class="header-3 mt-1 rounded-sm bg-rose/10 px-2 font-mono text-rose shadow-rose text-shadow-center md:mt-1.5"
                     class:hidden={isNotMounted}
                 ></span>
-                <SparkleIcon
+                <Sparkle
                     class={cn(
                         "sparkle ml-2 mt-2 h-12 w-12 stroke-rose text-rose shadow-rose text-shadow-[0_0_12px_#EBADC1]",
                         isNotMounted ? "hidden" : ""
@@ -84,8 +116,8 @@
         </div>
     </div>
     <Button class="text-md font-medium lg:text-lg" href="/login">Start now</Button>
-    <div class="relative mt-24 flex w-3/4 max-w-[1000px] justify-center lg:w-1/2">
-        <div class="-translate-x-12 rounded-sm border-2 border-neutral shadow-xl">
+    <div class="relative mt-24 flex w-3/4 max-w-[1280px] justify-center lg:w-1/2">
+        <div class="-translate-x-6 rounded-sm border-2 border-neutral shadow-xl lg:-translate-x-12">
             <enhanced:img src={User1} alt="Gameplay" class="rounded-sm object-contain" />
         </div>
         <div
@@ -107,7 +139,9 @@
     </div>
     <iframe
         src="https://www.youtube.com/embed/O7C7Tl8N2rY?si=ZAHdwBFe4OrhlUMm"
-        class="aspect-video min-h-[400px]"
+        class="aspect-video max-w-xl"
+        width="100%"
+        height="100%"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -116,30 +150,22 @@
     ></iframe>
 </section>
 
-<section class="mx-auto mb-12 flex max-w-[500px] flex-col items-center overflow-hidden">
+<section class="mx-auto mb-12 flex max-w-[1280px] flex-col items-center overflow-hidden">
     <div class="mb-6 flex flex-col items-center">
         <h2 class="mb-2 font-icon text-4xl">Features</h2>
-        <p class="text-secondary">Hover for details. No fancy images sorry :)</p>
     </div>
-    <div class="mb-4 w-full space-y-2">
-        <TextSlideButton
-            text1="Real-time Battles"
-            text2="Fight random people or create a custom room with your friends!"
-        />
-        <TextSlideButton
-            text1="Multiple Languages (Python, Java, C++)"
-            text2="Since some people are allergic to Python"
-        />
-        <TextSlideButton
-            text1="Runtime Analysis"
-            text2="Instantly know the time complexity of your code after it passed"
-        />
-        <TextSlideButton
-            text1="Special Abilities"
-            text2="8 ways to make your opponent crash out. Try it out below"
-        />
+    <div class="mb-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {#each features as feature}
+            <div
+                class="group flex flex-col items-center justify-center rounded-md border-2 border-secondary p-4"
+            >
+                <feature.icon class="h-32 w-64 p-2" />
+                <h3 class="mt-2 text-center text-lg font-semibold">{feature.title}</h3>
+                <p class="max-w-[40ch] text-center text-secondary">{feature.description}</p>
+            </div>
+        {/each}
     </div>
-    <Button href="/playground" class="w-full">Try out abilities in the playground</Button>
+    <Button href="/playground">Try out abilities on playground</Button>
 </section>
 
 <ScrollUpButton screenWidth={1280} />

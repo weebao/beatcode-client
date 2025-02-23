@@ -13,8 +13,8 @@ const preloadFont: Handle = async ({ event, resolve }) => {
 const protectedRoutes: string[] = [
     "/home",
     "/settings",
-    "/solo",
-    "/team",
+    "/solo/unranked",
+    "/solo/ranked",
     "/custom",
     "/custom/lobby"
 ];
