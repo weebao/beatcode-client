@@ -58,6 +58,7 @@ export const handleDeletio = (view: EditorView) => {
     const lineCount = doc.lines;
 
     if (lineCount === 0) return;
+    if (doc.toString().trim() === "") return;
     console.log(lineCount);
 
     let randomLine = Math.floor(Math.random() * lineCount) + 1;
