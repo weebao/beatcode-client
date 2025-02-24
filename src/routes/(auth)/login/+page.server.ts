@@ -18,21 +18,27 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions = {
     account: async ({ request, cookies }) => {
         const form = await superValidate(request, zod(LoginSchema));
-        const url = new URL(request.url);
-        const roomId = url.searchParams.get("joining");
+        const url = new URL(request.headers.get("referer") || "");
+        const joiningId = url.searchParams.get("joining");
 
         if (!form.valid) {
             return fail(400, { form });
         }
 
         try {
-            const response = await login(form.data, cookies);
+            const response = await login(
+                {
+                    username: form.data.username,
+                    password: form.data.password
+                },
+                cookies
+            );
             if (response.status >= 400) {
                 form.errors.password = [response.error.detail];
                 return fail(response.status, { form, message: response.error.detail });
             }
-            if (roomId) {
-                redirect(302, `/room/${roomId}`);
+            if (joiningId) {
+                redirect(302, `/room/${joiningId}`);
             }
             redirect(302, "/home");
         } catch (e: unknown) {
@@ -44,11 +50,17 @@ export const actions = {
             return fail(500, { form, message: "An unexpected error occurred" });
         }
     },
-    guest: async ({ cookies }) => {
+    guest: async ({ request, cookies }) => {
         try {
+            const url = new URL(request.headers.get("referer") || "");
+            const joiningId = url.searchParams.get("joining");
+
             const response = await loginAsGuest(cookies);
             if (response.status >= 400) {
                 return fail(response.status, { message: response.error.detail });
+            }
+            if (joiningId) {
+                redirect(302, `/room/${joiningId}`);
             }
             redirect(302, "/home");
         } catch (e: unknown) {

@@ -48,7 +48,8 @@ export interface ResetPasswordData extends HttpJSONPayload {
 
 export const LoginSchema = z.object({
     username: z.string().min(1, "Email or Username is required"),
-    password: z.string().min(1, "Password is required")
+    password: z.string().min(1, "Password is required"),
+    joiningId: z.string().optional()
 });
 
 export const RegisterSchema = z

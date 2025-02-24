@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import type { PageProps } from "./$types";
     import { type Infer, superForm } from "sveltekit-superforms";
-    import { goto } from "$app/navigation";
 
     import * as Card from "$components/ui/card";
     import * as Dialog from "$components/ui/dialog";
@@ -87,8 +87,8 @@
                             <Form.FieldErrors />
                         </Form.Field>
                     </div>
-                </div>
-            </Card.Content>
+                </div></Card.Content
+            >
             <Card.Footer class="flex flex-col gap-2">
                 <Button class="w-full" type="submit" disabled={$submitting}>
                     {#if $submitting}
