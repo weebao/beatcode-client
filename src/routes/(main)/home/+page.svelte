@@ -126,8 +126,8 @@
                 </Card.Header>
                 <Card.Content>
                     <Tooltip.Provider delayDuration={50} disableHoverableContent>
-                        <div class="flex flex-wrap gap-2">
-                            {#each Abilities as ability}
+                        <div class="flex flex-wrap items-center gap-2">
+                            {#each Abilities.slice(0, 5) as ability}
                                 <Tooltip.Root>
                                     <Tooltip.Trigger
                                         class={cn(
@@ -144,11 +144,16 @@
                                     </Tooltip.Content>
                                 </Tooltip.Root>
                             {/each}
+                            {#if Abilities.length > 5}
+                                <span class="text-muted-foreground"
+                                    >+{Abilities.length - 5} more</span
+                                >
+                            {/if}
                         </div>
                     </Tooltip.Provider>
                 </Card.Content>
                 <Card.Footer>
-                    <Button href="/playground">Try in playground!</Button>
+                    <Button href="/abilities">Check out all abilities</Button>
                 </Card.Footer>
             </Card.Root>
         </div>

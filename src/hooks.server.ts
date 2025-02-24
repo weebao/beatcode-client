@@ -10,7 +10,7 @@ const preloadFont: Handle = async ({ event, resolve }) => {
     });
 };
 
-const protectedRoutes: string[] = ["/home", "/settings", "/solo", "/custom"];
+const protectedRoutes: string[] = ["/home", "/settings", "/solo", "/custom", "/abilities"];
 
 const getIsProtected = (pathname: string) => {
     for (const route of protectedRoutes) {
