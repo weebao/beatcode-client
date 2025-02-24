@@ -10,14 +10,15 @@ const preloadFont: Handle = async ({ event, resolve }) => {
     });
 };
 
-const protectedRoutes: string[] = [
-    "/home",
-    "/settings",
-    "/solo/unranked",
-    "/solo/ranked",
-    "/custom",
-    "/custom/lobby"
-];
+const protectedRoutes: string[] = ["/home", "/settings", "/solo", "/custom"];
+
+const getIsProtected = (pathname: string) => {
+    for (const route of protectedRoutes) {
+        if (pathname.startsWith(route)) {
+            return true;
+        }
+    }
+};
 
 // custom redirect from joy of code `https://github.com/JoysOfCode/sveltekit-auth-cookies/blob/migration/src/hooks.ts`
 function redirect(location: string, body?: string) {
@@ -29,21 +30,21 @@ function redirect(location: string, body?: string) {
 
 const checkAuth: Handle = async ({ event, resolve }) => {
     const accessToken = event.cookies.get("access_token");
-    const isProtected = protectedRoutes.includes(event.url.pathname);
+    const isProtected = getIsProtected(event.url.pathname);
     if (!accessToken && isProtected) {
         return redirect("/login", "User is unauthorized");
     }
     try {
-        const userCookie = event.cookies.get("user");
-        if (!userCookie) {
+        if (accessToken) {
             const user = await getMe(event.cookies);
-            log("[Fetch user's latest info]:", user);
-            if (!user && isProtected) {
+            log("[Fetch user's info]:", user);
+            if (!user) {
                 return redirect("/login", "User is unauthorized");
             }
             event.locals.user = user;
         } else {
-            event.locals.user = JSON.parse(userCookie);
+            if (!isProtected) return resolve(event);
+            return redirect("/login", "User is unauthorized");
         }
     } catch {
         if (isProtected) {
