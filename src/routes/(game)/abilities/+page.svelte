@@ -12,13 +12,13 @@
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {#each Abilities as ability}
-            <div class="rounded-lg border border-secondary p-4 flex flex-col">
+            <div class="flex flex-col rounded-lg border border-secondary p-4">
                 <div class="text-xl">
                     <span class={cn(ability.class, "rounded-md px-2 py-1 font-mono")}>
                         {ability.name}
                     </span>
                 </div>
-                <div class="flex-1 flex flex-col justify-between">
+                <div class="flex flex-1 flex-col justify-between">
                     <p class="mt-4 text-sm text-muted-foreground">
                         {ability.desc}
                     </p>
