@@ -1,5 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import type { PageProps } from "./$types";
+    import { goto } from "$app/navigation";
     import { gsap } from "gsap";
     import { TextPlugin } from "gsap/TextPlugin";
 
@@ -16,6 +18,8 @@
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
     import { cn } from "$lib/utils.js";
+
+    let { data }: PageProps = $props();
 
     let isNotMounted = $state<boolean>(true);
     const features = [
@@ -52,6 +56,9 @@
     ];
 
     onMount(() => {
+        if (data.user) {
+            goto("/home");
+        }
         isNotMounted = false;
         gsap.registerPlugin(TextPlugin);
         const tl = gsap.timeline();

@@ -15,6 +15,12 @@ export async function GET() {
 				<priority>1.0</priority>
 			</url>
 			<url>
+				<loc>https://beatcode.dev/playground</loc>
+			</url>
+			<url>
+				<loc>https://beatcode.dev/abilities</loc>
+			</url>
+			<url>
 				<loc>https://beatcode.dev/home</loc>
 			</url>
 			<url>
