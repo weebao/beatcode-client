@@ -39,7 +39,7 @@
     <meta name="twitter:site" content="@BeatCode.dev" />
 </svelte:head>
 
-<Navbar user={data?.user} />
+<Navbar user={data.user} />
 <Toaster />
 {#key data.pathname}
     <div class="absolute w-full" transition:fade={{ duration: 150 }}>

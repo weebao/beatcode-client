@@ -1,20 +1,25 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
 
-    import { Abilities, Ratings } from "$assets/config/game";
+    import { Abilities } from "$assets/config/game";
     import * as Card from "$components/ui/card";
     import { Progress } from "$components/ui/progress";
     import { Button } from "$components/ui/button";
     import * as Tooltip from "$components/ui/tooltip";
 
     import { Settings, Shell, Swords } from "lucide-svelte";
-    import { cn } from "$lib/utils";
+    import { cn, getRank } from "$lib/utils";
     import { onMount } from "svelte";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
 
     let { data }: PageProps = $props();
-    let user = data.user;
     let mounted = $state(false);
+
+    const abilitiesCount = 3; // for display
+
+    const user = data.user;
+    const rating = user?.rating ?? 0;
+    const rank = getRank(rating);
 
     const mockExp = [
         { name: "Array", percentage: 0 },
@@ -28,7 +33,6 @@
         { name: "Ranked", icon: Swords, link: "/solo/ranked", disabled: user?.is_guest },
         { name: "Custom", icon: Settings, link: "/custom" }
     ];
-    const rating = Ratings[user?.rating ?? 0];
 
     onMount(() => (mounted = true));
 </script>
@@ -107,17 +111,21 @@
                 <div
                     class="mb-4 h-24 w-24 overflow-hidden rounded-lg border border-slate-500 bg-secondary"
                 >
-                    {#if rating}
-                        <rating.badge class="h-24 w-24" />
-                    {/if}
+                    <rank.badge class="h-24 w-24" />
                 </div>
-                <div
-                    class={cn(
-                        "rounded-md px-4 pb-1 pt-2 font-icon font-bold italic",
-                        rating?.class ?? ""
-                    )}
-                >
-                    {rating?.name}
+                <div class={cn("mb-4 rounded-md px-4 py-1 font-icon font-bold italic", rank.class)}>
+                    {rank.name}
+                </div>
+                <div class="space-y-2">
+                    <Progress
+                        class="h-2"
+                        value={rating - rank.rating}
+                        max={rank.nextRating - rank.rating}
+                    ></Progress>
+                    <div class="font-icon text-sm font-medium">
+                        Elo: <span class="font-bold text-primary">{Math.floor(rating)}</span>
+                        ({rank.nextRating} to rank up)
+                    </div>
                 </div>
             </div>
             <Card.Root class="flex-1 bg-background/75 backdrop-blur-md">
@@ -127,7 +135,7 @@
                 <Card.Content>
                     <Tooltip.Provider delayDuration={50} disableHoverableContent>
                         <div class="flex flex-wrap items-center gap-2">
-                            {#each Abilities.slice(0, 5) as ability}
+                            {#each Abilities.slice(0, abilitiesCount) as ability}
                                 <Tooltip.Root>
                                     <Tooltip.Trigger
                                         class={cn(
@@ -144,9 +152,9 @@
                                     </Tooltip.Content>
                                 </Tooltip.Root>
                             {/each}
-                            {#if Abilities.length > 5}
-                                <span class="text-muted-foreground"
-                                    >+{Abilities.length - 5} more</span
+                            {#if Abilities.length > abilitiesCount}
+                                <span class="ml-2 text-muted-foreground"
+                                    >+{Abilities.length - abilitiesCount} more</span
                                 >
                             {/if}
                         </div>
