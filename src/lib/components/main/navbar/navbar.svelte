@@ -23,7 +23,7 @@
 >
     <div class="flex min-h-[80px] w-full max-w-[1280px] items-center justify-between gap-10">
         <div class="my-auto flex items-center gap-1.5 self-stretch whitespace-nowrap text-2xl">
-            <a href="/">
+            <a href={user ? "/home" : "/"}>
                 <LogoHorizontal class="h-full w-full" />
             </a>
         </div>
