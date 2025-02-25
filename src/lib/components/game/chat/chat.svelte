@@ -1,7 +1,6 @@
 <script lang="ts">
     import { scale } from "svelte/transition";
     import { backOut } from "svelte/easing";
-    import { onClickOutside } from "runed";
     import { Button } from "$components/ui/button";
     import { Card } from "$components/ui/card";
     import { Input } from "$components/ui/input";
@@ -74,11 +73,6 @@
         const date = new Date(timestamp * 1000);
         return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
     };
-
-    onClickOutside(
-        () => chatMenu,
-        () => (isOpen = false)
-    );
 </script>
 
 <div bind:this={chatMenu} class="fixed bottom-4 right-4 z-50">
