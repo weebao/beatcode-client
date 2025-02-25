@@ -12,23 +12,53 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 
-export const Ratings = [
-    { name: "O(n!)", class: "bg-gradient-to-br from-neutral-700 to-neutral-600", badge: ONFac },
+export const Ranks = [
+    {
+        name: "O(n!)",
+        rating: 0,
+        nextRating: 100,
+        class: "bg-gradient-to-br from-neutral-700 to-neutral-600",
+        badge: ONFac
+    },
     {
         name: "O(2^n)",
+        rating: 100,
+        nextRating: 200,
         class: "bg-gradient-to-br from-green-400 to-green-300 text-green-950",
         badge: O_2n
     },
-    { name: "O(n²)", class: "bg-gradient-to-br from-blue-600 to-blue-500", badge: ONSquared },
-    { name: "O(nlog(n))", class: "bg-gradient-to-br from-purple-500 to-purple-400", badge: ONLogn },
+    {
+        name: "O(n²)",
+        rating: 200,
+        nextRating: 500,
+        class: "bg-gradient-to-br from-blue-600 to-blue-500",
+        badge: ONSquared
+    },
+    {
+        name: "O(nlog(n))",
+        rating: 500,
+        nextRating: 1200,
+        class: "bg-gradient-to-br from-purple-500 to-purple-400",
+        badge: ONLogn
+    },
     {
         name: "O(n)",
+        rating: 1200,
+        nextRating: 1600,
         class: "bg-gradient-to-br from-yellow-300 to-yellow-200 text-amber-800",
         badge: ON
     },
-    { name: "O(log(n))", class: "bg-gradient-to-br from-orange-800 to-orange-700", badge: OLogn },
+    {
+        name: "O(log(n))",
+        rating: 1600,
+        nextRating: 2400,
+        class: "bg-gradient-to-br from-orange-800 to-orange-700",
+        badge: OLogn
+    },
     {
         name: "O(1)",
+        rating: 2400,
+        nextRating: 10000,
         class: "bg-gradient-to-br from-slate-200 to-slate-400 text-slate-950",
         badge: O_1
     }

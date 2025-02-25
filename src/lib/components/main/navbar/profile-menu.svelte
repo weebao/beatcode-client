@@ -2,10 +2,9 @@
     import type { User } from "$models/user";
     import { ChevronDown } from "lucide-svelte";
     import AvatarImg from "$assets/images/avatar.jpg";
-    import { Ratings } from "$assets/config/game";
     import * as Avatar from "$components/ui/avatar";
     import * as DropdownMenu from "$components/ui/dropdown-menu";
-    import { cn } from "$lib/utils";
+    import { cn, getRank } from "$lib/utils";
     import { goto } from "$app/navigation";
 
     interface Props {
@@ -13,7 +12,7 @@
     }
 
     let { user }: Props = $props();
-    const rating = Ratings[user.rating];
+    const rank = getRank(user.rating);
 </script>
 
 <DropdownMenu.Root>
@@ -23,9 +22,9 @@
         >
             <div class="flex">
                 <Avatar.Root class="mr-4 size-12">
-                    <Avatar.Image src={user?.avatar_url ?? AvatarImg} />
+                    <Avatar.Image src={user.avatar_url ?? AvatarImg} />
                     <Avatar.Fallback
-                        >{user?.display_name
+                        >{user.display_name
                             .split(" ")
                             .reduce((a, v) => a + v[0].toUpperCase(), "")}</Avatar.Fallback
                     >
@@ -35,10 +34,10 @@
                     <div
                         class={cn(
                             "w-fit rounded-sm px-4 pb-px pt-[2px] font-icon text-xs font-bold italic tracking-wider",
-                            rating?.class ?? ""
+                            rank.class
                         )}
                     >
-                        {rating?.name}
+                        {rank.name}
                     </div>
                 </div>
             </div>

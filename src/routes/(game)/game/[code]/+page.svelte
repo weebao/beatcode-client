@@ -23,7 +23,7 @@
     import { Editor, EditorData } from "$components/game/editor";
     import { Chat } from "$components/game/chat";
 
-    import { log } from "$lib/utils";
+    import { cn, log, getRank } from "$lib/utils";
 
     import {
         Play,
@@ -41,6 +41,11 @@
     let selected = $state<number>(0);
     let isGameStarted = $state<boolean>(false);
     let gameState = $state<GameState>();
+
+    let userRating = data.user?.rating ?? 0;
+    let userRank = getRank(userRating);
+    let opponentRating = $derived(gameState?.opponent_rating ?? 0);
+    let opponentRank = $derived(getRank(opponentRating));
 
     let currentProblem = $state<ProblemDetails>();
     let isProblemSolved = $state<boolean>(false);
@@ -297,7 +302,15 @@
                 <Avatar.Fallback>You</Avatar.Fallback>
             </Avatar.Root>
             <div class="w-full">
-                <div class="mb-1 font-semibold">{data.user?.display_name ?? "You"}</div>
+                <div class="mb-1 flex items-center gap-2">
+                    <div class="font-semibold">{data.user?.display_name ?? "You"}</div>
+                    <div class={cn("rounded-sm bg-neutral px-1 font-mono text-xs", userRank.class)}>
+                        {userRank.name}
+                    </div>
+                    <div class="rounded-sm bg-neutral px-1 font-mono text-xs">
+                        {Math.floor(userRating)}
+                    </div>
+                </div>
                 <Progress max={100} value={Math.min(gameState?.your_hp ?? 0, 100)} class="h-2" />
             </div>
         </div>
@@ -348,8 +361,21 @@
         </div>
         <div class="flex w-full">
             <div class="w-full">
-                <div class="mb-1 text-right font-semibold">
-                    {gameState?.opponent_display_name ?? "Opponent"}
+                <div class="mb-1 flex items-center justify-end gap-2">
+                    <div class="rounded-sm bg-neutral px-1 font-mono text-xs">
+                        {Math.floor(opponentRating)}
+                    </div>
+                    <div
+                        class={cn(
+                            "rounded-sm bg-neutral px-1 font-mono text-xs",
+                            opponentRank.class
+                        )}
+                    >
+                        {opponentRank.name}
+                    </div>
+                    <div class="font-semibold">
+                        {gameState?.opponent_display_name ?? "Opponent"}
+                    </div>
                 </div>
                 <Progress
                     max={100}

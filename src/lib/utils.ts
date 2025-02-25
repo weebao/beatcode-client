@@ -3,12 +3,13 @@ import { twMerge } from "tailwind-merge";
 import { toast } from "svelte-sonner";
 import type { ActionResult } from "@sveltejs/kit";
 import { dev } from "$app/environment";
+import { Ranks } from "$assets/config/game";
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
-}
+};
 
-export function announce(result: ActionResult, successMsg: string, customErrorMsg?: string) {
+export const announce = (result: ActionResult, successMsg: string, customErrorMsg?: string) => {
     const findErrorMsg = (data: Record<string, any> | undefined) => {
         console.log(data);
         if (!data) {
@@ -40,10 +41,19 @@ export function announce(result: ActionResult, successMsg: string, customErrorMs
     } else if (result.type === "failure") {
         toast.error(`${result.status}: ${findErrorMsg(result.data)}`);
     }
-}
+};
 
-export function log(message?: any, ...optionalParams: any[]) {
+export const log = (message?: any, ...optionalParams: any[]) => {
     if (dev) {
         console.log(message, ...optionalParams);
     }
-}
+};
+
+export const getRank = (rating: number) => {
+    for (let i = 0; i < Ranks.length; i++) {
+        if (rating < Ranks[i].nextRating) {
+            return Ranks[i];
+        }
+    }
+    return Ranks[0];
+};
