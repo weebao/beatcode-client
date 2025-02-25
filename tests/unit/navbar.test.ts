@@ -18,7 +18,7 @@ describe("Testing Navbar", () => {
         username: "testuser",
         email: "testuser@example.com",
         display_name: "Test User",
-        rating: 5,
+        rating: 0,
         is_verified: true,
         is_guest: false,
         created_at: Date.now(),
@@ -29,7 +29,7 @@ describe("Testing Navbar", () => {
         const results = render(Navbar, { user });
 
         expect(() => results.getByText(user.display_name)).not.toThrow();
-        expect(() => results.getByText("O(log(n))")).not.toThrow();
+        expect(() => results.getByText("O(n!)")).not.toThrow();
     });
 
     it("dropdown should show when profile menu is clicked", async () => {
