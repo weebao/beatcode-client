@@ -493,7 +493,8 @@
     <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
         <div class="my-4 flex flex-col items-center">
             <WifiIcon class="mb-8 h-20 w-20 animate-pulse" />
-            <div class="mb-10 font-icon text-2xl font-bold">Waiting for opponent</div>
+            <div class="mb-4 font-icon text-2xl font-bold">Waiting for opponent</div>
+            <Button onclick={forfeit}>Leave game</Button>
         </div>
     </Dialog.Content>
 </Dialog.Root>
