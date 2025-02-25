@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import type { PageProps } from "./$types";
     import { Swords } from "lucide-svelte";
     import { createWebSocket } from "$lib/websocket.svelte";
@@ -7,7 +8,7 @@
     let { data }: PageProps = $props();
 
     const ws = createWebSocket(data?.token ?? "");
-    if (data.user) {
+    if (browser && data.user) {
         ws.setUrl(`${data.webSocketUrl}/game/ranked-queue`);
         ws.connect();
     }
