@@ -4,6 +4,18 @@ import { getMe } from "$lib/server/user";
 import { getCurrentGame } from "$lib/server/game";
 import { log } from "$lib/utils";
 
+const handleStaticFiles: Handle = async ({ event, resolve }) => {
+    if (event.url.pathname === "/robots.txt") {
+        return new Response("User-agent: *\nAllow: /", {
+            headers: {
+                "Content-Type": "text/plain"
+            }
+        });
+    }
+
+    return resolve(event);
+};
+
 const preloadFont: Handle = async ({ event, resolve }) => {
     return await resolve(event, {
         preload: ({ type }) => type === "font"
@@ -83,4 +95,4 @@ const checkIfInGame: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-export const handle = sequence(preloadFont, checkAuth, checkIfInGame);
+export const handle = sequence(handleStaticFiles, preloadFont, checkAuth, checkIfInGame);
