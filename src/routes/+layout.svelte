@@ -9,7 +9,23 @@
 </script>
 
 <svelte:head>
-    <title>BeatCode</title>
+    <title>BeatCode - Test Your LeetCode Skills With Your Friends</title>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "BeatCode",
+            "url": "https://beatcode.dev/"
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "BeatCode",
+            "url": "https://beatcode.dev/"
+        }
+    </script>
     <meta
         name="description"
         content="A live LeetCode battle game where you can use abilities to sabotage your oponents. Invite your friends and beat them with your code!"
