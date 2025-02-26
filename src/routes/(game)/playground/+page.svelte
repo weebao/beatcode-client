@@ -1,4 +1,3 @@
-<!-- File: /routes/(game)/playground/+page.svelte -->
 <script lang="ts">
     import { onMount } from "svelte";
     import { Abilities } from "$assets/config/game";
@@ -51,6 +50,10 @@
         rightEditorData.setCode(defaultCode, "", true);
     });
 </script>
+
+<svelte:head>
+    <title>Playground - BeatCode</title>
+</svelte:head>
 
 <div class="mt-8 flex flex-col items-center bg-background p-4 text-foreground">
     <div class="mb-6 text-center">
