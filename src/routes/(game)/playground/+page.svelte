@@ -56,15 +56,19 @@
 </svelte:head>
 
 <div class="mt-8 flex flex-col items-center bg-background p-4 text-foreground">
-    <div class="mb-6 text-center">
+    <div class="flex flex-col items-center mb-6 text-center">
         <h1 class="mb-3 font-icon text-4xl font-bold">Playground</h1>
-        <div>Type any ability in the editor and hit <code>Enter</code> to see the magic :D</div>
+        <div class="mb-3">
+            Type any ability in the editor and hit <code>Enter</code> to see the magic :D
+        </div>
+        <Toggle
+            class="group flex space-x-2 border-2 border-secondary"
+            onPressedChange={toggleVim}
+        >
+            <Vim class="saturate-0 group-data-[state=on]:saturate-100" />
+            Vim Mode
+        </Toggle>
     </div>
-
-    <Toggle class="group mb-3 flex space-x-2 border-2 border-secondary" onPressedChange={toggleVim}>
-        <Vim class="saturate-0 group-data-[state=on]:saturate-100" />
-        Vim Mode
-    </Toggle>
 
     <div class="flex max-h-[500px] w-full max-w-6xl items-stretch gap-4">
         <div class="h-full w-1/5 rounded-lg border border-secondary bg-background p-4">

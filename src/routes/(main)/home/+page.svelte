@@ -153,9 +153,11 @@
                                 </Tooltip.Root>
                             {/each}
                             {#if Abilities.length > abilitiesCount}
-                                <span class="ml-2 text-muted-foreground"
-                                    >+{Abilities.length - abilitiesCount} more</span
-                                >
+                                <a
+                                    href="/abilities"
+                                    class="ml-1 text-muted-foreground hover:underline"
+                                    >+{Abilities.length - abilitiesCount} more
+                                </a>
                             {/if}
                         </div>
                     </Tooltip.Provider>

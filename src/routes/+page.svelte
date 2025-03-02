@@ -26,7 +26,7 @@
         {
             icon: RanksImg,
             title: "Ranked Mode",
-            description: "Level up by testing your LeetCode skills against others"
+            description: "Level up by testing your LeetCode skills against others (Elo-based)"
         },
         {
             icon: Gamepad2,
@@ -46,12 +46,12 @@
         {
             icon: AbiltiesImg,
             title: "Special Abilities",
-            description: "8 ways to make your opponent crash out. Try it out below"
+            description: "8 ways to make your opponent crash out. Try them out below"
         },
         {
             icon: Vim,
             title: "Vim Bindings",
-            description: "I'm sure many people will appreciate this :)"
+            description: "Many people will appreciate this :)"
         }
     ];
 
@@ -161,12 +161,12 @@
     <div class="mb-6 flex flex-col items-center">
         <h2 class="mb-2 font-icon text-4xl">Features</h2>
     </div>
-    <div class="mb-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {#each features as feature}
             <div
                 class="group flex flex-col items-center justify-center rounded-md border-2 border-secondary p-4"
             >
-                <feature.icon class="h-32 w-64 p-2" />
+                <feature.icon class="h-32 w-64 p-2 stroke-[1.5]" />
                 <h3 class="mt-2 text-center text-lg font-semibold">{feature.title}</h3>
                 <p class="max-w-[40ch] text-center text-secondary">{feature.description}</p>
             </div>
