@@ -4,6 +4,14 @@ Keep up with the latest updates here :D
 
 ---
 
+## 2025-03-02
+
+### Added
+
+- Added a changelog page to keep track of updates ([#90](https://github.com/beatcode-official/client/pull/90)).
+
+---
+
 ## 2025-02-28
 
 ### Fixed
