@@ -166,7 +166,7 @@
             <div
                 class="group flex flex-col items-center justify-center rounded-md border-2 border-secondary p-4"
             >
-                <feature.icon class="h-32 w-64 p-2 stroke-[1.5]" />
+                <feature.icon class="h-32 w-64 stroke-[1.5] p-2" />
                 <h3 class="mt-2 text-center text-lg font-semibold">{feature.title}</h3>
                 <p class="max-w-[40ch] text-center text-secondary">{feature.description}</p>
             </div>

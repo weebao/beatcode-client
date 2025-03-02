@@ -1,4 +1,6 @@
-<footer class="w-full max-w-[1280px] mx-auto mt-8 mb-4 space-y-1 justify-between text-center text-sm">
+<footer
+    class="mx-auto mb-4 mt-8 w-full max-w-[1280px] justify-between space-y-1 text-center text-sm"
+>
     <div>
         Made with ❤️ by <a
             href="https://github.com/beatcode-official"
@@ -12,7 +14,9 @@
         <span>・</span>
         <a href="https://discord.gg/9nez8sYxAw" target="_blank" class="hover:underline">Discord</a>
         <span>・</span>
-        <a href="https://github.com/beatcode-official" target="_blank" class="hover:underline">GitHub</a>
+        <a href="https://github.com/beatcode-official" target="_blank" class="hover:underline"
+            >GitHub</a
+        >
         <span>・</span>
         <a href="/terms" class="hover:underline">Terms</a>
         <span>・</span>
