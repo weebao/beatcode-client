@@ -10,7 +10,9 @@
     />
 </svelte:head>
 
-<main class="mx-auto my-16 max-w-[900px] space-y-6 p-4 text-sm leading-relaxed lg:text-base">
+<main
+    class="mx-auto my-4 max-w-[900px] space-y-6 p-4 text-sm leading-relaxed lg:my-16 lg:text-base"
+>
     <!-- PAGE TITLE -->
     <h1 class="mb-2 font-icon text-2xl lg:text-4xl">Terms of Service</h1>
     <Separator />
