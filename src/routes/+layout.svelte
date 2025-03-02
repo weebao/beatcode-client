@@ -2,7 +2,7 @@
     import "../app.postcss";
     import type { LayoutProps } from "./$types";
     import { fade } from "svelte/transition";
-    import Navbar from "$components/main/navbar";
+    import { Navbar } from "$components/main/navbar";
     import Header from "$components/main/header.svelte";
     import Footer from "$components/main/footer.svelte";
     import { Toaster } from "$components/ui/sonner";

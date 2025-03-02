@@ -57,6 +57,7 @@
                             name="display_name"
                             type="text"
                             required
+                            readonly={data.user.is_guest}
                         />
                     {/snippet}
                 </Form.Control>
