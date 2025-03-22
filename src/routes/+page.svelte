@@ -1,7 +1,4 @@
 <script lang="ts">
-    import posthog from "posthog-js";
-    import { browser } from "$app/environment";
-    import { beforeNavigate, afterNavigate } from "$app/navigation";
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
     import { goto } from "$app/navigation";
@@ -58,25 +55,12 @@
         }
     ];
 
-    if (browser) {
-        beforeNavigate(() => posthog.capture("$pageleave"));
-        afterNavigate(() => posthog.capture("$pageview"));
-    }
-
     onMount(() => {
         if (data.user) {
             goto("/home");
         }
         isNotMounted = false;
 
-        // Posthog
-        if (browser) {
-            posthog.init("phc_YBl4Zpll1oNoZnGJhrOft6ZbLegGLFXFHQr1EPZFr9m", {
-                api_host: "https://us.i.posthog.com",
-                capture_pageview: false,
-                capture_pageleave: false
-            });
-        }
         // Text animation
         gsap.registerPlugin(TextPlugin);
         const tl = gsap.timeline();

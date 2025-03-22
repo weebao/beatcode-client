@@ -1,5 +1,8 @@
 <script lang="ts">
     import "../app.postcss";
+    import { browser } from "$app/environment";
+    import posthog from "posthog-js";
+    import { beforeNavigate, afterNavigate } from "$app/navigation";
     import type { LayoutProps } from "./$types";
     import { fade } from "svelte/transition";
     import { Navbar } from "$components/main/navbar";
@@ -8,6 +11,10 @@
     import { Toaster } from "$components/ui/sonner";
 
     let { children, data }: LayoutProps = $props();
+    if (browser) {
+        beforeNavigate(() => posthog.capture("$pageleave"));
+        afterNavigate(() => posthog.capture("$pageview"));
+    }
 </script>
 
 <Header />
