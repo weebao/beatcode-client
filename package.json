@@ -85,6 +85,7 @@
     "jsdom": "^25.0.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-solid": "^0.456.0",
+    "posthog-js": "^1.232.4",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
     "prettier-plugin-tailwindcss": "^0.6.8",
