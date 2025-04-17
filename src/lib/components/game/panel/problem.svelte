@@ -4,7 +4,7 @@
     import * as Tooltip from "$components/ui/tooltip";
 
     import type { ProblemDetails } from "$lib/models/game";
-    import { SquareArrowOutUpRight } from "lucide-svelte";
+    import { SquarePlay, SquareArrowOutUpRight } from "lucide-svelte";
     interface Props {
         content?: ProblemDetails;
     }
@@ -45,6 +45,26 @@
                     <Tooltip.Content
                         class="border border-secondary bg-background-dark text-sm text-foreground"
                         >Please don't use this to cheat :></Tooltip.Content
+                    >
+                </Tooltip.Root>
+            </Tooltip.Provider>
+        {/if}
+        {#if content?.explanation}
+            <Tooltip.Provider delayDuration={50}>
+                <Tooltip.Root>
+                    <Tooltip.Trigger>
+                        <a
+                            href={content.explanation}
+                            class="flex items-center rounded-md bg-neutral px-2 pb-px text-sm transition-all duration-150 hover:bg-secondary"
+                            target="_blank"
+                        >
+                            <SquarePlay class="mr-1 mt-px h-4 w-3.5" />
+                            <span>Explanation</span>
+                        </a>
+                    </Tooltip.Trigger>
+                    <Tooltip.Content
+                        class="border border-secondary bg-background-dark text-sm text-foreground"
+                        >Video by the legendary Neetcode! (or not)</Tooltip.Content
                     >
                 </Tooltip.Root>
             </Tooltip.Provider>

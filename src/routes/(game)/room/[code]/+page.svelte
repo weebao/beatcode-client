@@ -12,6 +12,7 @@
     import { Separator } from "$components/ui/separator";
     import { RoomSettingsForm } from "$components/game/room";
     import StatusIndicator from "$components/misc/status-indicator.svelte";
+    import PromptSignIn from "$components/misc/prompt-sign-in.svelte";
 
     import type { RoomState, RoomSettingsSchema, ChatMessage } from "$models/room";
     import { announce } from "$lib/utils";
@@ -238,18 +239,11 @@
 <Chat username={data?.user?.username} history={chatHistory} onSend={sendMessage} />
 
 <!-- If not authenticated - prompt user to sign in -->
-<Dialog.Root open={!data.user}>
-    <Dialog.Content class="sm:max-w-[425px]" hideCloseButton interactOutsideBehavior="ignore">
-        <Dialog.Header>
-            <Dialog.Title>Umm, akshually you can't join yet ☝️🤓</Dialog.Title>
-            <Dialog.Description>Please sign in to join</Dialog.Description>
-        </Dialog.Header>
-        <form method="POST" action="?/joinRoomAsGuest">
-            <Button href={`/login?joining=${data.roomCode}`}>Sign in</Button>
-            <Button type="submit" variant="ghost">Play as guest</Button>
-        </form>
-    </Dialog.Content>
-</Dialog.Root>
+<PromptSignIn
+    user={data.user}
+    loginUrl={`/login?joining=${data.roomCode}`}
+    guestAction="?/joinRoomAsGuest"
+/>
 
 <style>
 </style>

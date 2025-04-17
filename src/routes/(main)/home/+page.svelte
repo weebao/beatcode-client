@@ -7,7 +7,7 @@
     import { Button } from "$components/ui/button";
     import * as Tooltip from "$components/ui/tooltip";
 
-    import { Settings, Shell, Swords } from "lucide-svelte";
+    import { Settings, Bot, Swords } from "lucide-svelte";
     import { cn, getRank } from "$lib/utils";
     import { onMount } from "svelte";
     import GradientBlob from "$components/misc/gradient-blob.svelte";
@@ -29,9 +29,9 @@
         { name: "Dynamic Programming", percentage: 0 }
     ];
     const gameModes = [
-        { name: "Unranked", icon: Shell, link: "/solo/unranked", disabled: user?.is_guest },
-        { name: "Ranked", icon: Swords, link: "/solo/ranked", disabled: user?.is_guest },
-        { name: "Custom", icon: Settings, link: "/custom" }
+        { name: "Battle Mode", icon: Swords, link: "/battle" },
+        { name: "Practice Mode", icon: Bot, link: "/practice" },
+        { name: "Custom Mode", icon: Settings, link: "/custom" }
     ];
 
     onMount(() => (mounted = true));
@@ -81,13 +81,9 @@
                 >
                     <div class="flex items-center">
                         <mode.icon class="mr-4 h-8 w-8 text-secondary" />
-                        <span class="font-mono text-2xl">{mode.name}</span>
+                        <span class="font-icon text-2xl">{mode.name}</span>
                     </div>
-                    {#if mode.disabled}
-                        <Button variant="secondary" class="px-8 text-base" disabled>Locked</Button>
-                    {:else}
-                        <Button class="px-8 text-base" href={mode.link}>Start</Button>
-                    {/if}
+                    <Button class="px-8 text-base" href={mode.link}>Start</Button>
                 </div>
             {/each}
         </div>

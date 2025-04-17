@@ -51,6 +51,10 @@
 
         /* Typography */
         --font-base: 14px;
+
+        /* Button */
+        --gradient-reflect-color: var(--primary);
+        --gradient-reflect-width: 1px;
     }
 }
 
@@ -74,6 +78,64 @@
     }
     code {
         @apply rounded-sm border border-secondary bg-neutral px-1 pb-px text-sm;
+    }
+
+    /* got from t3 chat (go try it!) - thanks theo */
+    .border-reflect {
+        position: relative;
+        z‐index: 0;
+    }
+    .border-reflect::before {
+        content: "";
+        pointer-events: none;
+        user-select: none;
+        position: absolute;
+        inset: 0;
+        padding: var(--gradient-reflect-width);
+        border-radius: inherit;
+        background: linear-gradient(
+                180deg,
+                hsl(var(--gradient-reflect-color) / 0) 0%,
+                hsl(var(--gradient-reflect-color) / 0.75) 50%,
+                hsl(var(--gradient-reflect-color) / 0) 100%
+            ),
+            linear-gradient(
+                15deg,
+                hsl(var(--gradient-reflect-color) / 0) 0%,
+                hsl(var(--gradient-reflect-color) / 0.5) 50%,
+                hsl(var(--gradient-reflect-color) / 0) 100%
+            );
+        -webkit-mask:
+            linear-gradient(white, white) content-box,
+            linear-gradient(white, white);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        mask:
+            linear-gradient(white, white) content-box,
+            linear-gradient(white, white);
+        opacity: var(--gradient-reflect-opacity, 1);
+        z-index: -1;
+    }
+}
+
+@layer utilities {
+    .reflect-primary {
+        --gradient-reflect-color: var(--primary);
+    }
+    .reflect-secondary {
+        --gradient-reflect-color: var(--secondary);
+    }
+    .reflect-destructive {
+        --gradient-reflect-color: var(--destructive);
+    }
+    .reflect-accent {
+        --gradient-reflect-color: var(--accent);
+    }
+    .reflect-neutral {
+        --gradient-reflect-color: var(--neutral);
+    }
+    .reflect-rose {
+        --gradient-reflect-color: var(--rose);
     }
 }
 
