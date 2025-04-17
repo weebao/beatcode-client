@@ -24,6 +24,7 @@ export interface ProblemDetails {
     source: string;
     description: string; // HTML btw
     difficulty: "easy" | "medium" | "hard";
+    explanation?: string;
     sample_test_cases: string[];
     sample_test_results: string[];
     boilerplate: {
