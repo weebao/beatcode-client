@@ -4,6 +4,18 @@ Keep up with the latest updates here :D
 
 ---
 
+## 2025-04-17
+
+### Added
+
+- Added Practice Mode ([#65](https://github.com/beatcode-official/server/pull/65))
+
+### Fixed
+
+- Buggy animation on the home page
+
+---
+
 ## 2025-03-02
 
 ### Added
