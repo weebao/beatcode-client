@@ -21,10 +21,9 @@
     } from "$assets/images/landing";
 
     import { Button } from "$components/ui/button";
-    import GradientBlob from "$components/misc/gradient-blob.svelte";
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
-    let { data }: PageProps = $props();
+    // let { data }: PageProps = $props();
     let mounted = $state<boolean>(false);
 
     let img1: HTMLElement;
@@ -155,11 +154,6 @@
             <enhanced:img src={User2} alt="Gameplay" class="rounded-sm object-contain" />
         </div>
     </div>
-    <!-- <GradientBlob class="absolute left-0 top-2/3 -z-20 h-1/2 w-full -translate-y-1/2 opacity-50" />
-    <GradientBlob
-        class="absolute right-0 top-2/3 -z-20 h-1/2 w-1/2 -translate-y-3/4 opacity-50"
-        blobClass="bg-amber-200/80"
-    /> -->
 </section>
 
 <section class="mb-12 flex flex-col items-center overflow-hidden">
