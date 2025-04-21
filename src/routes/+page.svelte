@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import type { PageProps } from "./$types";
-    import { goto } from "$app/navigation";
     import { gsap } from "gsap";
     import { TextPlugin } from "gsap/TextPlugin";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
