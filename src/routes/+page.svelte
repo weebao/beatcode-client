@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { PageProps } from "./$types";
-    import { goto } from "$app/navigation";
+    // import type { PageProps } from "./$types";
     import { gsap } from "gsap";
     import { TextPlugin } from "gsap/TextPlugin";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { cn } from "$lib/utils";
 
     gsap.registerPlugin(TextPlugin);
     gsap.registerPlugin(ScrollTrigger);
@@ -21,10 +21,10 @@
     } from "$assets/images/landing";
 
     import { Button } from "$components/ui/button";
-    import GradientBlob from "$components/misc/gradient-blob.svelte";
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
-    let { data }: PageProps = $props();
+    // let { data }: PageProps = $props();
+    let mounted = $state<boolean>(false);
 
     let img1: HTMLElement;
     let img2: HTMLElement;
@@ -63,29 +63,36 @@
     ];
 
     onMount(() => {
-        if (data.user) {
-            goto("/home");
-        }
-
-        // Text animation
+        mounted = true;
         const tl = gsap.timeline();
-        tl.from(".hero-title", {
-            scale: 0.5,
+        // Use query selectors for the words
+        const titleSelectors = [1, 2, 3, 4].map((i) => `.word-${i}`);
+        tl.from(titleSelectors, {
             opacity: 0,
-            duration: 1,
-            ease: "ease.out"
-        });
-        tl.to(".header-3", {
+            y: 10,
+            filter: "blur(10px)",
             duration: 0.5,
+            ease: "ease.out",
+            stagger: 0.2
+        });
+        tl.from(".word-5", {
+            duration: 0.1,
+            opacity: 0
+        });
+        tl.to(".word-5", {
+            duration: 0.3,
             text: "magic",
             ease: "none"
         });
+
         gsap.from([img1, img2], {
             opacity: 0,
             y: 20,
             duration: 1,
-            ease: "ease.out"
+            ease: "ease.out",
+            delay: 0.3
         });
+
         gsap.from(".feature-card", {
             scrollTrigger: {
                 trigger: ".features-section",
@@ -106,22 +113,34 @@
             Head-to-head coding battle with magic
         </h1>
         <div
-            class="hero-title relative mb-4 flex h-32 flex-col gap-2 text-center
-                 text-5xl font-semibold text-neutral-100 md:mb-0 md:text-6xl"
+            aria-hidden="true"
+            class={cn(
+                mounted ? "" : "opacity-0", // Initially hidden until mounted and animated
+                "hero-title relative mb-4 flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:mb-0 md:text-6xl"
+            )}
         >
-            <span class="header-1">Head-to-head coding battle</span>
-            <span class="flex w-full justify-center">
-                <span class="header-2">with</span>
+            <div>
+                <span class="word-1 inline-block">Head-to-head</span>
+                <span class="word-2 inline-block">coding</span>
+                <span class="word-3 inline-block">battle</span>
+            </div>
+            <div class="flex w-full justify-center">
+                <span class="word-4 inline-block">with</span>
                 &nbsp;
                 <span
-                    class="header-3 mt-1 rounded-sm bg-rose/10 px-2 font-mono
-                     text-rose shadow-rose text-shadow-center md:mt-1.5"
+                    class="word-5 mt-1 inline-block rounded-sm bg-rose/10 px-2 font-mono
+                         text-rose shadow-rose text-shadow-center md:mt-1.5"
                 ></span>
-            </span>
+            </div>
         </div>
     </div>
     <Button class="text-md font-medium lg:text-lg" href="/practice">Play now</Button>
-    <div class="relative mt-20 flex w-3/4 max-w-[1280px] justify-center lg:w-1/2">
+    <div
+        class={cn(
+            mounted ? "" : "opacity-0",
+            "relative mt-20 flex w-3/4 max-w-[1280px] justify-center lg:w-1/2"
+        )}
+    >
         <div
             bind:this={img1}
             class="-translate-x-6 rounded-sm border-2 border-neutral shadow-xl lg:-translate-x-12"
@@ -135,11 +154,6 @@
             <enhanced:img src={User2} alt="Gameplay" class="rounded-sm object-contain" />
         </div>
     </div>
-    <GradientBlob class="absolute left-0 top-2/3 -z-20 h-1/2 w-full -translate-y-1/2 opacity-50" />
-    <GradientBlob
-        class="absolute right-0 top-2/3 -z-20 h-1/2 w-1/2 -translate-y-3/4 opacity-50"
-        blobClass="bg-amber-200/80"
-    />
 </section>
 
 <section class="mb-12 flex flex-col items-center overflow-hidden">
