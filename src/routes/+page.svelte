@@ -115,7 +115,7 @@
         <div
             aria-hidden="true"
             class={cn(
-                mounted ? "" : "opacity-0", // Initially hidden until mounted and animated
+                mounted ? "" : "opacity-0",
                 "hero-title relative mb-4 flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:mb-0 md:text-6xl"
             )}
         >
