@@ -8,9 +8,9 @@ export const DefaultRoomSettings: RoomSettings = {
     hp_multiplier_medium: 1.5,
     hp_multiplier_hard: 2.0,
     distribution_mode: "auto",
-    prob_easy: 1,
-    prob_medium: 1,
-    prob_hard: 1,
+    prob_easy: 0.4,
+    prob_medium: 0.3,
+    prob_hard: 0.3,
     starting_sp: 100,
     starting_mp: 100,
     mana_recharge: 50

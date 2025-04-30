@@ -2,6 +2,12 @@
 
 Keep up with the latest updates here :D
 
+## 2025-04-30
+
+## Fixed
+
+- Spam-submitting the same solution will no longer deal damage to the bot ([#68](https://github.com/beatcode-official/server/pull/68))
+
 ---
 
 ## 2025-04-17
