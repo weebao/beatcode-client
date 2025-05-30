@@ -4,6 +4,7 @@
     import { gsap } from "gsap";
     import { TextPlugin } from "gsap/TextPlugin";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import * as Dialog from "$components/ui/dialog";
     import { cn } from "$lib/utils";
 
     gsap.registerPlugin(TextPlugin);
@@ -11,6 +12,7 @@
 
     import User1 from "$assets/images/landing/user1.png?enhanced";
     import User2 from "$assets/images/landing/user2.png?enhanced";
+    import VideoImg from "$assets/images/landing/video.jpg?enhanced";
     import {
         AbiltiesImg,
         LangsImg,
@@ -21,6 +23,7 @@
     } from "$assets/images/landing";
 
     import { Button } from "$components/ui/button";
+    import { Play } from "lucide-svelte";
     import ScrollUpButton from "$components/misc/scroll-up-button.svelte";
 
     // let { data }: PageProps = $props();
@@ -84,7 +87,6 @@
             text: "magic",
             ease: "none"
         });
-
         gsap.from([img1, img2], {
             opacity: 0,
             y: 20,
@@ -108,7 +110,7 @@
 </script>
 
 <section class="relative mb-12 flex flex-col items-center">
-    <div class="mb-8 mt-20 flex flex-col items-center md:mt-24">
+    <div class="mb-1 mt-20 flex flex-col items-center md:mb-8 md:mt-24">
         <h1 class="clip-path-inset absolute h-px w-px overflow-hidden whitespace-nowrap">
             Head-to-head coding battle with magic
         </h1>
@@ -116,17 +118,14 @@
             aria-hidden="true"
             class={cn(
                 mounted ? "" : "opacity-0",
-                "hero-title relative mb-4 flex h-32 flex-col gap-2 text-center text-5xl font-semibold text-neutral-100 md:mb-0 md:text-6xl"
+                "hero-title relative mb-4 flex flex-col gap-2 text-center text-4xl font-semibold text-neutral-100 sm:text-5xl md:mb-0 md:max-w-[875px] md:text-6xl"
             )}
         >
             <div>
                 <span class="word-1 inline-block">Head-to-head</span>
                 <span class="word-2 inline-block">coding</span>
                 <span class="word-3 inline-block">battle</span>
-            </div>
-            <div class="flex w-full justify-center">
                 <span class="word-4 inline-block">with</span>
-                &nbsp;
                 <span
                     class="word-5 mt-1 inline-block rounded-sm bg-rose/10 px-2 font-mono
                          text-rose shadow-rose text-shadow-center md:mt-1.5"
@@ -134,7 +133,7 @@
             </div>
         </div>
     </div>
-    <Button class="text-md font-medium lg:text-lg" href="/practice">Play now</Button>
+    <Button class="play-button text-md font-medium lg:text-lg" href="/practice">Play now</Button>
     <div
         class={cn(
             mounted ? "" : "opacity-0",
@@ -156,29 +155,52 @@
     </div>
 </section>
 
-<section class="mb-12 flex flex-col items-center overflow-hidden">
-    <div class="mb-6 flex flex-col items-center">
-        <h2 class="font-icon text-4xl">How to play?</h2>
+<section class="mb-12 flex flex-col items-center">
+    <div class="mb-4 flex flex-col items-center md:mb-6">
+        <h2 class="font-icon text-3xl md:text-4xl">How to play?</h2>
     </div>
-    <iframe
-        src="https://www.youtube.com/embed/O7C7Tl8N2rY?si=ZAHdwBFe4OrhlUMm"
-        class="aspect-video max-w-xl"
-        width="100%"
-        height="100%"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-    ></iframe>
+    <Dialog.Root>
+        <Dialog.Trigger
+            aria-label="Demo Video"
+            class="group relative mx-auto max-w-xl cursor-pointer rounded-lg shadow-lg transition-transform"
+        >
+            <enhanced:img
+                src={VideoImg}
+                alt="How to play video thumbnail"
+                class="aspect-video w-full rounded-xl object-cover"
+            />
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                <div
+                    class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-lg transition-all hover:scale-125 hover:bg-white group-hover:scale-125"
+                >
+                    <Play class="ml-1 h-8 w-8 fill-black text-black" />
+                </div>
+            </div>
+        </Dialog.Trigger>
+        <Dialog.Content class="max-h-screen overflow-auto sm:max-w-4xl">
+            <div class="mt-4">
+                <iframe
+                    src="https://www.youtube.com/embed/O7C7Tl8N2rY?si=ZAHdwBFe4OrhlUMm"
+                    class="aspect-video w-full"
+                    width="100%"
+                    height="100%"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                ></iframe>
+            </div>
+        </Dialog.Content>
+    </Dialog.Root>
 </section>
 
 <section
     class="features-section mx-auto mb-12 flex max-w-[1280px] flex-col
          items-center overflow-hidden"
 >
-    <div class="mb-6 flex flex-col items-center">
-        <h2 class="mb-2 font-icon text-4xl">Features</h2>
+    <div class="mb-4 flex flex-col items-center md:mb-6">
+        <h2 class="mb-2 font-icon text-3xl md:text-4xl">Features</h2>
     </div>
     <div class="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {#each features as feature}
