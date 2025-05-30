@@ -161,6 +161,7 @@
     </div>
     <Dialog.Root>
         <Dialog.Trigger
+            aria-label="Demo Video"
             class="group relative mx-auto max-w-xl cursor-pointer rounded-lg shadow-lg transition-transform"
         >
             <enhanced:img
