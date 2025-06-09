@@ -206,7 +206,7 @@
         {#each features as feature}
             <div
                 class="feature-card group flex flex-col items-center
-                       justify-center rounded-md border-2 border-secondary p-4"
+                       justify-center rounded-md border-2 border-secondary p-4 backdrop-blur-lg"
             >
                 <feature.icon class="h-32 w-64 stroke-[1.5] p-2" />
                 <h3 class="mt-2 text-center text-lg font-semibold">{feature.title}</h3>
@@ -218,5 +218,24 @@
 </section>
 
 <ScrollUpButton screenWidth={1280} />
+<div class="fixed -left-4 top-0 -z-[20] opacity-20">
+    <!-- Cool dithering Japanese effect -->
+    <div data-us-project="jzsvsRi2fATTRNcOAqWq" class="h-[calc(100dvh+4rem)] w-screen"></div>
+    <script type="text/javascript">
+        !(function () {
+            if (!window.UnicornStudio) {
+                window.UnicornStudio = { isInitialized: !1 };
+                var i = document.createElement("script");
+                (i.src =
+                    "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.25/dist/unicornStudio.umd.js"),
+                    (i.onload = function () {
+                        window.UnicornStudio.isInitialized ||
+                            (UnicornStudio.init(), (window.UnicornStudio.isInitialized = !0));
+                    }),
+                    (document.head || document.body).appendChild(i);
+            }
+        })();
+    </script>
+</div>
 
 <style></style>
