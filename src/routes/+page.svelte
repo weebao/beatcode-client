@@ -218,7 +218,7 @@
 </section>
 
 <ScrollUpButton screenWidth={1280} />
-<div class="fixed -left-4 top-0 -z-[20] opacity-20">
+<div class="fixed hidden lg:block -left-4 top-0 -z-[20] opacity-20">
     <!-- Cool dithering Japanese effect -->
     <div data-us-project="jzsvsRi2fATTRNcOAqWq" class="h-[calc(100dvh+5rem)] w-screen"></div>
     <script type="text/javascript">
