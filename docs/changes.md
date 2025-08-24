@@ -2,6 +2,16 @@
 
 Keep up with the latest updates here :D
 
+## 2025-08-24
+
+### Fixed
+
+- Fixed infinite loading bug when saving profile on Google OAuth callback page with existing username ([#TBD](https://github.com/beatcode-official/client/pull/TBD))
+- Added proper field-specific error messages for Google OAuth registration form
+- Implemented consistent error handling patterns across authentication forms
+
+---
+
 ## 2025-04-30
 
 ## Fixed

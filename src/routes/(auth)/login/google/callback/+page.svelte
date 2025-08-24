@@ -15,22 +15,28 @@
 
     import { announce } from "$lib/utils";
     import { onMount } from "svelte";
-    import { fromStore } from "svelte/store";
 
     let { data }: PageProps = $props();
 
-    let registerForm = $state<any>();
-    let isSubmitting = $state<boolean>(false);
+    let form = $state<any>();
+    let formData = $state<any>();
+    let submitting = $state<any>();
+    let enhance = $state<any>();
 
     onMount(() => {
         if (data.status === "success" && data.form) {
-            registerForm = superForm<Infer<typeof RegisterWithGoogleSchema>>(data.form, {
+            const registerForm = superForm<Infer<typeof RegisterWithGoogleSchema>>(data.form, {
                 onResult: async ({ result }) => {
                     if (result.type === "redirect") {
                         announce(result, "Account created successfully");
                     }
                 }
             });
+            form = registerForm;
+            const { form: fd, submitting: sub, enhance: enh } = registerForm;
+            formData = fd;
+            submitting = sub;
+            enhance = enh;
         }
     });
 </script>
@@ -55,62 +61,64 @@
             </div>
         </Card.Header>
         <Card.Content class="text-center">
-            {#if registerForm}
-                {@const { enhance } = registerForm}
-                {@const registerFormData = fromStore<RegisterWithGoogleData>(
-                    registerForm.form
-                ).current}
-                <form method="POST" use:enhance onsubmit={() => (isSubmitting = true)}>
+            {#if form && formData}
+                <form method="POST" use:enhance>
                     <div class="space-y-4">
-                        <Form.Field form={registerForm} name="username">
+                        <Form.Field {form} name="username">
                             <Form.Control>
-                                <Input
-                                    value={registerFormData.username}
-                                    name="username"
-                                    type="text"
-                                    placeholder="Username"
-                                    required
-                                />
+                                {#snippet children({ props })}
+                                    <Input
+                                        {...props}
+                                        bind:value={$formData.username}
+                                        type="text"
+                                        placeholder="Username"
+                                        required
+                                    />
+                                {/snippet}
                             </Form.Control>
                             <Form.FieldErrors />
                         </Form.Field>
 
-                        <Form.Field form={registerForm} name="display_name">
+                        <Form.Field {form} name="display_name">
                             <Form.Control>
-                                <Input
-                                    value={registerFormData.display_name}
-                                    name="display_name"
-                                    type="text"
-                                    placeholder="Display Name"
-                                    required
-                                />
+                                {#snippet children({ props })}
+                                    <Input
+                                        {...props}
+                                        bind:value={$formData.display_name}
+                                        type="text"
+                                        placeholder="Display Name"
+                                        required
+                                    />
+                                {/snippet}
                             </Form.Control>
                             <Form.FieldErrors />
                         </Form.Field>
 
-                        <Form.Field form={registerForm} name="email">
+                        <Form.Field {form} name="email">
                             <Form.Control>
-                                <Input
-                                    value={registerFormData.email}
-                                    name="email"
-                                    type="email"
-                                    placeholder="Email"
-                                    required
-                                    readonly
-                                />
+                                {#snippet children({ props })}
+                                    <Input
+                                        {...props}
+                                        bind:value={$formData.email}
+                                        type="email"
+                                        placeholder="Email"
+                                        required
+                                        readonly
+                                    />
+                                {/snippet}
                             </Form.Control>
                             <Form.FieldErrors />
                         </Form.Field>
 
-                        <input type="hidden" name="google_id" value={registerFormData.google_id} />
+                        <input type="hidden" name="google_id" bind:value={$formData.google_id} />
                         <input
                             type="hidden"
                             name="avatar_url"
-                            value={registerFormData.avatar_url}
+                            bind:value={$formData.avatar_url}
                         />
 
-                        <Button type="submit" disabled={isSubmitting}>
-                            {#if isSubmitting}
+                        <Button type="submit" disabled={submitting ? $submitting : false}>
+                            {#if submitting && $submitting}
                                 <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                                 Saving...
                             {:else}
