@@ -2,7 +2,7 @@
     import type { PageProps } from "./$types";
 
     import { type Infer, superForm } from "sveltekit-superforms";
-    import { type RegisterWithGoogleData, RegisterWithGoogleSchema } from "$models/auth";
+    import { RegisterWithGoogleSchema } from "$models/auth";
 
     import * as Card from "$components/ui/card";
     import { Button } from "$components/ui/button";
@@ -111,11 +111,7 @@
                         </Form.Field>
 
                         <input type="hidden" name="google_id" bind:value={$formData.google_id} />
-                        <input
-                            type="hidden"
-                            name="avatar_url"
-                            bind:value={$formData.avatar_url}
-                        />
+                        <input type="hidden" name="avatar_url" bind:value={$formData.avatar_url} />
 
                         <Button type="submit" disabled={submitting ? $submitting : false}>
                             {#if submitting && $submitting}
