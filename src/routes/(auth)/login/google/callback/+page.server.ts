@@ -47,16 +47,25 @@ export const actions = {
 
         try {
             const response = await registerWithGoogle(form.data, cookies);
+            if (response.status === 400) {
+                const message: string = response.error.detail;
+                if (message.toLowerCase().includes("username")) {
+                    form.errors.username = [message];
+                } else if (message.toLowerCase().includes("email")) {
+                    form.errors.email = [message];
+                }
+                return fail(400, { form, message });
+            }
             if (response.status >= 400) {
-                return fail(response.status, { form, error: response.error.detail });
+                return fail(response.status, { form, message: response.error.detail });
             }
             redirect(302, "/");
         } catch (e: unknown) {
             if (isRedirect(e)) throw e;
             if (isHttpError(e)) {
-                return fail(e.status, { form, error: "Something went wrong in the server" });
+                return fail(e.status, { form, message: "Something went wrong in the server" });
             }
-            return fail(500, { form, error: "An unexpected error occurred" });
+            return fail(500, { form, message: "An unexpected error occurred" });
         }
     }
 };

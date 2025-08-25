@@ -2,6 +2,14 @@
 
 Keep up with the latest updates here :D
 
+## 2025-08-24
+
+### Fixed
+
+- Submit button no longer loads infinitely when signing in with an existing username through Google ([#107](https://github.com/beatcode-official/client/pull/107))
+
+---
+
 ## 2025-04-30
 
 ## Fixed
