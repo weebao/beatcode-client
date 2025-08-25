@@ -60,7 +60,7 @@
                 {/if}
             </div>
         </Card.Header>
-        <Card.Content class="text-center">
+        <Card.Content>
             {#if form && formData}
                 <form method="POST" use:enhance>
                     <div class="space-y-4">

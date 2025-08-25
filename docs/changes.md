@@ -6,7 +6,7 @@ Keep up with the latest updates here :D
 
 ### Fixed
 
-- Fixed infinite loading when saving profile during Google OAuth signup with existing username ([#107](https://github.com/beatcode-official/client/pull/107))
+- Submit button no longer loads infinitely when signing in with an existing username through Google ([#107](https://github.com/beatcode-official/client/pull/107))
 
 ---
 
